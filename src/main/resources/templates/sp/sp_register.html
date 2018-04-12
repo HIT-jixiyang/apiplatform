@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<head>
+<meta lang="en"/>
+<meta charset="UTF-8"/>
+    <title>服务提供商信息注册</title>
+    <script type="text/javascript" src="../../static/bootstrap/js/jquery-3.3.1.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap-validator/0.5.3/css/bootstrapValidator.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap-theme.css" type="text/css"/>
+    <script src="https://cdn.bootcss.com/bootstrap-validator/0.5.3/js/bootstrapValidator.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            //此处为校验的核心代码
+            $("#register-form").bootstrapValidator({
+                submitHandler: function (valiadtor, loginForm, submitButton) {
+
+                    valiadtor.defaultSubmit();
+                },
+                fields: {
+                    sp_name: {
+                        validators: {
+                            notEmpty: {
+                                message: '用户名不能为空'
+                            },
+                            stringLength: {
+                                /*长度提示*/
+                                min: 1,
+                                max: 30,
+                                message: '用户名长度必须在1到30之间'
+                            }
+                        }
+                    },
+                    sp_description: {
+                        validators: {
+                            stringLength: {
+                                /*长度提示*/
+                                max: 200,
+                                message: '描述不能超过200字'
+                            }
+                        }
+                    },
+                    tel: {
+                        validators: {
+                            notEmpty: {
+                                message: '电话不能为空'
+                            }
+                        }
+                    },
+                    sp_representative: {
+                        validators: {
+                            notEmpty: {
+                                message: '法人名称不能为空'
+                            },
+                            stringLength: {
+                                /*长度提示*/
+                                min: 1,
+                                max: 30,
+                                message: '法人名长度必须在4到30之间'
+                            }
+                        }
+                    },
+
+                    sp_email: {
+                        validators: {
+                            notEmpty: {
+                                message: '登录邮箱名或用户名不能为空'
+                            },
+                            stringLength: {
+                                /*长度提示*/
+                                min: 1,
+                                max: 30,
+                                message: '用户名长度必须在4到30之间'
+                            }
+                        }
+                    },
+                    sp_password: {
+                        validators: {
+                            notEmpty: {
+                                message: '密码不能为空'
+                            },
+                            stringLength: {
+                                /*长度提示*/
+                                min: 6,
+                                max: 30,
+                                message: '密码长度必须在6到30之间'
+                            },
+
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9_\.]+$/,
+                                message: '密码由数字字母下划线和.组成'
+                            }
+                        }
+                    },
+                    repwd: {
+                        message: '密码无效',
+                        validators: {
+                            notEmpty: {
+                                message: '密码不能为空'
+                            },
+                            stringLength: {
+                                min: 6,
+                                max: 30,
+                                message: '用户名长度必须在6到30之间'
+                            },
+                            identical: {//相同
+                                field: 'sp_password',
+                                message: '两次密码不一致'
+                            },
+                            regexp: {//匹配规则
+                                regexp: /^[a-zA-Z0-9_\.]+$/,
+                                message: '密码由数字字母下划线和.组成'
+                            }
+                        }
+                    }
+
+                }
+            });
+
+        });
+
+        function submit() {
+            $.ajax({
+                type : "POST",
+                url : "/sp/sp_register",
+                dataType : "text",
+                data : $("#register-form").serializeArray(),
+                contentType:"application/x-www-form-urlencoded",
+                success : function(data) {
+
+                    if(data==="success"){
+                        alert("注册成功");
+                    window.location.href="sp_loginpage";
+                    }
+                    else{
+                        alert("注册失败");
+                    }
+                },
+                error : function(data) {
+                    alert("失败");
+                    console.log(data);
+                }
+            });
+        }
+    </script>
+   <style>
+    body{
+        background-color: #444444;
+    }
+       .text-white{
+           color: #f7f7f7;
+       }
+</style>
+</head>
+<body>
+<H1 class="text-center text-white">服务提供商注册</H1>
+<div >
+    <form id="register-form" action="" method="post">
+        <div class="box col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+<div class="box1 col-lg-4 col-md-4 col-sm-4" >
+
+            <div class=" org_name form-group has-feedback ">
+                <h5 class="tag text-white">您的组织名称：</h5>
+                <input type="text" name="sp_name"class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="输入组织名称"/>
+            </div>
+            <div class=" form-group has-feedback">
+                <h5 class="tag text-white">您的组织法人名称：</h5>
+                <input type="text" name="sp_representative" class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="输入法人名称"/>
+            </div>
+            <div class=" form-group has-feedback">
+                <h5 class="tag text-white">您的组织法人身份证号：</h5>
+                <input type="text" name="sp_representative_id" class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="输入法人身份证号"/>
+            </div>
+            <div class=" form-group has-feedback">
+                <h5 class="tag text-white">您的组织代码（没有可以不写）：</h5>
+                <input type="text" name="sp_org_id" class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="输入组织代码"/>
+            </div>
+</div>
+
+<div class="box2 col-lg-4 col-sm-4 col-md-4" >
+            <div class=" form-group has-feedback">
+                <h5 class="tag text-white">联系邮箱：</h5>
+                <input type="email" name="sp_email" class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="输入邮箱"/>
+            </div>
+            <div class="form-group has-feedback">
+                <h5 class="tag text-white">您的组织电话：</h5>
+                <input type="text" name="sp_tel" class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="输入组织电话"/>
+            </div>
+            <div class="form-group has-feedback">
+                <h5 class="tag text-white">您的登录密码：</h5>
+                <input type="password" name="sp_password" class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="输入您的密码"/>
+            </div>
+            <div class=" form-group has-feedback">
+                <h5 class="tag text-white">确认您的登录密码：</h5>
+                <input type="password" name="repwd" class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="再次输入您的密码"/>
+            </div>
+
+</div>
+
+        <div style="margin-top: 30px" class=" form-group has-feedback col-lg-8 col-md-8 col-sm-8 ">
+            <h5 class="tag text-white">您的组织描述（不超过200字）：</h5>
+            <textarea rows="10" cols="20" name="sp_description" class="form-control" placeholder="输入组织描述"></textarea>
+        </div>
+
+        </div>
+
+    </form>
+    <div style="margin-top: 30px" class=" form-group has-feedback col-lg-8 col-md-8 col-sm-8 ">
+        <button type="button"  class="btn-primary col-md-offset-6 col-lg-offset-5 col-sm-offset-6" onclick="submit()" style="width: 100px;height: 60px">
+            注册
+        </button>
+    </div>
+</div>
+</body>
+

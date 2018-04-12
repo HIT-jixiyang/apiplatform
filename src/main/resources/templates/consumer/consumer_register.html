@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../../static/bootstrap/js/jquery-3.3.1.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap-validator/0.5.3/css/bootstrapValidator.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap-theme.css" type="text/css"/>
+    <script src="https://cdn.bootcss.com/bootstrap-validator/0.5.3/js/bootstrapValidator.js"></script>
+</head>
+<style>
+    body{
+        background-color: #444444;
+    }
+    .text-white{
+        color: #f7f7f7;
+    }
+    .box{
+      margin-left: 40%;
+    }
+    .form-group{
+        margin-top: 40px;
+    }
+</style>
+<script>
+
+    $(function () {
+
+        //此处为校验的核心代码
+        $("#register-form").bootstrapValidator({
+            submitHandler: function (valiadtor, loginForm, submitButton) {
+
+                valiadtor.defaultSubmit();
+            },
+            fields: {
+                consumer_name: {
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        stringLength: {
+                            /*长度提示*/
+                            min: 1,
+                            max: 30,
+                            message: '用户名长度必须在1到30之间'
+                        }
+                    }
+                },
+
+                consumer_tel: {
+                    validators: {
+                        notEmpty: {
+                            message: '电话不能为空'
+                        }
+                    }
+                },
+                consumer_email: {
+                    validators: {
+                        notEmpty: {
+                            message: '登录邮箱名或用户名不能为空'
+                        },
+                        stringLength: {
+                            /*长度提示*/
+                            min: 1,
+                            max: 30,
+                            message: '用户名长度必须在4到30之间'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        stringLength: {
+                            /*长度提示*/
+                            min: 6,
+                            max: 30,
+                            message: '密码长度必须在6到30之间'
+                        },
+
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_\.]+$/,
+                            message: '密码由数字字母下划线和.组成'
+                        }
+                    }
+                },
+                repwd: {
+                    message: '密码无效',
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 30,
+                            message: '用户名长度必须在6到30之间'
+                        },
+                        identical: {//相同
+                            field: 'org_pwd',
+                            message: '两次密码不一致'
+                        },
+                        regexp: {//匹配规则
+                            regexp: /^[a-zA-Z0-9_\.]+$/,
+                            message: '密码由数字字母下划线和.组成'
+                        }
+                    }
+                }
+
+            }
+        });
+
+    });
+    function submit() {
+        $.ajax({
+            type : "POST",
+            url : "/consumer/consumer_register",
+            dataType : "text",
+            data : $("#register-form").serializeArray(),
+            contentType:"application/x-www-form-urlencoded",
+            success : function(data) {
+
+                if(data==="success"){
+                    alert("注册成功");
+                    window.location.href="consumer_loginpage";
+                }
+                else{
+                    alert("注册失败");
+                }
+            },
+            error : function(data) {
+                alert("失败");
+                console.log(data);
+            }
+        });
+    }
+</script>
+<body>
+
+<div class="box">
+    <H1 class="text-white" style="margin-top: 10%">服务消费用户注册</H1>
+    <form style="margin-top: 100px" id="register-form" action="" method="post">
+        <div>
+            <div class="box1 col-lg-4 col-md-5 col-sm-5" >
+
+                <div class=" org_name form-group has-feedback " >
+                    <h5 class="tag text-white">您的名称：</h5>
+                    <input type="text" name="consumer_name"class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="输入您的用户名"/>
+                </div>
+                <div class=" form-group has-feedback" >
+                    <h5 class="tag text-white">您的邮箱：</h5>
+                    <input type="text" name="consumer_email" class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="输入您的邮箱"/>
+                </div>
+                <div class=" form-group has-feedback">
+                    <h5 class="tag text-white">您的电话号码：</h5>
+                    <input type="text" name="consumer_tel" class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="输入您的电话号码"/>
+                </div>
+                <div class=" form-group has-feedback">
+                    <h5 class="tag text-white">密码：</h5>
+                    <input type="password" name="consumer_password" class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="输入您的密码"/>
+                </div>
+                <div class=" form-group has-feedback">
+                    <h5 class="tag text-white">确认您的登录密码：</h5>
+                    <input type="password" name="repwd" class="form-control col-lg-1 col-md-1 col-sm-3" placeholder="再次输入您的密码"/>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <div class="col-lg-10 col-md-10 col-sm-10 " >
+        <button type="button" onclick="submit()" class="btn-primary col-sm-3 col-lg-2 col-md-3 col-sm-offset-1 col-md-offset-1 col-lg-offset-1" style="height: 50px;margin-top: 30px">注册</button>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+
+#header{
+    height: 60px;
+}
+#headertitle{
+
+    height: 55px;
+    margin: auto;
+}
+#userinfo{
+    float: right;
+    margin-top: 20px;
+}
+#sidebar{
+    background-color: #444444;
+    height: 0px;
+    padding-bottom: 100%;
+
+}
+#sidebar ul li{
+    font-size: large;
+    background-color: #444444;
+
+}
+.app{
+    margin-top: 50px;
+}
+#search-html{
+    height: 800px;
+    border: none;
+
+}

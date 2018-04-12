@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>服务提供商登录</title>
+    <script type="text/javascript" src="../../static/bootstrap/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.css " type="text/css"/>
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap-theme.css" type="text/css"/>
+<style>
+    .headtag{
+        background-color: #2aabd2;
+    }
+
+    .logout{
+        float: right;
+
+        margin-top: 3%;
+    }
+    .welcome{
+        float: left;
+    }
+</style>
+
+</head>
+<script type="text/javascript">
+    function toaddapi(){
+        window.location.href = '/sp/addapipage';
+    }
+$(document).ready(function(){
+$.ajax({
+    type:"get",
+    url:"/getapilist",
+    async:true,
+    success:function (json) {
+        console.log(json);
+        var dataobj=json;
+        con="";
+        $.each(dataobj,function (index,item) {
+            console.log(item.api_name);
+            con+="<tr><td>"+item.api_name+"</td><td>"+item.api_url+"</td><td>"+"<a>查看报表 </a> <a>配置 </a> <a>测试 </a> </td></tr>";
+      console.log(con);
+        });
+    document.getElementById('listbody').innerHTML=con;
+
+    }
+    });
+}
+);
+</script>
+<body>
+
+<div class="headtag col-lg-12 col-md-12 col-sm-12">
+    <div class="logout">
+        <span> <small><a href="/sp/sp_logout" style="color: white">退出登录</a></small></span>
+    </div>
+   <div class="welcome"> <H2>欢迎来到HIT-ICES-API接入平台</H2></div>
+</div>
+<table class="table table-bordered" id="list">
+    <thead>
+    <tr>
+        <th>API名称</th>
+        <th>url</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="listbody">
+   <!-- <tr th:each="api : ${apilist}">
+        <td><a th:text="${{api.api_description}}"/></td>
+        <td><a th:text="${{api.api_ip}} "/></td>
+        <td><a th:text="${ {api.api_port} }"/></td>
+        <td><a>查看报表 </a>
+            <a>配置 </a>
+             <a>测试 </a>
+    </td>
+    </tr>-->
+    </tbody>
+</table>
+<button type="button" class="btn-primary" onclick="toaddapi()">添加新的API</button>
+</body>
+</html>

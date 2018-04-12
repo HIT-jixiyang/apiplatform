@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+	<!--搜索栏-->
+	<div class="search-bar">
+		<el-row>
+			<el-col :span="12" :offset="5">
+				<el-input placeholder="请输入关键字" v-model="filter.value" @keyup.enter.native="initPage"></el-input>
+			</el-col>
+			<el-col :span="2">
+				<el-select v-model="filter.type" placeholder="请选择" style="margin-left:5px">
+					<el-option
+						v-for="item in options"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value">
+					</el-option>
+				</el-select>
+			</el-col>
+		</el-row>
+	</div>
+	<div class="api-table">
+		<el-row>
+			<el-col :span="14" :offset="5">
+				<el-table
+					:data="tableData"
+					style="width: 100%">
+					<el-table-column
+						prop="api_name"
+						label="api名称"
+						width="140">
+					</el-table-column>
+					<el-table-column
+						prop="sp_name"
+						label="供应商"
+						width="100">
+					</el-table-column>
+					<el-table-column
+							prop="api_description"
+							label="简介">
+					</el-table-column>
+					<el-table-column
+							label="操作"
+							width="100px">
+						<template slot-scope="scope">
+							<el-button type="info" size="mini" @click="showDetail(scope.row)">详情</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+				<el-pagination
+					@size-change="handleSizeChange"
+					@current-change="handleCurrentChange"
+					:current-page="filter.pageNo"
+					:page-sizes="[5, 10, 15]"
+					:page-size="filter.pageSize"
+					layout="total, sizes, prev, pager, next, jumper"
+					:total="tableDataLength"
+					style="float:right">
+				</el-pagination>
+			</el-col>
+		</el-row>
+	</div>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="//cdn.bootcss.com/vue-resource/1.0.3/vue-resource.min.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- import util -->
+<script src="../static/util/cache.js"></script>
+<script>
+	new Vue({
+		el: '#app',
+		data: function() {
+			return {
+				tableData: [],
+				tableDataLength: null,
+				filter: {
+					pageSize: 10,
+					pageNo: 1,
+                    type: 'api_name',
+					value: null
+				},
+				options: [{
+				  value: 'api_name',
+				  label: '名称'
+				}, {
+				  value: 'api_method',
+				  label: '请求方式'
+				}]
+			}
+		},
+		created () {
+			this.initPage()
+		},
+		methods: {
+			initPage () {
+				var params = {}
+				params.pageNo = this.filter.pageNo
+				params.pageSize = this.filter.pageSize
+				params.api = {}
+				params.api[this.filter.type] = this.filter.value
+				this.$http.post("/getData/search", JSON.stringify(params)).then((response) => {
+					var data = response.body
+					this.tableData = data.data
+					this.tableDataLength = data.total
+					console.log(data)
+				})
+			},
+			handleSizeChange (val) {
+				this.filter.pageSize = val
+				console.log(this.filter)
+				this.initPage()
+			},
+			handleCurrentChange (val) {
+				this.filter.pageNo = val
+                console.log(this.filter)
+				this.initPage()
+			},
+			formatMethod (val) {
+			    if (val == 0)
+			        return 'GET'
+				else if (val == 1)
+				    return 'POST'
+				else
+				    return 'GET/POST'
+			},
+			showDetail (api) {
+			    console.log(api)
+			    CACHE.set('api', api)
+                window.location.href='/api/detail';
+            }
+		}
+	})
+</script>
+<style>
+	.search-bar {
+		margin-top: 100px;
+	}
+	.api-table {
+		margin-top: 20px;
+	}
+</style>
+</html>

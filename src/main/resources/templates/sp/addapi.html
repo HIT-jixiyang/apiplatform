@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>API添加</title>
+    <script type="text/javascript" src="../../static/bootstrap/js/jquery-3.3.1.min.js"></script>
+    <link type="text/css" href="../../static/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+    <link type="text/css" href="../../static/bootstrap/css/bootstrap-theme.css" rel="stylesheet"/>
+    <link type="text/css" href="../../static/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <style>
+        .des{
+
+        }
+        .apiform{
+            margin-top: 1%;
+        }
+        .headtag{
+            background-color: #2aabd2;
+        }
+
+        .logout{
+            float: right;
+
+            margin-top: 3%;
+        }
+        .welcome{
+            float: left;
+        }
+        .text-primary{
+            border: none;
+        }
+        .requestparam tr td{
+            text-align: center;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+    function addapi() {
+        var str=$("#apiform").serializeArray();
+        var j=JSON.stringify(str);
+        alert(j);
+         $.ajax({
+              type : "POST",
+              url : "/sp/addapi",
+              dataType : "text",
+              data : $("#apiform").serializeArray(),
+              contentType:"application/x-www-form-urlencoded",
+              success : function(data) {
+                  alert("成功");
+              },
+              error : function(data) {
+                  alert("失败");
+                  console.log(data);
+              }
+          });
+      }
+    var row=0;
+    function addrow() {
+        if(row<20){
+            row++;
+            var table=$("#paratable");
+            console.log("OK");
+            var tr=$("<tr>"+" <td class='text-center'>"+"<input class='form-control ' type='text'  placeholder='参数名称'>"+"</td>" +
+                " <td class='text-center'> "+"<input class='form-control ' type='text'  placeholder='参数值'>"+" </td>" +
+                "  <td class='text-center'>"+"<button type='button' class='btn-link'>删除</button>"+"</td>"+"</tr>" );
+            console.log(tr.toString());
+            table.append(tr);
+        }else{
+            alert("已经达到最大参数数量");
+        }
+    }
+    function deleterow(tdobject) {
+        row--;
+        var td=$(tdobject);
+        td.parents("tr").remove();
+    }
+    function addtr(){
+        if(row<8){
+            row++;
+            var table = $("#para_table");
+            var param="apiRequestParamList["+row+"].api_param";
+            var value="apiRequestParamList["+row+"].api_param_demo";
+            console.log(param);
+            var tr= $("<tr>" +
+                "<td style='text-align: center;' >"+"<input type='text' name="+"'"+param+"'"+" class='text-primary text-center'/>"+"</td>" +
+                "<td style='text-align: center;'>"+"<input type='text'  name="+"'"+value+"'"+"class='text-primary text-center' />"+"</td>" +
+                "<td align='center' onclick='deletetr(this)'><button type='button' class='btn btn-xs btn-link' >"+"删除"+"</button></td></tr>");
+            table.append(tr);
+        }else{
+            alert("已达到发票能开具的最大商品明细行数");
+        }
+    }
+    function deletetr(tdobject){
+        row--;
+        var td=$(tdobject);
+        td.parents("tr").remove();
+    }
+    function gettableinfo(){
+        var objInput = document.getElementById("para_table").getElementsByTagName("input");
+        for (i = 0; i < objInput.length; i++) alert(objInput[i].value);
+
+    }
+</script>
+<body>
+<div class="headtag col-lg-12 col-md-12 col-sm-12">
+    <div class="logout">
+        <span> <small><a href="/logout" style="color: white">退出登录</a></small></span>
+    </div>
+    <div class="welcome"> <H2>欢迎来到HIT-ICES-API接入平台</H2></div>
+</div>
+
+<div class="apiform col-lg-10 col-lg-offset-1">
+    <H1 class="text-primary col-lg-offset-3">感谢您将您的服务注册到我们的平台</H1>
+    <form class="apiform" id="apiform">
+        <table class="table">
+            <tr>
+                <td> <div class="col-lg-5 col-lg-offset-4">
+                    <div >
+                        <label >Api名称</label>
+                        <input class="form-control" type="text" name="api_name" placeholder="填写Api简称"/>
+                    </div>
+                    <div >
+                        <label >Api的Url</label>
+                        <input class="form-control"  type="text" name="api_url" placeholder="填写Api的url"/>
+                    </div>
+                    <div >
+                        <label >记账类型</label>
+                        <select class="form-control" name="api_bill_type">
+                            <option value="1">按访问次数计费</option>
+                            <option value="2">按流量计费</option>
+                        </select>
+                    </div>
+                    <div >
+                        <label >请求方式</label>
+                        <select class="form-control" name="api_method">
+                            <option value="0">Get</option>
+                            <option value="1">Post</option>
+                            <option value="2">Get与Post</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label >返回格式</label>
+                        <select class="form-control" name="api_return_pattern">
+                            <option value="0">Json</option>
+                            <option value="1">Xml</option>
+                            <option value="2">String</option>
+                        </select>
+                    </div>
+
+                </div>
+                </td>
+                <td> <div class="col-lg-5 col-lg-offset-1">
+                    <div >
+                        <label >最大同时接入量</label>
+                        <input class="form-control" type="text" name="api_max_in" placeholder="填写最大同时接入数"/>
+                    </div>
+
+
+                    <div >
+                        <label >Api密钥</label>
+                        <input class="form-control" type="text" name="api_token" placeholder="填写分给平台使用的API密钥"/>
+                    </div>
+                    <div >
+                        <label >Api单价</label>
+                        <input class="form-control" type="text" name="api_sys_price" placeholder="Api单价：单位为元/次或者元/M"/>
+                    </div>
+                    <div >
+                        <label >心跳测试接口</label>
+                        <input class="form-control" type="text" name="api_path" placeholder="填写用于心跳测试的url,没有则可以为空"/>
+                    </div>
+                </div>
+                </td>
+            </tr>
+
+        </table>
+        <div>
+            <H3 class="col-lg-offset-5">Api的请求参数列表</H3>
+
+            <table class="table table-bordered" id="para_table">
+                <thead>
+                <tr>
+                    <th style="text-align:center" width="200">参数名称</th>
+                    <th style="text-align:center" width="200">参数值样例</th>
+                    <th style="text-align:center" width="100">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td style="text-align:center; " ><input type="text" name="apiRequestParamList[0].api_param" class="text-primary text-center"/></td>
+                    <td style="text-align:center; " ><input type="text" name="apiRequestParamList[0].api_param_demo" class="text-primary text-center"/></td>
+                    <td style="text-align:center; " >
+                        <button type="button" class="btn btn-xs btn-link">删除</button></td>
+                </tr>
+                </tbody>
+            </table>
+
+
+            <div id="addtrdiv" style="margin-top:-15px; width: 15%; float: right;">
+                <button type="button" class="btn btn-primary" onclick="addtr()" style="margin-right: 10px">添加</button>
+
+            </div>
+        </div>
+        <div style="margin-top: 50px">
+        <div class="col-lg-3">
+            <label >Api功能描述</label>
+            <textarea class="form-control" rows="8" cols="10" placeholder="填写API的功能描述（200字以内）" name="api_description"></textarea>
+        </div>
+        <div class="col-lg-3">
+            <label >Api请求示例</label>
+            <textarea class="form-control" rows="8" cols="10" placeholder="填写API的请求示例" name="api_demo"></textarea>
+        </div>
+        <div class="col-lg-3">
+            <label >Api正常返回示例</label>
+            <textarea class="form-control" rows="8" cols="10" placeholder="填写API的正常返回示例" name="api_normal_return_demo"></textarea>
+        </div>
+        <div class="col-lg-3">
+            <label>Api错误返回示例</label>
+            <textarea class="form-control" rows="8" cols="10" placeholder="填写API的异常返回示例" name="api_error_return_demo"></textarea>
+        </div>
+        </div>
+    </form>
+    <input style="margin-top: 50px" type="button" id="btnsubmit" onclick="addapi()" value="提交" class="col-lg-1 col-lg-offset-5 btn-primary"/>
+</div>
+
+</body>
+</html>

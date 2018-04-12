@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+    <section class="allsection">
+        <el-row>
+            <el-col width="100%" class="detail-title">
+                <div class="title-name" style="float:left"><span>api详情</span></div>
+                <el-button style="float:right;magin-top:5px" @click="goback"><i class="el-icon-arrow-left" aria-hidden="true"></i> 返回api列表</el-button>
+            </el-col>
+        </el-row>
+        <el-tabs v-model="activeName">
+            <el-tab-pane label="api详情" name="detail">
+                <div>
+                    <el-card style="margin-top:12px" class="infocard">
+                        <div slot="header" class="detail-card-header">
+                            <span>基本信息</span>
+                        </div>
+                        <div>
+                            <el-row>
+                                <el-col class="detailcell" :span="12"><span class="detailLabel">api名称: </span>{{api.api_name}}</el-col>
+                                <el-col class="detailcell" :span="12"><span class="detailLabel">请求方式: </span>{{formatMethod(api.api_method)}}</el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col class="detailcell" :span="12"><span class="detailLabel">记帐类型: </span>{{formatBill(api.api_bill_type)}}</el-col>
+                                <el-col class="detailcell" :span="12"><span class="detailLabel">api单价: </span>{{api.api_sys_price}}</el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col class="detailcell" :span="24"><span class="detailLabel">网关地址: </span>{{api.api_path}}</el-col>
+                            </el-row>
+                        </div>
+                    </el-card>
+
+                    <el-card>
+                        <div slot="header" class="detail-card-header">
+                            <span>功能描述</span>
+                        </div>
+                        <div>
+                            <p>
+                                {{api.api_description}}
+                            </p>
+                        </div>
+                    </el-card>
+                    <el-card>
+                        <div slot="header" class="detail-card-header">
+                            <span>参数列表</span>
+                        </div>
+                        <div>
+                            <el-table :data="tableData" style="width: 100%">
+                                <el-table-column
+                                        prop="api_param"
+                                        label="参数名">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="api_param_demo"
+                                        label="参数值">
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                    </el-card>
+                </div>
+            </el-tab-pane>
+
+            <el-tab-pane label="用户评价" name="evaluate">
+                <!--动态生成用户评价-->
+                    <el-row v-for="(item,index) in userEvaluate" class="user-evaluate">
+                        <el-col :span="1">
+                            {{item.userName}}
+                        </el-col>
+                        <el-col :span="1">
+                            评分：
+                        </el-col>
+                        <el-col :span="3">
+                            <el-rate v-model="userEvaluate[index].score"
+                                     disabled
+                                     show-score
+                                     text-color="#ff9900">
+                            </el-rate>
+                        </el-col>
+                        <el-col :span="2">
+                            {{item.date}}
+                        </el-col>
+                        <el-col :span="18">
+                            <p>
+                                {{item.evaluate}}
+                            </p>
+                        </el-col>
+                    </el-row>
+                <el-row>
+                    <el-col :offset="8">
+                        <el-pagination
+                                layout="prev, pager, next"
+                                :total="1000">
+                        </el-pagination>
+                    </el-col>
+                </el-row>
+            </el-tab-pane>
+        </el-tabs>
+    </section>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="//cdn.bootcss.com/vue-resource/1.0.3/vue-resource.min.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- import util -->
+<script src="../static/util/cache.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                api: {},
+                tableData: [],
+                activeName: "detail",
+                userEvaluate: [
+                    {
+                        userName: '老王',
+                        score: 3,
+                        date: '2017-03-03',
+                        evaluate: 'asdsadsadcvdsvdscvsdvdsvsdsad'
+                    },
+                    {
+                        userName: '老李',
+                        score: 5,
+                        date: '2018-03-03',
+                        evaluate: 'xzcvcxzvdsvdsvdsvvdsvdsvzxc'
+                    }
+                ]
+            }
+        },
+        created () {
+            this.initPage()
+        },
+        methods: {
+            initPage () {
+                var api = CACHE.get('api')
+                this.api = api
+                this.$http.post("/getData/api/param", {apiId: api.api_id}).then((response) => {
+                    var data = response.body
+                    this.tableData = data
+                })
+            },
+            formatMethod (val) {
+                if (val == 0)
+                    return 'GET'
+                else if (val == 1)
+                    return 'POST'
+                else
+                    return 'GET/POST'
+            },
+            formatBill (val) {
+                if (val == '1')
+                    return '按访问次数计费'
+                else if (val == '0')
+                    return '按流量计费'
+            },
+            goback () {
+                window.location.href='/api/search';
+            }
+        }
+    })
+</script>
+<style>
+    .infocard .el-card__body {
+        padding: 0;
+    }
+    .allsection .el-card {
+        margin-top: 12px;
+    }
+    .allsection .el-card .el-card__header {
+        padding: 10px 20px;
+        background-color: #EEF1F6;
+        color: black;
+        border-left: 3px solid #475669;
+    }
+    .detail-title .title-name {
+        line-height: 50px;
+        font-size: 20px;
+    }
+    .detail-title .el-button {
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+    .allsection .el-row .user-detail-title {
+        border-bottom: 1px solid #DDD;
+    }
+    .infocard .el-card__header div .el-button {
+        padding: 3px 10px;
+        float: right;
+    }
+    .infocard{
+        box-shadow:none;
+    }
+    .el-dialog__footer {
+        padding: 15px 20px 15px;
+        text-align: right;
+        box-sizing: border-box;
+        border-top: 1px solid #BFCBD9;
+    }
+    .el-dialog__header {
+        padding: 20px 20px 20px;
+        /*border-bottom: 1px solid #BFCBD9;*/
+    }
+    .detailcell {
+        height: 50px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        border-left: 1px solid rgba(0, 0, 0, 0.2);
+        line-height: 50px;
+        padding-left: 23px;
+        font-size: 12px;
+    }
+    .detailcell .detailLabel {
+        color:#8492A6;
+        margin-right: 10px;
+    }
+    .user-evaluate {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 10px;
+        border-bottom:1px solid #ccc;
+    }
+</style>
+</html>
