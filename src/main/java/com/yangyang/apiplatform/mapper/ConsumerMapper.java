@@ -12,5 +12,5 @@ public Consumer getConsumerByEmail(String email);
     @Select("select * from consumer where consumer_id=#{id}")
     public Consumer getConsumerById(String id);
     @Insert("insert into consumer(consumer_id,consumer_email,consumer_password,consumer_name,consumer_tel) values(#{consumer_id},#{consumer_email},#{consumer_password},#{consumer_name},#{consumer_tel})")
-public int addConsumer(Consumer consumer);
+    public int addConsumer(Consumer consumer);
 }

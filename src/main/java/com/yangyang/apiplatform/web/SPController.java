@@ -8,6 +8,7 @@ import com.yangyang.apiplatform.mapper.ConsumerMapper;
 import com.yangyang.apiplatform.mapper.SpMapper;
 import com.yangyang.apiplatform.service.ApiService;
 import com.yangyang.apiplatform.service.LoginService;
+import com.yangyang.apiplatform.utils.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class SPController {
             sp = spMapper.getSpByEmail(email);
             addSptoSession(session, sp);
             session.setMaxInactiveInterval(10 * 60);
-            ModelAndView mv = new ModelAndView("/sp/apimanage");
+            ModelAndView mv = new ModelAndView("/sp/sp_apimanage");
             List<Api> apilist = apiService.getApiListBySpId(loginService.findSpByEmail(email).getSp_id());
             mv.addObject("apilist", apilist);
             return mv;
@@ -67,11 +68,51 @@ public class SPController {
         session.setAttribute("sp", sp);
     }
 
-    @RequestMapping(value = "/getapilist", method = RequestMethod.GET)
+    @RequestMapping(value = "/sp/getapilist", method = RequestMethod.GET)
     @ResponseBody
     public List<Api> getApiList(HttpSession session) {
         System.out.println(session.getAttribute("sp").toString());
         List<Api> apilist = apiService.getApiListBySpId(loginService.findSpByEmail(((Sp) session.getAttribute("sp")).getSp_email()).getSp_id());
         return apilist;
+    }
+    //到达添加API页面
+    @RequestMapping(value = "/sp/toaddapipage")
+    public ModelAndView  toaddpage(){
+        ModelAndView mv=new ModelAndView("/sp/sp_addapi");
+        return mv;
+    }
+    //添加API
+    @PostMapping(value = "/sp/addapi")
+    public String addApi(Api api, HttpSession session) {
+        System.out.println("前端发过来的参数" + api.toString());
+        String uid = UUID.getUUID();
+        api.setApi_id(uid);
+        api.setSp_id(((Sp) session.getAttribute("sp")).getSp_id());
+        api.setApi_strip_prefix(1);
+        api.setApi_enabled(1);
+        api.setApi_path("/" + uid + "/**");
+        api.setApi_retryable(1);
+        System.out.println(api.toString());
+        System.out.println("getSp_id:" + ((Sp) session.getAttribute("sp")).getSp_id());
+        if (apiService.addApi(api))
+            return "success";
+        else
+            return "fail";
+    }
+    //获取sp_addapi中的iframe子页面
+    @RequestMapping(value = "/sp/sp_addapipagesrc")
+    public ModelAndView src() {
+        ModelAndView mv = new ModelAndView("/sp/addapi");
+        return mv;
+    }
+@RequestMapping(value = "/sp/sp_apimanage")
+    public ModelAndView toapimanage(){
+        ModelAndView mv=new ModelAndView("/sp/sp_apimanage");
+        return mv;
+}
+    @RequestMapping(value = "/sp/sp_appmanage")
+    public ModelAndView toappmanage(){
+        ModelAndView mv=new ModelAndView("/sp/sp_appmanage");
+        return mv;
     }
 }

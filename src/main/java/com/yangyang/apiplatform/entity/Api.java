@@ -23,7 +23,6 @@ public class Api {
     String api_name;
 List<ApiRequestParam> apiRequestParamList;
 String api_return_pattern;
-String api_demo;
 String api_normal_return_demo;
 String api_error_return_demo;
 
@@ -46,7 +45,6 @@ String api_error_return_demo;
                 ", api_name='" + api_name + '\'' +
                 ", apiRequestParamList=" + apiRequestParamList +
                 ", api_return_pattern='" + api_return_pattern + '\'' +
-                ", api_demo='" + api_demo + '\'' +
                 ", api_normal_return_demo='" + api_normal_return_demo + '\'' +
                 ", api_error_return_demo='" + api_error_return_demo + '\'' +
                 '}';
@@ -178,14 +176,6 @@ String api_error_return_demo;
 
     public void setApi_return_pattern(String api_return_pattern) {
         this.api_return_pattern = api_return_pattern;
-    }
-
-    public String getApi_demo() {
-        return api_demo;
-    }
-
-    public void setApi_demo(String api_demo) {
-        this.api_demo = api_demo;
     }
 
     public String getApi_normal_return_demo() {

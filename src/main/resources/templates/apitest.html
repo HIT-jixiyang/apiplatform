@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Restclient</title>
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css"/>
+
+    <script src="../static/bootstrap/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+</head>
+<style>
+    #testheader {
+        margin-top: 15%;
+    }
+
+    .param_table {
+        border: none;
+
+    }
+
+    .paramtable input {
+
+        border: none;
+        border-bottom: #d58512 solid 1px;
+    }
+
+    #headeraddbutton {
+
+        margin-top: 45px;
+    }
+
+    #bodyaddbutton {
+
+        margin-top: 45px;
+    }
+
+    #resulttext {
+        height: 500px;
+        width: 600px;
+    }
+.param_tab{
+
+}
+    #result {
+        margin-left: 0;
+
+        margin-top: 70px;
+    }
+    .status{
+        margin-left: 20%;
+        margin-top: 20px;
+    }
+</style>
+<script>
+    var headerrow = 1;
+    var bodyrow = 1;
+
+    function addheaderparam() {
+        var tr = $("        <tr>\n" +
+            "                            <td>\n" +
+            "                             <input type=\"text\" name=\"headerkey\" class=\"input-group\"/>\n" +
+            "                            </td>\n" +
+            "                            <td>\n" +
+            "                               <input type=\"text\" name=\"headervalue\" class=\"input-group\"/>\n" +
+            "                            </td>\n" +
+            "                            <td><button type=\"button\" id=\"headerdelete" + headerrow + "\" onclick=\"delheaderRow(this)\" class=\"input-group btn-link\">删除</button></td>\n" +
+            "                        </tr>")
+        $("#headertable").append(tr);
+        headerrow++;
+
+    }
+
+    function addbodyparam() {
+        var tr = $("        <tr>\n" +
+            "                            <td>\n" +
+            "                                 <input type=\"text\" name=\"bodykey\" class=\"input-group\"/>\n" +
+            "                            </td>\n" +
+            "                            <td>\n" +
+            "                               <input type=\"text\" name=\"bodyvalue\" class=\"input-group\"/>\n" +
+            "                            </td>\n" +
+            "                            <td><button type=\"button\" id=\"bodydelete" + bodyrow + "\" onclick=\"delBodyRow(this)\" class=\"input-group btn-link\">删除</button></td>\n" +
+            "                        </tr>")
+        $("#bodytable").append(tr);
+        bodyrow++;
+
+    }
+
+
+    function getRowObj(obj) {
+        var i = 0;
+        while (obj.tagName.toLowerCase() != "tr") {
+            obj = obj.parentNode;
+            if (obj.tagName.toLowerCase() == "table") return null;
+        }
+        return obj;
+    }
+
+    //根据得到的行对象得到所在的行数
+    function getRowNo(obj) {
+        var trObj = getRowObj(obj);
+        var trArr = trObj.parentNode.children;
+        for (var trNo = 0; trNo < trArr.length; trNo++) {
+            if (trObj == trObj.parentNode.children[trNo]) {
+                alert(trNo + 1);
+            }
+        }
+    }
+
+    //删除body行
+    function delheaderRow(obj) {
+        var tr = this.getRowObj(obj);
+        if (headerrow >= 2)
+            if (tr != null) {
+                tr.parentNode.removeChild(tr);
+                headerrow--;
+            } else {
+                throw new Error("the given object is not contained by the table");
+            }
+    }
+
+    //删除body行
+    function delBodyRow(obj) {
+        var tr = this.getRowObj(obj);
+        if (bodyrow >= 2)
+            if (tr != null) {
+                tr.parentNode.removeChild(tr);
+                bodyrow--;
+            } else {
+                throw new Error("the given object is not contained by the table");
+            }
+    }
+
+    /*    function sendrequest() {
+            var url=$("#url").val();
+            var method=$("#methodselect").val();
+            console.log(url+" "+method);
+            if(method==="get"){
+
+         $.ajax({
+             type:method,
+                url:url,
+             success:function (data) {
+
+                 console.log(JSON.stringify(data));
+                 $("#resulttext").innerText=data;
+             }
+
+
+         });
+            }
+        }*/
+    function sendrequest() {
+        document.getElementById("resulttext").innerText="正在请求，请稍等"
+        var json = {};
+        var url = $("#url").val();
+        var method = $("#methodselect").val();
+        json.url = url;
+        json.method = method;
+        var headerkey = document.getElementsByName("headerkey");
+        var headervalue = document.getElementsByName("headervalue");
+        var bodykey = document.getElementsByName("bodykey");
+        var bodyvalue = document.getElementsByName("bodyvalue")
+        var hp = new Array(), bp = new Array();
+        console.log(headerkey.length)
+        for (var i = 0; i < headerkey.length; i++) {
+            var temp = {};
+            temp.key = headerkey[i].value;
+            temp.value = headervalue[i].value;
+            hp[i] = temp;
+        }
+
+
+        for (var i = 0; i < bodykey.length; i++) {
+            var temp = {};
+            temp.key = bodykey[i].value;
+            temp.value = bodyvalue[i].value;
+            bp[i] = temp;
+        }
+        json.hp = hp;
+        json.bp = bp;
+        alert(JSON.stringify(json));
+        $.ajax({
+            type: "post",
+            url: "/api/request",
+            datatype: "text",
+            contentType: "application/json", //必须有
+            data: JSON.stringify(json),
+            success: function (data) {
+//console.log(typeof(data));
+                console.log(data.time);
+                document.getElementById("resulttext").innerText = data.response.toString();
+                document.getElementById("time").innerHTML = data.time.toString() + "秒";
+                document.getElementById("status").innerHTML = data.statuscode.toString();
+            }
+        });
+    }
+</script>
+<body>
+<div class="container">
+    <div id="testheader" class="col-md-12 col-sm-12 col-lg-12">
+
+        <div class="col-sm-2 col-lg-2">
+            <select id="methodselect" class="form-control text-center col-lg-1 col-sm-2 col-md-2">
+                <option value="get" class="form-control">Get</option>
+                <option value="post" class="form-control">Post</option>
+            </select>
+
+
+        </div>
+        <span>
+            <div class="url col-lg-6 col-sm-6 col-md-6">
+                <input class=" form-control" id="url" placeholder="http://">
+             </div>
+        </span>
+        <span class="col-sm-2 col-lg-1 col-md-3">
+             <button type="button" id="send" onclick="sendrequest()" class="form-control btn-primary">Send</button>
+        </span>
+        <span class="col-sm-2 col-lg-1 col-md-3">
+        <button type="button" class="form-control btn-primary">Reset</button>
+        </span>
+    </div>
+
+    <div class="param_tab">
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active">
+                <a href="#header" data-toggle="tab">
+                    Header
+                </a>
+            </li>
+            <li><a href="#body" data-toggle="tab">body</a></li>
+
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active  col-lg-12 col-md-12 col-sm-12" id="header">
+                <div class="col-md-5 col-sm-5 col-lg-5">
+                    <table id="headertable" class="paramtable table">
+                        <thead>
+                        <tr>
+                            <th>key</th>
+                            <th>value</th>
+                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td >
+                                <input  type="text" name="headerkey" class="input-group"/>
+                            </td>
+                            <td>
+                                <input type="text" name="headervalue" class="input-group"/>
+                            </td>
+                            <td>
+                                <button type="button" id="headerdelete0" onclick="delheaderRow(this)"
+                                        class="input-group btn-link">
+                                    删除
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="headeraddbutton" class="col-lg-offset-6 col-sm-offset-8 col-md-offset-7">
+                    <button class="btn-primary" onclick="addheaderparam()">添加</button>
+                </div>
+            </div>
+            <div class="tab-pane fade col-lg-12 col-md-12 col-sm-12" id="body">
+                <div class="col-md-5 col-sm-5 col-lg-5">
+                    <table id="bodytable" class="paramtable table">
+                        <thead>
+                        <tr>
+                            <th>key</th>
+                            <th>value</th>
+                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" name="bodykey" class="input-group"/>
+                            </td>
+                            <td>
+                                <input type="text" name="bodyvalue" class="input-group"/>
+                            </td>
+                            <td>
+                                <button type="button" id="bodydelete0" onclick="delBodyRow(this)"
+                                        class="input-group btn-link">
+                                    删除
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="bodyaddbutton" class="col-lg-offset-6 col-sm-offset-8 col-md-offset-7">
+                    <button class="btn-primary" onclick="addbodyparam()">添加</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div id="result" class="col-lg-5 col-md-6 col-sm-6">
+        <div class="col-lg-2 col-sm-3 col-md-3" >
+             <H3 >Response</H3>
+        </div>
+        <div style="margin-top: 50px" class="col-md-6 col-lg-6 col-md-6 col-md-offset-3 col-lg-offset-3 col-sm-offset-2">
+             <label>用时：</label><span id="time"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               <label>状态：</label>
+               <span id="status"></span>
+
+        </div>
+        <textarea cols="30" id="resulttext" class="">
+        没有响应
+        </textarea>
+
+    </div>
+    <div class="paramtable col-sm-4 col-md-3 col-lg-4 col-lg-offset-2 col-sm-offset-5 col-md-offset-5 text-center" style="margin-top: 100px">
+        <label>path参数</label>
+        <table id="pathparamtable" class="table table-bordered">
+            <thead>
+            <tr>
+                <th>参数Key</th>
+                <th>参数示例</th>
+            </tr>
+            </thead>
+        </table>
+
+        <label>header参数</label>
+        <table id="headerparamtable" class="table table-bordered">
+            <thead>
+            <tr>
+                <th>参数Key</th>
+                <th>参数value</th>
+            </tr>
+            </thead>
+        </table>
+        <label>body参数</label>
+        <table id="bodyparamtable" class="table table-bordered">
+            <thead>
+            <tr>
+                <th>参数Key</th>
+                <th>参数value</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

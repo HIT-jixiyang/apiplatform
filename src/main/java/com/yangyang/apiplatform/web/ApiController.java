@@ -19,29 +19,6 @@ public class ApiController {
     @Autowired
     ApiService apiService;
 
-    @PostMapping(value = "/sp/addapi")
-    public String addApi(Api api, HttpSession session) {
-        System.out.println("前端发过来的参数" + api.toString());
-        String uid = UUID.getUUID();
-        api.setApi_id(uid);
-        api.setSp_id(((Sp) session.getAttribute("sp")).getSp_id());
-        api.setApi_strip_prefix(1);
-        api.setApi_enabled(1);
-        api.setApi_path("/" + uid + "/**");
-        api.setApi_retryable(1);
-        System.out.println(api.toString());
-        System.out.println("getSp_id:" + ((Sp) session.getAttribute("sp")).getSp_id());
-        if (apiService.addApi(api))
-            return "success";
-        else
-            return "fail";
-    }
-
-    @RequestMapping(value = "/sp/addapipage")
-    public ModelAndView toaddapi() {
-        ModelAndView mv = new ModelAndView("/sp/addapi");
-        return mv;
-    }
 
     // api搜索
     @RequestMapping(value = "/api/search")

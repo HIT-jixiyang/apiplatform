@@ -7,7 +7,7 @@
     <link type="text/css" href="../../static/bootstrap/css/bootstrap.css" rel="stylesheet"/>
     <link type="text/css" href="../../static/bootstrap/css/bootstrap-theme.css" rel="stylesheet"/>
     <link type="text/css" href="../../static/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
-
+<script src="../../static/js/addapi.js"></script>
     <style>
         .des{
 
@@ -35,83 +35,11 @@
         }
     </style>
 </head>
-<script type="text/javascript">
-    function addapi() {
-        var str=$("#apiform").serializeArray();
-        var j=JSON.stringify(str);
-        alert(j);
-         $.ajax({
-              type : "POST",
-              url : "/sp/addapi",
-              dataType : "text",
-              data : $("#apiform").serializeArray(),
-              contentType:"application/x-www-form-urlencoded",
-              success : function(data) {
-                  alert("成功");
-              },
-              error : function(data) {
-                  alert("失败");
-                  console.log(data);
-              }
-          });
-      }
-    var row=0;
-    function addrow() {
-        if(row<20){
-            row++;
-            var table=$("#paratable");
-            console.log("OK");
-            var tr=$("<tr>"+" <td class='text-center'>"+"<input class='form-control ' type='text'  placeholder='参数名称'>"+"</td>" +
-                " <td class='text-center'> "+"<input class='form-control ' type='text'  placeholder='参数值'>"+" </td>" +
-                "  <td class='text-center'>"+"<button type='button' class='btn-link'>删除</button>"+"</td>"+"</tr>" );
-            console.log(tr.toString());
-            table.append(tr);
-        }else{
-            alert("已经达到最大参数数量");
-        }
-    }
-    function deleterow(tdobject) {
-        row--;
-        var td=$(tdobject);
-        td.parents("tr").remove();
-    }
-    function addtr(){
-        if(row<8){
-            row++;
-            var table = $("#para_table");
-            var param="apiRequestParamList["+row+"].api_param";
-            var value="apiRequestParamList["+row+"].api_param_demo";
-            console.log(param);
-            var tr= $("<tr>" +
-                "<td style='text-align: center;' >"+"<input type='text' name="+"'"+param+"'"+" class='text-primary text-center'/>"+"</td>" +
-                "<td style='text-align: center;'>"+"<input type='text'  name="+"'"+value+"'"+"class='text-primary text-center' />"+"</td>" +
-                "<td align='center' onclick='deletetr(this)'><button type='button' class='btn btn-xs btn-link' >"+"删除"+"</button></td></tr>");
-            table.append(tr);
-        }else{
-            alert("已达到发票能开具的最大商品明细行数");
-        }
-    }
-    function deletetr(tdobject){
-        row--;
-        var td=$(tdobject);
-        td.parents("tr").remove();
-    }
-    function gettableinfo(){
-        var objInput = document.getElementById("para_table").getElementsByTagName("input");
-        for (i = 0; i < objInput.length; i++) alert(objInput[i].value);
 
-    }
-</script>
 <body>
-<div class="headtag col-lg-12 col-md-12 col-sm-12">
-    <div class="logout">
-        <span> <small><a href="/logout" style="color: white">退出登录</a></small></span>
-    </div>
-    <div class="welcome"> <H2>欢迎来到HIT-ICES-API接入平台</H2></div>
-</div>
 
 <div class="apiform col-lg-10 col-lg-offset-1">
-    <H1 class="text-primary col-lg-offset-3">感谢您将您的服务注册到我们的平台</H1>
+
     <form class="apiform" id="apiform">
         <table class="table">
             <tr>
@@ -182,6 +110,10 @@
                 <tr>
                     <th style="text-align:center" width="200">参数名称</th>
                     <th style="text-align:center" width="200">参数值样例</th>
+                    <th style="text-align:center" width="200">参数是否必选</th>
+                    <th style="text-align:center" width="200">参数位置</th>
+                    <th style="text-align:center" width="200">是否是常量参数</th>
+
                     <th style="text-align:center" width="100">操作</th>
                 </tr>
                 </thead>
@@ -189,6 +121,23 @@
                 <tr>
                     <td style="text-align:center; " ><input type="text" name="apiRequestParamList[0].api_param" class="text-primary text-center"/></td>
                     <td style="text-align:center; " ><input type="text" name="apiRequestParamList[0].api_param_demo" class="text-primary text-center"/></td>
+                    <td style="text-align:center; " ><select name="apiRequestParamList[0].api_param_ismust" class="text-primary text-center">
+                        <option value="0" >可选</option>
+                        <option value="1">必选</option>
+                    </select>
+                    </td>
+                    <td style="text-align:center; " >
+                    <select name="apiRequestParamList[0].api_param_position" class="text-primary text-center">
+                        <option value="path" class="active">Path</option>
+                        <option value="header">Header</option>
+                        <option value="body">Body</option>
+                    </select>
+                    </td>
+                    <td style="text-align:center; " ><select name="apiRequestParamList[0].api_param_isconstant" class="text-primary text-center">
+                        <option value="0" >是</option>
+                        <option value="1">不是</option>
+                    </select>
+                    </td>
                     <td style="text-align:center; " >
                         <button type="button" class="btn btn-xs btn-link">删除</button></td>
                 </tr>
@@ -202,19 +151,15 @@
             </div>
         </div>
         <div style="margin-top: 50px">
-        <div class="col-lg-3">
+        <div class="col-lg-4">
             <label >Api功能描述</label>
             <textarea class="form-control" rows="8" cols="10" placeholder="填写API的功能描述（200字以内）" name="api_description"></textarea>
         </div>
-        <div class="col-lg-3">
-            <label >Api请求示例</label>
-            <textarea class="form-control" rows="8" cols="10" placeholder="填写API的请求示例" name="api_demo"></textarea>
-        </div>
-        <div class="col-lg-3">
+        <div class="col-lg-4">
             <label >Api正常返回示例</label>
             <textarea class="form-control" rows="8" cols="10" placeholder="填写API的正常返回示例" name="api_normal_return_demo"></textarea>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-4">
             <label>Api错误返回示例</label>
             <textarea class="form-control" rows="8" cols="10" placeholder="填写API的异常返回示例" name="api_error_return_demo"></textarea>
         </div>

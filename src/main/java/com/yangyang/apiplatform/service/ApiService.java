@@ -3,6 +3,7 @@ package com.yangyang.apiplatform.service;
 import com.yangyang.apiplatform.entity.Api;
 import com.yangyang.apiplatform.entity.ApiRequestParam;
 import com.yangyang.apiplatform.mapper.ApiMapper;
+import com.yangyang.apiplatform.mapper.ApiParamMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,8 @@ import java.util.Map;
 public class ApiService {
     @Autowired
     ApiMapper apiMapper;
-
+@Autowired
+    ApiParamMapper apiParamMapper;
     public boolean addApi(Api api) {
         boolean flag = false;
         if (!apiMapper.addApi(
@@ -33,14 +35,13 @@ public class ApiService {
                 api.getApi_sys_price(),
                 api.getApi_method(),
                 api.getApi_return_pattern(),
-                api.getApi_demo(),
                 api.getApi_normal_return_demo(),
                 api.getApi_error_return_demo()
         )) return false;
         List<ApiRequestParam> apiRequestParamsList = api.getApiRequestParamList();
         for (ApiRequestParam p : apiRequestParamsList) {
             p.setApi_id(api.getApi_id());
-            if (!apiMapper.addApiParam(p)) return false;
+            if (!apiParamMapper.addApiParam(p)) return false;
         }
         return true;
 

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的Api</title>
+    <script src="../../static/bootstrap/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="../../static/css/consumer.css">
+    <script src="../../static/bootstrap/js/bootstrap.min.js"></script>
+
+
+</head>
+<style>
+    .headtag{
+        background-color: #2aabd2;
+    }
+
+    .logout{
+        float: right;
+
+        margin-top: 3%;
+    }
+    .welcome{
+        float: left;
+    }
+</style>
+<script type="text/javascript">
+    function toaddapi(){
+        window.location.href = '/sp/toaddapipage';
+    }
+    $(document).ready(function(){
+            $.ajax({
+                type:"get",
+                url:"/sp/getapilist",
+                async:true,
+                success:function (json) {
+                    console.log(json);
+                    var dataobj=json;
+                    con="";
+                    $.each(dataobj,function (index,item) {
+                        console.log(item.api_name);
+                        con+="<tr><td>"+item.api_id+"</td><td>"+item.api_name+"</td><td>"+item.api_url+"</td><td>"+"<a>查看报表 </a> <a>配置 </a> <a>测试 </a> </td></tr>";
+                        console.log(con);
+                    });
+                    document.getElementById('listbody').innerHTML=con;
+
+                }
+            });
+        }
+    );
+</script>
+<body>
+
+    <div id="header" class="col-lg-12 col-md-12 col-sm-12" style="background-color: #2aabd2">
+        <div id="headertitle" class="col-sm-4 col-lg-3 col-md-5" >
+            <H3>消费者用户个人中心</H3>
+        </div>
+        <div id="userinfo">
+            <label><small>欢迎您</small></label>
+            <span>用户名</span>
+            <span> <small><a href="/sp/sp_logout" style="color: white">退出登录</a></small></span>
+        </div>
+    </div>
+<div class="container-fluid col-sm-12 col-md-12 col-lg-12">
+    <div id="sidebar" class="row col-lg-2 col-md-3 col-sm-3">
+
+        <ul class="nav nav-pills nav-stacked">
+            <li class="active"><a href="/sp/sp_apimanage">我的API</a></li>
+            <li ><a href="/sp/toaddapipage">API接入</a></li>
+            <li><a href="/sp/sp_appmanage">应用管理</a></li>
+            <li><a href="#">报表查看</a></li>
+            <li><a href="#">账单管理</a></li>
+            <li><a href="#">用户设置</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-8 col-lg-8 col-md-8 col-md-offset-1 col-sm-offset-1 col-lg-offset-1">
+        <table class="table table-bordered" id="list">
+            <thead>
+            <tr>
+                <th>API ID</th>
+                <th>API名称</th>
+                <th>url</th>
+                <th>网关path</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="listbody">
+            <!-- <tr th:each="api : ${apilist}">
+                 <td><a th:text="${{api.api_description}}"/></td>
+                 <td><a th:text="${{api.api_ip}} "/></td>
+                 <td><a th:text="${ {api.api_port} }"/></td>
+                 <td><a>查看报表 </a>
+                     <a>配置 </a>
+                      <a>测试 </a>
+             </td>
+             </tr>-->
+            </tbody>
+        </table>
+        <button type="button" class="btn-primary" onclick="toaddapi()">添加新的API</button>
+    </div>
+
+</div>
+
+</body>
+</html>
