@@ -2,9 +2,90 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>应用管理</title>
+    <script src="../../static/bootstrap/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="../../static/css/consumer.css">
+    <script src="../../static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../static/js/addapi.js"></script>
 </head>
+<style>
+    #addapi-html {
+        height: 1500px;
+        border: none;
+    }
+</style>
 <body>
+<div id="header" class="col-lg-12 col-md-12 col-sm-12" style="background-color: #2aabd2">
+    <div id="headertitle" class="col-sm-4 col-lg-3 col-md-5">
+        <H3>服务提供商个人中心</H3>
+    </div>
+    <div id="userinfo">
+        <label>
+            <small>欢迎您</small>
+        </label>
+        <span>用户名</span>
+        <span> <small><a href="/sp/sp_logout" style="color: white">退出登录</a></small></span>
+    </div>
+</div>
+<div class="container-fluid col-sm-12 col-md-12 col-lg-12">
+    <div id="sidebar" class="row col-lg-2 col-md-3 col-sm-3">
+
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href="/sp/sp_apimanage">我的API</a></li>
+            <li class="active"><a href="/sp/toaddapipage">API接入</a></li>
+            <li><a href="/sp/sp_appmanage">应用管理</a></li>
+            <li><a href="#">报表查看</a></li>
+            <li><a href="#">账单管理</a></li>
+            <li><a href="#">用户设置</a></li>
+        </ul>
+    </div>
+    <div class="righttable" style="margin-top: 50px">
+        <div>
+            <button type="button" class="btn-primary " data-toggle="modal" data-target="#myModal" style="float: right">创建应用</button>
+        </div>
+        <div class="col-lg-10 col-md-9 col-sm-9" style="margin-top: 30px">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>应用ID</th>
+                    <th>应用名称</th>
+                    <th>应用Secret</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                         创建App
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                      <div id="appname"> <label class="col-lg-4">App名称</label> <input class="col-lg-8"></div>
+                        <div id="appdescription" style="margin-top: 30px"><label class="col-lg-4">App描述</label><textarea class="col-lg-8" cols="15" rows="8"></textarea></div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: 200px">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                            提交
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    </div>
+
+</div>
 
 </body>
 </html>

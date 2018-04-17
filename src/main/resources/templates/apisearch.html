@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
     <!-- import CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<link rel="stylesheet" href="../static/css/eleindex.css">
 </head>
 <body>
 <div id="app">
@@ -76,7 +76,7 @@
 <!-- import util -->
 <script src="../static/util/cache.js"></script>
 <script>
-	new Vue({
+	var vue=new Vue({
 		el: '#app',
 		data: function() {
 			return {
@@ -111,7 +111,7 @@
 					var data = response.body
 					this.tableData = data.data
 					this.tableDataLength = data.total
-					console.log(data)
+					console.log(JSON.stringify(this.tableData))
 				})
 			},
 			handleSizeChange (val) {
@@ -138,7 +138,8 @@
                 window.location.href='/api/detail';
             }
 		}
-	})
+	});
+	vue.initPage();
 </script>
 <style>
 	.search-bar {

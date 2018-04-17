@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <title>我的Api</title>
     <script src="../../static/bootstrap/js/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.min.css">
@@ -41,7 +42,7 @@
                     con="";
                     $.each(dataobj,function (index,item) {
                         console.log(item.api_name);
-                        con+="<tr><td>"+item.api_id+"</td><td>"+item.api_name+"</td><td>"+item.api_url+"</td><td>"+"<a>查看报表 </a> <a>配置 </a> <a>测试 </a> </td></tr>";
+                        con+="<tr><td>"+item.api_id+"</td><td>"+item.api_name+"</td><td>"+item.api_url+"</td><td>"+"127.0.0.1:8082"+item.api_path+"</td><td>"+"<a>查看报表 </a> <a>配置 </a> <a href=\"/api/test\">测试</a> <a>下线 </a></td></tr>";
                         console.log(con);
                     });
                     document.getElementById('listbody').innerHTML=con;
@@ -55,7 +56,7 @@
 
     <div id="header" class="col-lg-12 col-md-12 col-sm-12" style="background-color: #2aabd2">
         <div id="headertitle" class="col-sm-4 col-lg-3 col-md-5" >
-            <H3>消费者用户个人中心</H3>
+            <H3>服务提供商个人中心</H3>
         </div>
         <div id="userinfo">
             <label><small>欢迎您</small></label>
@@ -74,8 +75,9 @@
             <li><a href="#">账单管理</a></li>
             <li><a href="#">用户设置</a></li>
         </ul>
+
     </div>
-    <div class="col-sm-8 col-lg-8 col-md-8 col-md-offset-1 col-sm-offset-1 col-lg-offset-1">
+    <div class="col-sm-9 col-lg-10 col-md-9 ">
         <table class="table table-bordered" id="list">
             <thead>
             <tr>

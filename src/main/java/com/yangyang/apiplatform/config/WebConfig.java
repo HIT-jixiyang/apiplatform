@@ -28,9 +28,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
        registry.addInterceptor(new SpLoginInterceptor()).addPathPatterns("/**").excludePathPatterns("/sp/sp_loginpage","/sp/sp_registerpage","/sp_login","/sp_register","/api/search");
-        ;
         super.addInterceptors(registry);
     }
 }

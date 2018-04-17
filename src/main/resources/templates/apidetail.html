@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <!-- import CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../static/css/eleindex.css">
 </head>
 <body>
 <div id="app">
@@ -31,7 +31,7 @@
                                 <el-col class="detailcell" :span="12"><span class="detailLabel">api单价: </span>{{api.api_sys_price}}</el-col>
                             </el-row>
                             <el-row>
-                                <el-col class="detailcell" :span="24"><span class="detailLabel">网关地址: </span>{{api.api_path}}</el-col>
+                                <el-col class="detailcell" :span="24"><span class="detailLabel">网关地址: </span>http://127.0.0.1:8082{{api.api_path}}</el-col>
                             </el-row>
                         </div>
                     </el-card>
@@ -58,11 +58,48 @@
                                 </el-table-column>
                                 <el-table-column
                                         prop="api_param_demo"
-                                        label="参数值">
+                                        label="参数样例">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="api_param_position"
+                                        label="参数位置">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="api_param_ismust"
+                                        label="是否必选">
+                                    <template scope="scope">
+                                        <span v-if="scope.row.api_param_ismust === 0">可选</span>
+                                        <span v-else>必选</span>
+                                    </template>
+
                                 </el-table-column>
                             </el-table>
                         </div>
                     </el-card>
+                    <el-card>
+                        <div slot="header" class="detail-card-header">
+                            <span>正常返回示例</span>
+                        </div>
+                        <div>
+                            <p>
+                                {{api.api_normal_return_demo}}
+                            </p>
+                        </div>
+                    </el-card>
+                    <el-card>
+                        <div slot="header" class="detail-card-header">
+                            <span>异常返回示例</span>
+                        </div>
+                        <div>
+                            <p>
+                                {{api.api_error_return_demo}}
+                            </p>
+                        </div>
+                    </el-card>
+                    <div style="float: right">
+                        <el-button type="primary" @click="buy">购买</el-button>
+                    </div>
+
                 </div>
             </el-tab-pane>
 
@@ -160,6 +197,12 @@
                     return '按访问次数计费'
                 else if (val == '0')
                     return '按流量计费'
+            },
+            ismust(val){
+              if(val=='1')
+                  return '必选'
+                else if(val=='0')
+                    return '可选'
             },
             goback () {
                 window.location.href='/api/search';

@@ -16,24 +16,6 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`mybatisdemo` /*!40100 DEFAULT CHARACTER
 
 USE `mybatisdemo`;
 
-/*Table structure for table `account_item` */
-
-DROP TABLE IF EXISTS `account_item`;
-
-CREATE TABLE `account_item` (
-  `account_item_id` varchar(32) NOT NULL,
-  `user_id` varchar(32) NOT NULL,
-  `api_id` varchar(32) NOT NULL,
-  `combo_id` varbinary(32) NOT NULL,
-  `record_time` datetime NOT NULL,
-  `end_time` datetime NOT NULL,
-  PRIMARY KEY (`account_item_id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `consumer` (`consumer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `account_item` */
-
 /*Table structure for table `api` */
 
 DROP TABLE IF EXISTS `api`;
@@ -61,7 +43,7 @@ CREATE TABLE `api` (
 
 /*Data for the table `api` */
 
-insert  into `api`(`api_id`,`sp_id`,`api_token`,`api_max_in`,`api_enabled`,`api_description`,`api_strip_prefix`,`api_retryable`,`api_path`,`api_name`,`api_bill_type`,`api_sys_price`,`api_method`,`api_url`,`api_return_pattern`,`api_normal_return_demo`,`api_error_return_demo`) values ('1a6ffdb51dd742bf9b58b9d4d9f859f1','c430c9776a934ff1a856360185920c5d','111111',11,1,'1',1,1,'/1a6ffdb51dd742bf9b58b9d4d9f859f1/**','add',1,1,0,'http://127.0.0.1:8090/available','0','1','1'),('24987fb58daa4f56b4c76669312d3e7b','c430c9776a934ff1a856360185920c5d','111111111',111,1,'',1,1,'/24987fb58daa4f56b4c76669312d3e7b/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('61a2b7d32b6844799420f36209126bbf','c430c9776a934ff1a856360185920c5d','1111',1111,1,'',1,1,'/61a2b7d32b6844799420f36209126bbf/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('6fc06379a4ac4ce9b75b7264fda0d407','c430c9776a934ff1a856360185920c5d','1111111',111,1,'',1,1,'/6fc06379a4ac4ce9b75b7264fda0d407/**','天气预报',1,0.01,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('9648b9fd7ae74750bdc1b1391ef05580','c430c9776a934ff1a856360185920c5d','1111111',111,1,'',1,1,'/9648b9fd7ae74750bdc1b1391ef05580/**','天气预报',1,0.01,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('b25badc6744544caa6c5addbfc5be03d','c430c9776a934ff1a856360185920c5d','1111',11111,1,'',1,1,'/b25badc6744544caa6c5addbfc5be03d/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('b41a68f395c34e709bdcef4540933433','c430c9776a934ff1a856360185920c5d','111111',111,1,'',1,1,'/b41a68f395c34e709bdcef4540933433/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('dcb2e7e79d58470e819a2da6ea2a89d3','c430c9776a934ff1a856360185920c5d','1',11,1,'1',1,1,'/dcb2e7e79d58470e819a2da6ea2a89d3/**','1',1,1,0,'1','0','1','1'),('ef7deaca96d94cfeb21c1985c44525db','c430c9776a934ff1a856360185920c5d','11111',100,1,'简单的加法',1,1,'/ef7deaca96d94cfeb21c1985c44525db/**','加法',1,1,0,'http://127.0.0.1:8090/add','0','2','error');
+insert  into `api`(`api_id`,`sp_id`,`api_token`,`api_max_in`,`api_enabled`,`api_description`,`api_strip_prefix`,`api_retryable`,`api_path`,`api_name`,`api_bill_type`,`api_sys_price`,`api_method`,`api_url`,`api_return_pattern`,`api_normal_return_demo`,`api_error_return_demo`) values ('1a6ffdb51dd742bf9b58b9d4d9f859f1','c430c9776a934ff1a856360185920c5d','111111',11,1,'加法',1,1,'/1a6ffdb51dd742bf9b58b9d4d9f859f1/**','add',1,1,0,'http://127.0.0.1:8090/available','0','1','1'),('24987fb58daa4f56b4c76669312d3e7b','c430c9776a934ff1a856360185920c5d','111111111',111,1,'',1,1,'/24987fb58daa4f56b4c76669312d3e7b/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('61a2b7d32b6844799420f36209126bbf','c430c9776a934ff1a856360185920c5d','1111',1111,1,'',1,1,'/61a2b7d32b6844799420f36209126bbf/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('6fc06379a4ac4ce9b75b7264fda0d407','c430c9776a934ff1a856360185920c5d','1111111',111,1,'',1,1,'/6fc06379a4ac4ce9b75b7264fda0d407/**','天气预报',1,0.01,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('9648b9fd7ae74750bdc1b1391ef05580','c430c9776a934ff1a856360185920c5d','1111111',111,1,'',1,1,'/9648b9fd7ae74750bdc1b1391ef05580/**','天气预报',1,0.01,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('b25badc6744544caa6c5addbfc5be03d','c430c9776a934ff1a856360185920c5d','1111',11111,1,'',1,1,'/b25badc6744544caa6c5addbfc5be03d/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('b41a68f395c34e709bdcef4540933433','c430c9776a934ff1a856360185920c5d','111111',111,1,'',1,1,'/b41a68f395c34e709bdcef4540933433/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('dcb2e7e79d58470e819a2da6ea2a89d3','c430c9776a934ff1a856360185920c5d','1',11,1,'1',1,1,'/dcb2e7e79d58470e819a2da6ea2a89d3/**','1',1,1,0,'1','0','1','1'),('ef7deaca96d94cfeb21c1985c44525db','c430c9776a934ff1a856360185920c5d','11111',100,1,'简单的加法',1,1,'/ef7deaca96d94cfeb21c1985c44525db/**','加法',1,1,0,'http://127.0.0.1:8090/add','0','2','error');
 
 /*Table structure for table `api_app` */
 
@@ -105,7 +87,7 @@ CREATE TABLE `api_request_param` (
 
 /*Data for the table `api_request_param` */
 
-insert  into `api_request_param`(`api_id`,`api_param`,`api_param_demo`,`api_param_position`,`api_param_ismust`,`api_param_isconstant`) values ('508a6640781b4958a452842d3387ca71','1','2','path',1,0),('508a6640781b4958a452842d3387ca71','3','4','path',1,0),('02c79ec86b46432b8382219b45172c9a','1','1','path',1,0),('02c79ec86b46432b8382219b45172c9a','2','2','path',1,0),('25b2b9ac290a4b1d8b67396b6be8fa25','1','1','path',1,0),('ef7deaca96d94cfeb21c1985c44525db','','','path',1,0),('44bd717027a640b5b795e2352767161b','','','path',1,0),('c9e6e28621c64d038a4c80b50ae4d261','','','path',1,0),('ab2c0fab05da48ff959ad8bd92e403fb','','','path',1,0),('bdd5c611a3e84c4c86a57291482e75fa','','','path',1,0),('dcb2e7e79d58470e819a2da6ea2a89d3','1','2','path',1,0),('1a6ffdb51dd742bf9b58b9d4d9f859f1','1','2','path',1,0),('b25badc6744544caa6c5addbfc5be03d','','','path',0,0);
+insert  into `api_request_param`(`api_id`,`api_param`,`api_param_demo`,`api_param_position`,`api_param_ismust`,`api_param_isconstant`) values ('1a6ffdb51dd742bf9b58b9d4d9f859f1','first','1','path',1,0),('1a6ffdb51dd742bf9b58b9d4d9f859f1','second','1','path',1,0);
 
 /*Table structure for table `api_sys_price` */
 
@@ -140,14 +122,17 @@ CREATE TABLE `api_user_price` (
 DROP TABLE IF EXISTS `app`;
 
 CREATE TABLE `app` (
-  `appid` bigint(12) NOT NULL AUTO_INCREMENT,
-  `appsecret` varchar(32) NOT NULL,
-  `app_decription` text NOT NULL,
+  `app_id` bigint(12) NOT NULL AUTO_INCREMENT,
+  `app_secret` varchar(16) NOT NULL,
+  `app_description` text NOT NULL,
   `app_name` varchar(128) NOT NULL DEFAULT '"null"',
-  PRIMARY KEY (`appid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `consumer_id` varchar(32) NOT NULL,
+  PRIMARY KEY (`app_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `app` */
+
+insert  into `app`(`app_id`,`app_secret`,`app_description`,`app_name`,`consumer_id`) values (1,'absudbaskba','烤面筋','烤面筋','11111111111111111'),(2,'absudbaskba','烤面筋','烤面筋','11111111111111111'),(3,'ZBla9YwkZfGGhadi','aaa','aaa','87de254182574856af64d323869b686d'),(4,'ZPdNWfNoyxiEo7cO','11','11','87de254182574856af64d323869b686d'),(5,'j0FF6DAlFgZGffIw','app2','app2','87de254182574856af64d323869b686d'),(6,'7QN4Q3hP7RWpLDqk','app','爱屁屁','87de254182574856af64d323869b686d');
 
 /*Table structure for table `bill_type` */
 
@@ -232,18 +217,20 @@ CREATE TABLE `gateway_api_define` (
 
 insert  into `gateway_api_define`(`id`,`path`,`service_id`,`url`,`retryable`,`enabled`,`strip_prefix`,`api_name`) values ('book1','/book',NULL,'http://localhost:8000',0,1,1,NULL),('myapiplatform','/api/**',NULL,'http://localhost:8082',0,1,1,NULL),('new','/mybatis/**',NULL,'http://localhost:8081',0,1,1,NULL),('pppp','/pppp/**',NULL,'http://localhost:8090/available',0,1,1,NULL);
 
-/*Table structure for table `person` */
+/*Table structure for table `order` */
 
-DROP TABLE IF EXISTS `person`;
+DROP TABLE IF EXISTS `order`;
 
-CREATE TABLE `person` (
-  `pid` int(11) NOT NULL AUTO_INCREMENT,
-  `pname` varchar(50) DEFAULT NULL,
-  `page` int(11) DEFAULT NULL,
-  PRIMARY KEY (`pid`)
+CREATE TABLE `order` (
+  `consumer_id` varchar(32) NOT NULL,
+  `api_id` varchar(32) NOT NULL,
+  `order_create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `order_remain` int(11) NOT NULL,
+  `order_total` int(11) NOT NULL,
+  PRIMARY KEY (`consumer_id`,`api_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `person` */
+/*Data for the table `order` */
 
 /*Table structure for table `service_provider` */
 
@@ -281,23 +268,6 @@ CREATE TABLE `sys_combo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `sys_combo` */
-
-/*Table structure for table `tb_area` */
-
-DROP TABLE IF EXISTS `tb_area`;
-
-CREATE TABLE `tb_area` (
-  `area_id` int(2) NOT NULL,
-  `area_name` varchar(200) DEFAULT NULL,
-  `priority` int(2) DEFAULT NULL,
-  `create_time` date DEFAULT NULL,
-  `last_edit_time` date DEFAULT NULL,
-  PRIMARY KEY (`area_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `tb_area` */
-
-insert  into `tb_area`(`area_id`,`area_name`,`priority`,`create_time`,`last_edit_time`) values (2,'西',2,'2018-03-19','2018-03-19');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
