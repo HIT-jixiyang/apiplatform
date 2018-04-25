@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -38,7 +38,7 @@ $.ajax({
         con="";
         $.each(dataobj,function (index,item) {
             console.log(item.api_name);
-            con+="<tr><td>"+item.api_name+"</td><td>"+item.api_url+"</td><td>"+"<a>查看报表 </a> <a>配置 </a> <a>测试 </a> </td></tr>";
+            con+="<tr><td>"+item.api_name+"</td><td>"+item.api_url+"</td><td>"+"<a>查看报表 </a> <a>配置 </a> <a href=''>测试 </a> </td></tr>";
       console.log(con);
         });
     document.getElementById('listbody').innerHTML=con;

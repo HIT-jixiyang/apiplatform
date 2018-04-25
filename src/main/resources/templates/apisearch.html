@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
     <!-- import CSS -->
-	<link rel="stylesheet" href="../static/css/eleindex.css">
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 </head>
 <body>
 <div id="app">
@@ -40,6 +40,15 @@
 						prop="sp_name"
 						label="供应商"
 						width="100">
+					</el-table-column>
+					<el-table-column
+							prop="api_enabled"
+							label="是否可用"
+							width="100">
+						<template scope="scope">
+							<span v-if="scope.row.api_enabled === true">可用</span>
+							<span v-else>不可用</span>
+						</template>
 					</el-table-column>
 					<el-table-column
 							prop="api_description"

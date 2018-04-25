@@ -2,9 +2,13 @@ package com.yangyang.apiplatform.service;
 
 import com.yangyang.apiplatform.entity.Api;
 import com.yangyang.apiplatform.entity.App;
+import com.yangyang.apiplatform.entity.Consumer;
+import com.yangyang.apiplatform.mapper.ApiMapper;
 import com.yangyang.apiplatform.mapper.AppMapper;
+import com.yangyang.apiplatform.utils.AppID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -21,8 +25,11 @@ import java.util.Map;
 public class AppService {
     @Autowired
     AppMapper appMapper;
+@Autowired
+    ApiMapper apiMapper;
 
     public boolean addApp(App app) {
+        app.setApp_id(AppID.getAppID());
         if (appMapper.addApp(app) == 1) {
             return true;
         } else {
@@ -34,7 +41,7 @@ public class AppService {
         return appMapper.getAppListByConsumerID(ConsumerID);
     }
 
-    public App findAppByAppID(BigInteger app_id) {
+    public App findAppByAppID(String app_id) {
         return appMapper.getAppByAppID(app_id);
     }
 
@@ -44,4 +51,15 @@ public class AppService {
         result.put("total", appMapper.countPageList(app));
         return result;
     }
+ /*   public Consumer findConsumerByApp_id(BigInteger app_id){
+        App app=findAppByAppID(app_id);
+        Consumer consumer=
+    }*/
+ @Transactional
+ public String getAppSecretByApp_id(String app_id){
+     App app=appMapper.getAppByAppID(app_id);
+     if(app!=null){
+         return app.getApp_secret();
+     }else return "";
+ }
 }

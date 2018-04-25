@@ -31,6 +31,12 @@
     function toaddapi(){
         window.location.href = '/sp/toaddapipage';
     }
+    //配置API
+    function peizhi(object) {
+alert(object.id);
+window.localStorage.setItem("currentapi_id",object.id);
+window.location.href="/sp/peizhi"
+    }
     $(document).ready(function(){
             $.ajax({
                 type:"get",
@@ -42,7 +48,7 @@
                     con="";
                     $.each(dataobj,function (index,item) {
                         console.log(item.api_name);
-                        con+="<tr><td>"+item.api_id+"</td><td>"+item.api_name+"</td><td>"+item.api_url+"</td><td>"+"127.0.0.1:8082"+item.api_path+"</td><td>"+"<a>查看报表 </a> <a>配置 </a> <a href=\"/api/test\">测试</a> <a>下线 </a></td></tr>";
+                        con+="<tr><td>"+item.api_id+"</td><td>"+item.api_name+"</td><td>"+item.api_url+"</td><td>"+"127.0.0.1:8082"+item.api_path+"</td><td>"+"<a>查看报表 </a> <a id=\""+item.api_id+"\" onclick='peizhi(this)'>配置 </a> <a href=\"/api/test\">测试</a> <a>下线 </a></td></tr>";
                         console.log(con);
                     });
                     document.getElementById('listbody').innerHTML=con;

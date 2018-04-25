@@ -101,6 +101,11 @@ public Map<String,Object> getAppPageListByConsumerId(@RequestBody Map map , Http
     Map<String,Object> appMap=appService.getAppPageList((Integer) map.get("pageNo"),(Integer) map.get("pageSize"), app);
     return appMap;
 }
+@RequestMapping(value = "/consumer/apilist")
+    public ModelAndView getConsumerApplist(){
+    ModelAndView mv=new ModelAndView("consumer_apilist");
+    return mv;
+}
 }
 
 

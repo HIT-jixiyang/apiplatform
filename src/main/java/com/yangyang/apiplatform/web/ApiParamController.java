@@ -16,6 +16,6 @@ public class ApiParamController {
 
     @RequestMapping(value = "/getData/api/param", method = RequestMethod.POST)
     public Object getApiParamById(@RequestBody Map map){
-        return apiParamService.getApiParamById((String)map.get("apiId"));
+        return apiParamService.getApiParamListById((String)map.get("apiId"));
     }
 }

@@ -13,16 +13,16 @@ import java.math.BigInteger;
 
 public class App {
 
-    BigInteger app_id;
+    String app_id;
     String app_secret;
     String app_description;
     String app_name;
-String consumer_id;
+    String consumer_id;
 
     @Override
     public String toString() {
         return "App{" +
-                "app_id=" + app_id +
+                "app_id='" + app_id + '\'' +
                 ", app_secret='" + app_secret + '\'' +
                 ", app_description='" + app_description + '\'' +
                 ", app_name='" + app_name + '\'' +
@@ -30,11 +30,11 @@ String consumer_id;
                 '}';
     }
 
-    public BigInteger getApp_id() {
+    public String getApp_id() {
         return app_id;
     }
 
-    public void setApp_id(BigInteger app_id) {
+    public void setApp_id(String app_id) {
         this.app_id = app_id;
     }
 

@@ -115,4 +115,10 @@ public class SPController {
         ModelAndView mv=new ModelAndView("/sp/sp_appmanage");
         return mv;
     }
+    @RequestMapping(value = "/sp/apipeizhi")
+    public ModelAndView toModifyPage(){
+
+        ModelAndView mv=new ModelAndView("/sp/sp_apimodify");
+        return mv;
+    }
 }

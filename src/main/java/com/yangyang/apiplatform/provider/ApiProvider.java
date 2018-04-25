@@ -10,7 +10,7 @@ import java.util.List;
  * @Date: Created in 9:25 2018/4/7 0007
  */
 public class ApiProvider {
-    public String getApiPageList(Integer pageNo, Integer pageSize, Api api) throws IllegalAccessException {
+    public String getApiPageListByApiExample(Integer pageNo, Integer pageSize, Api api) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
         sql.append("select a.*,s.sp_name from api a,service_provider s\n");
         List<String[]> condition = SqlUtil.getNotNullField(api);

@@ -27,11 +27,14 @@ public class HTTPUtils {
         HttpGet httpGet=new HttpGet(url);
         httpGet.setConfig(requestConfig);
         Map<String,Object> resultmap=new HashMap<String, Object>();
-        int n=hp.size();
-        for(Map m:hp){
-            if(!m.get("key").equals(""))
-            httpGet.setHeader((String)m.get("key"),(String) m.get("value"));
+        if(hp!=null){
+            int n=hp.size();
+            for(Map m:hp){
+                if(!m.get("key").equals(""))
+                    httpGet.setHeader((String)m.get("key"),(String) m.get("value"));
+            }
         }
+
         String srtResult =null;
         int StatusCode=404;
         try {
@@ -130,5 +133,9 @@ public class HTTPUtils {
         resultmap.put("statuscode","000");
         resultmap.put("time",0);
         return resultmap;
+    }
+
+    public static void main(String[] args) {
+        doget("http://wthrcdn.etouch.cn/weather_mini?city=威海",null);
     }
 }

@@ -60,18 +60,20 @@ public interface ApiMapper {
     @Select("select * from api where sp_id=#{sp_id}")
     public List<Api> getApiListBySpId(String sp_id);
     @Update("update api set api_ip=#{api_ip},api_port=#{api_port},api_token=#{api_token},api_prefix=#{api_prefix},api_max_in=#{api_max_in},api_enabled=#{api_enabled},api_description=#{api_description},api_strip_prefix=#{api_strip_prefix},api_retryable=#{api_retryable},api_path=#{api_path} ,api_name=#{api_name} ,api_bill_type=#{api_bill_type},api_sys_price=#{api_sys_type} where api_id=#{api_id}")
-    public boolean updateApi(Api api);
+    public boolean updateApiByApiID(Api api);
     @Select("select * from api ")
     public List<Api> getAllApiList();
-
-
+    @Delete("delete from api where api_id=#{api_id}")
+    public int deleteApiByApiID(String api_id);
     // 获取api分页列表
-    @SelectProvider(type = ApiProvider.class, method = "getApiPageList")
-    List<Map> getApiPageList(Integer pageNo, Integer pageSize, Api api);
+    @SelectProvider(type = ApiProvider.class, method = "getApiPageListByApiExample")
+    List<Map> getApiPageListByApiExample(Integer pageNo, Integer pageSize, Api api);
 
     // 获取api数
     @SelectProvider(type = ApiProvider.class, method = "countPageList")
     Integer countPageList(Api api);
+    @Select("select * from api where api_id=#{api_id}")
+    public Api getApiByApiID(String api_id);
     /*
     @Select("select api_id as service_id,api_ip")
     public List<ZuulRouteVO> getZuulApiBySp_id(String sp_id);*/

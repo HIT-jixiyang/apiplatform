@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- import CSS -->
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+	<div class="api-table">
+		<el-row>
+			<el-col :span="7">
+				<el-input v-model="input" placeholder="输入完整API名字进行查询" style="margin-bottom: 10px"></el-input>
+			</el-col>
+			<el-col :span="2">
+				<el-button style="margin-left: 5px">搜索</el-button>
+			</el-col>
+		</el-row>
+		<el-row>
+			<el-col>
+				<el-table
+						:data="tableData"
+						border tooltip-effect="dark" style="width: 100%"
+						@selection-change="handleSelectionChange">
+					<el-table-column
+							type="selection"
+							width="55">
+					</el-table-column>
+					<el-table-column
+							prop="api_name"
+							label="api名称">
+					</el-table-column>
+					<el-table-column
+							prop="order_total"
+							label="总共">
+					</el-table-column>
+					<el-table-column
+							prop="order_remain"
+							label="剩余">
+					</el-table-column>
+					<el-table-column
+							prop="count_type"
+							label="记账方式">
+					</el-table-column>
+					<el-table-column
+							label="操作"
+							width="200px">
+						<template slot-scope="scope">
+							<el-button type="info" size="mini" @click="showDetail(scope.row)">详情</el-button>
+							<el-button type="success" size="mini" @click="openDialog(scope.row)">授权</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+				<el-pagination
+						@size-change="handleSizeChange"
+						@current-change="handleCurrentChange"
+						:current-page="filter.pageNo"
+						:page-sizes="[5, 10, 15]"
+						:page-size="filter.pageSize"
+						layout="total, sizes, prev, pager, next, jumper"
+						:total="tableDataLength"
+						style="float:right">
+				</el-pagination>
+			</el-col>
+		</el-row>
+		<el-dialog
+				title="提示"
+				:visible.sync="dialog.visible"
+				width="70%"
+				center>
+			<div>
+				<el-row class="dialog-row">
+					<span>您将对下列api进行授权:</span>
+				</el-row>
+				<el-row class="dialog-row">
+					<el-tag>xxx,yyy等两个api</el-tag>
+				</el-row>
+				<el-row class="dialog-row">
+					<span>选择要授权的环境:</span>
+				</el-row>
+				<el-row class="dialog-row">
+					<el-radio-group v-model="dialog.form.environment" size="medium">
+						<el-radio-button label="线上"></el-radio-button>
+						<el-radio-button label="预发"></el-radio-button>
+						<el-radio-button label="测试"></el-radio-button>
+					</el-radio-group>
+				</el-row>
+				<el-row class="dialog-row">
+					<span>选择要授权的应用:</span>
+				</el-row>
+
+				<div class="wrap">
+					<div class="left">
+						<el-row>
+							<el-col :span="4">
+								<el-select v-model="searchType" placeholder="请选择" style="margin-right: 5px">
+									<el-option
+											v-for="item in options"
+											:key="item.value"
+											:label="item.label"
+											:value="item.value">
+									</el-option>
+								</el-select>
+							</el-col>
+							<el-col :span="16">
+								<el-input v-model="input" placeholder="输入应用ID" style="margin-bottom: 10px"></el-input>
+							</el-col>
+							<el-col :span="4">
+								<el-button style="margin-left: 5px">搜索</el-button>
+							</el-col>
+						</el-row>
+						<el-row class="dialog-row">
+							<el-col>
+								<el-table
+										:data="tableData1"
+										border tooltip-effect="dark" style="width: 100%"
+										@selection-change="handleSelectionChange1">
+									<el-table-column
+											type="selection"
+											width="55">
+									</el-table-column>
+									<el-table-column
+											prop="app_id"
+											label="应用ID">
+									</el-table-column>
+									<el-table-column
+											prop="app_name"
+											label="应用名称">
+									</el-table-column>
+									<el-table-column
+											label="操作">
+										<template slot-scope="scope">
+											<el-button type="success" size="mini" >添加</el-button>
+										</template>
+									</el-table-column>
+								</el-table>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="4">
+								<el-button>添加应用</el-button>
+							</el-col>
+							<el-col :span="20">
+								<el-pagination
+										style="float: right"
+										background
+										layout="prev, pager, next"
+										:total="1000">
+								</el-pagination>
+							</el-col>
+						</el-row>
+
+					</div>
+					<div class="right">
+						<el-card class="box-card">
+							<div slot="header" class="clearfix">
+								<span>卡片名称</span>
+								<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+							</div>
+							<div v-for="o in 4" :key="o" class="text item">
+								{{'列表内容 ' + o }}
+							</div>
+						</el-card>
+					</div>
+				</div>
+			</div>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="dialog.visible = false">取 消</el-button>
+				<el-button type="primary" @click="dialog.visible = false">确 定</el-button>
+			</span>
+		</el-dialog>
+	</div>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="//cdn.bootcss.com/vue-resource/1.0.3/vue-resource.min.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- import util -->
+<script src="../static/util/cache.js"></script>
+<script>
+    var vue=new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                tableData: [{
+                    api_name: '天气api',
+					order_total: 100,
+					order_remain: 50,
+                    count_type: '按次数(次)'
+				},{
+                    api_name: '旅游景点api',
+                    order_total: 1100,
+                    order_remain: 250,
+					count_type: '按流量(MB)'
+                },{
+                    api_name: '地点api',
+                    order_total: 1030,
+                    order_remain: 560,
+                    count_type: '按流量(MB)'
+                }],
+                tableData1: [{
+                    app_id: '9527',
+                    app_name: '天气'
+                },{
+                    app_id: '9528',
+                    app_name: 'niubi'
+                }],
+                tableDataLength: null,
+                filter: {
+                    pageSize: 10,
+                    pageNo: 1
+                },
+                multipleSelection: [],
+                multipleSelection1: [],
+				dialog: {
+                    comsumer_id: 'xx',
+					api_id: 'xx',
+                    visible: false,
+					form: {
+
+					}
+				},
+                options: [{
+                    value: '1',
+                    label: '应用ID'
+                }],
+                searchType: '1'
+            }
+        },
+        created () {
+            this.initPage()
+        },
+        methods: {
+            initPage () {
+                var params = {}
+                params.pageNo = this.filter.pageNo
+                params.pageSize = this.filter.pageSize
+                params.order = {
+                    comsumer_id: 'XX'
+				}
+//                this.$http.post("/getData/search", JSON.stringify(params)).then((response) => {
+//                    var data = response.body
+//                    this.tableData = data.data
+//                this.tableDataLength = data.total
+//            })
+            },
+			openDialog (row) {
+              	this.dialog.visible = true
+				this.dialog.api_id = row.api_id
+				this.dialog.comsumer_id = row.comsumer_id
+			},
+            handleSizeChange (val) {
+                this.filter.pageSize = val
+                console.log(this.filter)
+                this.initPage()
+            },
+            handleCurrentChange (val) {
+                this.filter.pageNo = val
+                console.log(this.filter)
+                this.initPage()
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val
+            },
+            handleSelectionChange1(val) {
+                this.multipleSelection1 = val
+            },
+            showDetail (api) {
+                CACHE.set('api', api)
+                window.location.href='/api/detail';
+            }
+        }
+    });
+    vue.initPage();
+</script>
+<style scope>
+	.search-bar {
+		margin-top: 100px;
+	}
+	.api-table {
+		margin-top: 20px;
+	}
+	.dialog-row {
+		margin-bottom: 5px;
+	}
+	.wrap {
+		display: -webkit-box;
+	}
+	.left {
+		width: 68%;
+		margin-right: 20px;
+	}
+	.right {
+		width: 28%;
+		margin-right: 20px;
+		position: relative;
+	}
+	.box-card {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+	}
+</style>
+</html>

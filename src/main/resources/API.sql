@@ -16,6 +16,23 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`mybatisdemo` /*!40100 DEFAULT CHARACTER
 
 USE `mybatisdemo`;
 
+/*Table structure for table `account` */
+
+DROP TABLE IF EXISTS `account`;
+
+CREATE TABLE `account` (
+  `account_id` varchar(32) NOT NULL,
+  `api_id` varchar(32) NOT NULL,
+  `app_id` varchar(32) NOT NULL,
+  `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `others` text,
+  PRIMARY KEY (`account_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `account` */
+
+insert  into `account`(`account_id`,`api_id`,`app_id`,`date`,`others`) values ('1111111','1111111','1111111','2018-04-22 11:23:47','备注');
+
 /*Table structure for table `api` */
 
 DROP TABLE IF EXISTS `api`;
@@ -23,7 +40,7 @@ DROP TABLE IF EXISTS `api`;
 CREATE TABLE `api` (
   `api_id` varchar(32) NOT NULL,
   `sp_id` varchar(32) NOT NULL,
-  `api_token` varchar(100) DEFAULT NULL,
+  `api_token` varchar(100) DEFAULT NULL COMMENT '删除，放于常量参数',
   `api_max_in` int(10) DEFAULT NULL COMMENT '访问控制',
   `api_enabled` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'api是否可用',
   `api_description` text,
@@ -35,15 +52,19 @@ CREATE TABLE `api` (
   `api_sys_price` float NOT NULL COMMENT 'api单价',
   `api_method` int(1) NOT NULL DEFAULT '0' COMMENT '0：get 1：post，2：两种都有',
   `api_url` varchar(255) NOT NULL,
-  `api_return_pattern` varchar(30) NOT NULL,
+  `api_return_pattern` varchar(64) NOT NULL,
   `api_normal_return_demo` text,
   `api_error_return_demo` text,
-  PRIMARY KEY (`api_id`)
+  `api_timeout` int(6) NOT NULL DEFAULT '30000' COMMENT 'api超时时间',
+  PRIMARY KEY (`api_id`),
+  UNIQUE KEY `api_id` (`api_id`) USING HASH,
+  KEY `api_sp` (`sp_id`),
+  CONSTRAINT `api_sp` FOREIGN KEY (`sp_id`) REFERENCES `service_provider` (`sp_id`) ON DELETE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `api` */
 
-insert  into `api`(`api_id`,`sp_id`,`api_token`,`api_max_in`,`api_enabled`,`api_description`,`api_strip_prefix`,`api_retryable`,`api_path`,`api_name`,`api_bill_type`,`api_sys_price`,`api_method`,`api_url`,`api_return_pattern`,`api_normal_return_demo`,`api_error_return_demo`) values ('1a6ffdb51dd742bf9b58b9d4d9f859f1','c430c9776a934ff1a856360185920c5d','111111',11,1,'加法',1,1,'/1a6ffdb51dd742bf9b58b9d4d9f859f1/**','add',1,1,0,'http://127.0.0.1:8090/available','0','1','1'),('24987fb58daa4f56b4c76669312d3e7b','c430c9776a934ff1a856360185920c5d','111111111',111,1,'',1,1,'/24987fb58daa4f56b4c76669312d3e7b/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('61a2b7d32b6844799420f36209126bbf','c430c9776a934ff1a856360185920c5d','1111',1111,1,'',1,1,'/61a2b7d32b6844799420f36209126bbf/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('6fc06379a4ac4ce9b75b7264fda0d407','c430c9776a934ff1a856360185920c5d','1111111',111,1,'',1,1,'/6fc06379a4ac4ce9b75b7264fda0d407/**','天气预报',1,0.01,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('9648b9fd7ae74750bdc1b1391ef05580','c430c9776a934ff1a856360185920c5d','1111111',111,1,'',1,1,'/9648b9fd7ae74750bdc1b1391ef05580/**','天气预报',1,0.01,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('b25badc6744544caa6c5addbfc5be03d','c430c9776a934ff1a856360185920c5d','1111',11111,1,'',1,1,'/b25badc6744544caa6c5addbfc5be03d/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('b41a68f395c34e709bdcef4540933433','c430c9776a934ff1a856360185920c5d','111111',111,1,'',1,1,'/b41a68f395c34e709bdcef4540933433/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','',''),('dcb2e7e79d58470e819a2da6ea2a89d3','c430c9776a934ff1a856360185920c5d','1',11,1,'1',1,1,'/dcb2e7e79d58470e819a2da6ea2a89d3/**','1',1,1,0,'1','0','1','1'),('ef7deaca96d94cfeb21c1985c44525db','c430c9776a934ff1a856360185920c5d','11111',100,1,'简单的加法',1,1,'/ef7deaca96d94cfeb21c1985c44525db/**','加法',1,1,0,'http://127.0.0.1:8090/add','0','2','error');
+insert  into `api`(`api_id`,`sp_id`,`api_token`,`api_max_in`,`api_enabled`,`api_description`,`api_strip_prefix`,`api_retryable`,`api_path`,`api_name`,`api_bill_type`,`api_sys_price`,`api_method`,`api_url`,`api_return_pattern`,`api_normal_return_demo`,`api_error_return_demo`,`api_timeout`) values ('1a6ffdb51dd742bf9b58b9d4d9f859f1','c430c9776a934ff1a856360185920c5d','111111',11,1,'加法',1,1,'/1a6ffdb51dd742bf9b58b9d4d9f859f1/**','add',1,1,0,'http://127.0.0.1:8090/available','0','1','1',30000),('24987fb58daa4f56b4c76669312d3e7b','c430c9776a934ff1a856360185920c5d','111111111',111,1,'',1,1,'/24987fb58daa4f56b4c76669312d3e7b/**','天气预报',1,1,0,'http://ali-weather.showapi.com/area-to-weather','0','','',30000),('e1dd60ed08ff472395167e8b8c61a657','c430c9776a934ff1a856360185920c5d','111111111',1000,1,'免费的天气预报接口',1,1,'/e1dd60ed08ff472395167e8b8c61a657/**','天气预报（免费）',1,0.0001,0,'http://wthrcdn.etouch.cn/weather_mini','0','{\r\nzhengchang;\r\n}','{\r\ncuowu;\r\n}',30000),('ef7deaca96d94cfeb21c1985c44525db','c430c9776a934ff1a856360185920c5d','11111',100,1,'简单的加法',1,1,'/ef7deaca96d94cfeb21c1985c44525db/**','加法',1,1,0,'http://127.0.0.1:8090/add','0','2','error',30000);
 
 /*Table structure for table `api_app` */
 
@@ -54,23 +75,15 @@ CREATE TABLE `api_app` (
   `app_id` varchar(32) NOT NULL,
   `create_date` datetime NOT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`api_id`,`app_id`)
+  PRIMARY KEY (`api_id`,`app_id`),
+  KEY `app_index` (`app_id`) USING HASH,
+  CONSTRAINT `auth_api` FOREIGN KEY (`api_id`) REFERENCES `api` (`api_id`),
+  CONSTRAINT `auth_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `api_app` */
 
-/*Table structure for table `api_auth` */
-
-DROP TABLE IF EXISTS `api_auth`;
-
-CREATE TABLE `api_auth` (
-  `api_id` varchar(32) NOT NULL,
-  `app_id` bigint(12) NOT NULL,
-  `remain` int(16) DEFAULT NULL,
-  PRIMARY KEY (`api_id`,`app_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `api_auth` */
+insert  into `api_app`(`api_id`,`app_id`,`create_date`,`enabled`) values ('e1dd60ed08ff472395167e8b8c61a657','4','2018-04-19 16:32:43',1),('e1dd60ed08ff472395167e8b8c61a657','5','2018-04-19 16:33:04',1);
 
 /*Table structure for table `api_request_param` */
 
@@ -87,7 +100,7 @@ CREATE TABLE `api_request_param` (
 
 /*Data for the table `api_request_param` */
 
-insert  into `api_request_param`(`api_id`,`api_param`,`api_param_demo`,`api_param_position`,`api_param_ismust`,`api_param_isconstant`) values ('1a6ffdb51dd742bf9b58b9d4d9f859f1','first','1','path',1,0),('1a6ffdb51dd742bf9b58b9d4d9f859f1','second','1','path',1,0);
+insert  into `api_request_param`(`api_id`,`api_param`,`api_param_demo`,`api_param_position`,`api_param_ismust`,`api_param_isconstant`) values ('1a6ffdb51dd742bf9b58b9d4d9f859f1','first','1','path',1,0),('1a6ffdb51dd742bf9b58b9d4d9f859f1','second','1','path',1,0),('e1dd60ed08ff472395167e8b8c61a657','city','北京','path',0,0);
 
 /*Table structure for table `api_sys_price` */
 
@@ -122,17 +135,17 @@ CREATE TABLE `api_user_price` (
 DROP TABLE IF EXISTS `app`;
 
 CREATE TABLE `app` (
-  `app_id` bigint(12) NOT NULL AUTO_INCREMENT,
+  `app_id` varchar(30) NOT NULL,
   `app_secret` varchar(16) NOT NULL,
   `app_description` text NOT NULL,
   `app_name` varchar(128) NOT NULL DEFAULT '"null"',
-  `consumer_id` varchar(32) NOT NULL,
+  `consumer_id` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`app_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `app` */
 
-insert  into `app`(`app_id`,`app_secret`,`app_description`,`app_name`,`consumer_id`) values (1,'absudbaskba','烤面筋','烤面筋','11111111111111111'),(2,'absudbaskba','烤面筋','烤面筋','11111111111111111'),(3,'ZBla9YwkZfGGhadi','aaa','aaa','87de254182574856af64d323869b686d'),(4,'ZPdNWfNoyxiEo7cO','11','11','87de254182574856af64d323869b686d'),(5,'j0FF6DAlFgZGffIw','app2','app2','87de254182574856af64d323869b686d'),(6,'7QN4Q3hP7RWpLDqk','app','爱屁屁','87de254182574856af64d323869b686d');
+insert  into `app`(`app_id`,`app_secret`,`app_description`,`app_name`,`consumer_id`) values ('1','absudbaskba','烤面筋','烤面筋','11111111111111111'),('2','absudbaskba','烤面筋','烤面筋','11111111111111111'),('3','ZBla9YwkZfGGhadi','aaa','aaa','87de254182574856af64d323869b686d'),('4','ZPdNWfNoyxiEo7cO','11','11','87de254182574856af64d323869b686d'),('5','j0FF6DAlFgZGffIw','app2','app2','87de254182574856af64d323869b686d'),('6','7QN4Q3hP7RWpLDqk','app','爱屁屁','87de254182574856af64d323869b686d');
 
 /*Table structure for table `bill_type` */
 
@@ -222,12 +235,17 @@ insert  into `gateway_api_define`(`id`,`path`,`service_id`,`url`,`retryable`,`en
 DROP TABLE IF EXISTS `order`;
 
 CREATE TABLE `order` (
+  `order_id` varchar(32) NOT NULL,
   `consumer_id` varchar(32) NOT NULL,
   `api_id` varchar(32) NOT NULL,
-  `order_create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `order_create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `order_remain` int(11) NOT NULL,
   `order_total` int(11) NOT NULL,
-  PRIMARY KEY (`consumer_id`,`api_id`)
+  PRIMARY KEY (`order_id`),
+  KEY `order_api` (`api_id`) USING BTREE,
+  KEY `order_consumer` (`consumer_id`),
+  CONSTRAINT `order_api` FOREIGN KEY (`api_id`) REFERENCES `api` (`api_id`),
+  CONSTRAINT `order_consumer` FOREIGN KEY (`consumer_id`) REFERENCES `consumer` (`consumer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `order` */
@@ -239,18 +257,20 @@ DROP TABLE IF EXISTS `service_provider`;
 CREATE TABLE `service_provider` (
   `sp_id` varchar(32) NOT NULL COMMENT '外键，组织ID等于userid',
   `sp_org_id` varchar(100) DEFAULT NULL COMMENT '组织ID',
-  `sp_description` text COMMENT '组织描述',
+  `sp_description` text NOT NULL COMMENT '组织描述',
   `sp_tel` varchar(20) NOT NULL COMMENT '组织电话',
   `sp_representative` varchar(30) NOT NULL COMMENT '法人代表',
   `sp_email` varchar(50) NOT NULL,
   `sp_name` varchar(255) NOT NULL,
-  `sp_password` varchar(255) NOT NULL,
-  `sp_representative_id` varchar(19) NOT NULL
+  `sp_password` varchar(36) NOT NULL,
+  `sp_representative_id` varchar(19) NOT NULL,
+  `sp_create_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  KEY `sp_id` (`sp_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `service_provider` */
 
-insert  into `service_provider`(`sp_id`,`sp_org_id`,`sp_description`,`sp_tel`,`sp_representative`,`sp_email`,`sp_name`,`sp_password`,`sp_representative_id`) values ('c430c9776a934ff1a856360185920c5d','123456','修改后的描述','17862700885','ICES','hitices@hitwh.com','ICES','hitices','');
+insert  into `service_provider`(`sp_id`,`sp_org_id`,`sp_description`,`sp_tel`,`sp_representative`,`sp_email`,`sp_name`,`sp_password`,`sp_representative_id`,`sp_create_time`) values ('c430c9776a934ff1a856360185920c5d','123456','修改后的描述','17862700885','ICES','hitices@hitwh.com','ICES','hitices','',NULL),('5275bcd53a9d4da39b960a0db8c9592b','yangyang','','测试','17862700885','姬喜洋','111111111111111111','1044456468@qq.com','1234567',NULL),('b3d9251d83a845e0b1bb8dcfdeb8de6b','yangyang','1','1','1111111','1111111','1111111111','11111@QQ.COM','1234567',NULL),('2bd890add14c4bb4a91532f23155d59e','yangyang','1','1','1111111','1111111','1111111111','1111122@QQ.COM','1234567',NULL),('ed4075c142724b749381ff130c13a76b','','111111111','111111111','aSAS','1111122222@QQ.COM','ICES','1234567','111111',NULL);
 
 /*Table structure for table `sys_combo` */
 
