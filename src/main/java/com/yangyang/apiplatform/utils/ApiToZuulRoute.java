@@ -15,9 +15,9 @@ List<ZuulRouteVO> zuulRouteVOList=new ArrayList<>();
     zuulRouteVO.setPath(api.getApi_path());
     zuulRouteVO.setUrl(api.getApi_url());
     zuulRouteVO.setEnabled(api.getApi_enabled()==1?true:false);
-    zuulRouteVO.setRetryable(api.getApi_retryable()==1?true:false);
+    zuulRouteVO.setRetryable(true);
     zuulRouteVO.setApiName(api.getApi_name());
-    zuulRouteVO.setStripPrefix(api.getApi_strip_prefix()==1?true:false);
+    zuulRouteVO.setStripPrefix(true);
     zuulRouteVO.setServiceId(null);
     zuulRouteVOList.add(zuulRouteVO);
 }

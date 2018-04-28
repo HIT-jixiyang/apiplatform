@@ -1,12 +1,17 @@
 package com.yangyang.apiplatform.web;
 
+import com.yangyang.apiplatform.entity.Api;
+import com.yangyang.apiplatform.entity.ApiAuthorization;
 import com.yangyang.apiplatform.entity.App;
 import com.yangyang.apiplatform.entity.Consumer;
 import com.yangyang.apiplatform.mapper.ConsumerMapper;
+import com.yangyang.apiplatform.service.ApiService;
 import com.yangyang.apiplatform.service.AppService;
+import com.yangyang.apiplatform.service.AuthorizationService;
 import com.yangyang.apiplatform.service.MyService;
 import com.yangyang.apiplatform.utils.ClassUtil;
 import com.yangyang.apiplatform.utils.RandomStrUtil;
+import javafx.scene.input.DataFormat;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.metrics.CounterService;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +32,10 @@ public class ConsumerController {
     MyService myService;
     @Autowired
     AppService appService;
+    @Autowired
+    ApiService apiService;
+    @Autowired
+    AuthorizationService authorizationService;
     @RequestMapping(value = "/consumer/consumer_login", method = RequestMethod.POST)
     public String Consumer_Login(@RequestBody Map map, HttpSession session) {
         //counterService.increment("consumer_log");
@@ -106,6 +116,28 @@ public Map<String,Object> getAppPageListByConsumerId(@RequestBody Map map , Http
     ModelAndView mv=new ModelAndView("consumer_apilist");
     return mv;
 }
+@RequestMapping(value = "/consumer/buyapi")
+    public String buyApi(@RequestBody Map map){
+        return null;
+}
+    @RequestMapping(value = "/consumer/getapilist", method = RequestMethod.POST)
+    @ResponseBody
+    public Object getApiPageList(@RequestBody Map map) {
+        return apiService.getApiPageList((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), ClassUtil.mapToClass((Map) map.get("api"), Api.class));
+    }
+    @RequestMapping(value = "/consumer/addApiAuthorization")
+    public String addApiAuthorization(@RequestBody Map map){
+        String Api_id= (String) map.get("api_id");
+        String App_id= (String) map.get("app_id");
+        ApiAuthorization apiAuthorization=new ApiAuthorization();
+        apiAuthorization.setApi_id(Api_id);
+        apiAuthorization.setApp_id(App_id);
+        apiAuthorization.setEnabled(true);
+    if(  authorizationService.addApiAuthorization(apiAuthorization)){
+        return "success";
+    }
+    else return "error";
+    }
 }
 
 

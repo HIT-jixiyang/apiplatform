@@ -13,6 +13,15 @@ public class ApiAuthorization {
     String api_id;
     String app_id;
     Date create_date;
+    Boolean enabled;
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
 
     @Override
     public String toString() {
@@ -20,6 +29,7 @@ public class ApiAuthorization {
                 "api_id='" + api_id + '\'' +
                 ", app_id='" + app_id + '\'' +
                 ", create_date=" + create_date +
+                ", enabled=" + enabled +
                 '}';
     }
 

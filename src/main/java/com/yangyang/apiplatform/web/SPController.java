@@ -1,6 +1,7 @@
 package com.yangyang.apiplatform.web;
 
 import com.yangyang.apiplatform.entity.Api;
+import com.yangyang.apiplatform.entity.ApiParam;
 import com.yangyang.apiplatform.entity.Consumer;
 import com.yangyang.apiplatform.entity.Sp;
 import com.yangyang.apiplatform.mapper.ApiMapper;
@@ -83,18 +84,18 @@ public class SPController {
     }
     //添加API
     @PostMapping(value = "/sp/addapi")
-    public String addApi(Api api, HttpSession session) {
+    public String addApi(Map map, HttpSession session) {
+        Api api= (Api) map.get("api");
+        List<ApiParam> apiParamList= (List<ApiParam>) map.get("apiparamlist");
         System.out.println("前端发过来的参数" + api.toString());
         String uid = UUID.getUUID();
         api.setApi_id(uid);
         api.setSp_id(((Sp) session.getAttribute("sp")).getSp_id());
-        api.setApi_strip_prefix(1);
         api.setApi_enabled(1);
         api.setApi_path("/" + uid + "/**");
-        api.setApi_retryable(1);
         System.out.println(api.toString());
         System.out.println("getSp_id:" + ((Sp) session.getAttribute("sp")).getSp_id());
-        if (apiService.addApi(api))
+        if (apiService.addApi(api,apiParamList))
             return "success";
         else
             return "fail";

@@ -1,7 +1,7 @@
 package com.yangyang.apiplatform.service;
 
 import com.yangyang.apiplatform.entity.Api;
-import com.yangyang.apiplatform.entity.ApiRequestParam;
+import com.yangyang.apiplatform.entity.ApiParam;
 import com.yangyang.apiplatform.mapper.ApiMapper;
 import com.yangyang.apiplatform.mapper.ApiParamMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,29 +21,11 @@ public class ApiService {
 
     //插入API同时插入参数列表
     @Transactional
-    public boolean addApi(Api api) {
+    public boolean addApi(Api api,List<ApiParam> apiParamList) {
         boolean flag = false;
-        if (!apiMapper.addApi(
-                api.getApi_id(),
-                api.getApi_url(),
-                api.getSp_id(),
-                api.getApi_token(),
-                api.getApi_max_in(),
-                api.getApi_enabled(),
-                api.getApi_description(),
-                api.getApi_strip_prefix(),
-                api.getApi_retryable(),
-                api.getApi_path(),
-                api.getApi_name(),
-                api.getApi_bill_type(),
-                api.getApi_sys_price(),
-                api.getApi_method(),
-                api.getApi_return_pattern(),
-                api.getApi_normal_return_demo(),
-                api.getApi_error_return_demo()
-        )) return false;
-        List<ApiRequestParam> apiRequestParamsList = api.getApiRequestParamList();
-        for (ApiRequestParam p : apiRequestParamsList) {
+        if (!apiMapper.addApi(api)) return false;
+
+        for (ApiParam p : apiParamList) {
             p.setApi_id(api.getApi_id());
             if (!apiParamMapper.addApiParam(p)) return false;
         }

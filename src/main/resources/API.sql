@@ -85,22 +85,25 @@ CREATE TABLE `api_app` (
 
 insert  into `api_app`(`api_id`,`app_id`,`create_date`,`enabled`) values ('e1dd60ed08ff472395167e8b8c61a657','4','2018-04-19 16:32:43',1),('e1dd60ed08ff472395167e8b8c61a657','5','2018-04-19 16:33:04',1);
 
-/*Table structure for table `api_request_param` */
+/*Table structure for table `api_param` */
 
-DROP TABLE IF EXISTS `api_request_param`;
+DROP TABLE IF EXISTS `api_param`;
 
-CREATE TABLE `api_request_param` (
+CREATE TABLE `api_param` (
+  `api_param_id` varchar(30) NOT NULL,
   `api_id` varchar(32) NOT NULL,
-  `api_param` varchar(255) NOT NULL,
-  `api_param_demo` varchar(255) NOT NULL,
-  `api_param_position` varchar(30) DEFAULT 'path',
+  `api_pre_param_key` varchar(255) NOT NULL DEFAULT '',
+  `api_pre_param_value` varchar(255) NOT NULL DEFAULT '',
+  `api_after_param_key` varchar(255) NOT NULL,
+  `api_after_param_value` varchar(255) NOT NULL,
+  `api_pre_param_position` int(1) NOT NULL COMMENT '0:header/1:path/2:body',
+  `api_after_param_position` int(1) NOT NULL COMMENT '0:header/1:path/2:body',
   `api_param_ismust` tinyint(1) NOT NULL DEFAULT '1',
-  `api_param_isconstant` tinyint(1) DEFAULT '0'
+  `api_param_isconstant` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`api_param_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `api_request_param` */
-
-insert  into `api_request_param`(`api_id`,`api_param`,`api_param_demo`,`api_param_position`,`api_param_ismust`,`api_param_isconstant`) values ('1a6ffdb51dd742bf9b58b9d4d9f859f1','first','1','path',1,0),('1a6ffdb51dd742bf9b58b9d4d9f859f1','second','1','path',1,0),('e1dd60ed08ff472395167e8b8c61a657','city','北京','path',0,0);
+/*Data for the table `api_param` */
 
 /*Table structure for table `api_sys_price` */
 
@@ -147,6 +150,24 @@ CREATE TABLE `app` (
 
 insert  into `app`(`app_id`,`app_secret`,`app_description`,`app_name`,`consumer_id`) values ('1','absudbaskba','烤面筋','烤面筋','11111111111111111'),('2','absudbaskba','烤面筋','烤面筋','11111111111111111'),('3','ZBla9YwkZfGGhadi','aaa','aaa','87de254182574856af64d323869b686d'),('4','ZPdNWfNoyxiEo7cO','11','11','87de254182574856af64d323869b686d'),('5','j0FF6DAlFgZGffIw','app2','app2','87de254182574856af64d323869b686d'),('6','7QN4Q3hP7RWpLDqk','app','爱屁屁','87de254182574856af64d323869b686d');
 
+/*Table structure for table `bill_item` */
+
+DROP TABLE IF EXISTS `bill_item`;
+
+CREATE TABLE `bill_item` (
+  `bill_item_id` varchar(30) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `api_id` varchar(32) NOT NULL,
+  `app_id` varchar(30) NOT NULL,
+  PRIMARY KEY (`bill_item_id`),
+  KEY `bill_api` (`api_id`),
+  KEY `bill_app` (`app_id`),
+  CONSTRAINT `bill_api` FOREIGN KEY (`api_id`) REFERENCES `api` (`api_id`),
+  CONSTRAINT `bill_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`app_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `bill_item` */
+
 /*Table structure for table `bill_type` */
 
 DROP TABLE IF EXISTS `bill_type`;
@@ -176,7 +197,7 @@ CREATE TABLE `consumer` (
 
 /*Data for the table `consumer` */
 
-insert  into `consumer`(`consumer_id`,`consumer_name`,`consumer_password`,`consumer_email`,`consumer_tel`) values ('87de254182574856af64d323869b686d','姬喜洋','woshiyangyang.','1044456468@qq.com','17862700885'),('d6701b9a5b0147f9939016f84aa2e9c0','姬喜洋','1111111','1044456469@qq.com','17862700885');
+insert  into `consumer`(`consumer_id`,`consumer_name`,`consumer_password`,`consumer_email`,`consumer_tel`) values ('2cfae09cfaf04d7cb3911413e45eadcb','YANGYANG','WOSHIYANGYANG.','17862700885@163.COM','17862700885'),('46f35005e70a4102a5323da9bc641e2b','YANGYANG','WOSHIYANGYANG.','17862700885@163.COM','17862700885'),('5c4b5c0d6fb848d59d5092200f7573eb','YANGYANG','1111111','17862700885@163.COM','17862700885'),('74547d7737854374977aa940d8cd376c','YANGYANG','WOSHIYANGYANG.','17862700885@163.COM','17862700885'),('87c340886b29406eb417deaeb53a53d5','YANGYANG','1111111','17862700885@163.COM','17862700885'),('87de254182574856af64d323869b686d','姬喜洋','woshiyangyang.','1044456468@qq.com','17862700885'),('d6701b9a5b0147f9939016f84aa2e9c0','姬喜洋','1111111','1044456469@qq.com','17862700885');
 
 /*Table structure for table `consumer_business` */
 

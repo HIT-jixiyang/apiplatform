@@ -1,30 +1,25 @@
 package com.yangyang.apiplatform.entity;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
-
-import javax.print.DocFlavor;
+import java.io.Serializable;
 import java.util.List;
 
-public class Api {
+public class Api implements Serializable{
     
     String api_id;
     String api_url;
     String sp_id;
-    String api_token;
     Integer api_max_in;
     Integer api_enabled;
     String api_description;
-    Integer api_strip_prefix;
-    Integer api_retryable;
     String api_path;
     Integer api_bill_type;
     Float api_sys_price;
     Integer api_method;
     String api_name;
-List<ApiRequestParam> apiRequestParamList;
 String api_return_pattern;
 String api_normal_return_demo;
 String api_error_return_demo;
+Integer api_timeout;
 
     @Override
     public String toString() {
@@ -32,21 +27,18 @@ String api_error_return_demo;
                 "api_id='" + api_id + '\'' +
                 ", api_url='" + api_url + '\'' +
                 ", sp_id='" + sp_id + '\'' +
-                ", api_token='" + api_token + '\'' +
                 ", api_max_in=" + api_max_in +
                 ", api_enabled=" + api_enabled +
                 ", api_description='" + api_description + '\'' +
-                ", api_strip_prefix=" + api_strip_prefix +
-                ", api_retryable=" + api_retryable +
                 ", api_path='" + api_path + '\'' +
                 ", api_bill_type=" + api_bill_type +
                 ", api_sys_price=" + api_sys_price +
                 ", api_method=" + api_method +
                 ", api_name='" + api_name + '\'' +
-                ", apiRequestParamList=" + apiRequestParamList +
                 ", api_return_pattern='" + api_return_pattern + '\'' +
                 ", api_normal_return_demo='" + api_normal_return_demo + '\'' +
                 ", api_error_return_demo='" + api_error_return_demo + '\'' +
+                ", api_timeout=" + api_timeout +
                 '}';
     }
 
@@ -74,14 +66,6 @@ String api_error_return_demo;
         this.sp_id = sp_id;
     }
 
-    public String getApi_token() {
-        return api_token;
-    }
-
-    public void setApi_token(String api_token) {
-        this.api_token = api_token;
-    }
-
     public Integer getApi_max_in() {
         return api_max_in;
     }
@@ -104,22 +88,6 @@ String api_error_return_demo;
 
     public void setApi_description(String api_description) {
         this.api_description = api_description;
-    }
-
-    public Integer getApi_strip_prefix() {
-        return api_strip_prefix;
-    }
-
-    public void setApi_strip_prefix(Integer api_strip_prefix) {
-        this.api_strip_prefix = api_strip_prefix;
-    }
-
-    public Integer getApi_retryable() {
-        return api_retryable;
-    }
-
-    public void setApi_retryable(Integer api_retryable) {
-        this.api_retryable = api_retryable;
     }
 
     public String getApi_path() {
@@ -162,14 +130,6 @@ String api_error_return_demo;
         this.api_name = api_name;
     }
 
-    public List<ApiRequestParam> getApiRequestParamList() {
-        return apiRequestParamList;
-    }
-
-    public void setApiRequestParamList(List<ApiRequestParam> apiRequestParamList) {
-        this.apiRequestParamList = apiRequestParamList;
-    }
-
     public String getApi_return_pattern() {
         return api_return_pattern;
     }
@@ -192,5 +152,13 @@ String api_error_return_demo;
 
     public void setApi_error_return_demo(String api_error_return_demo) {
         this.api_error_return_demo = api_error_return_demo;
+    }
+
+    public Integer getApi_timeout() {
+        return api_timeout;
+    }
+
+    public void setApi_timeout(Integer api_timeout) {
+        this.api_timeout = api_timeout;
     }
 }

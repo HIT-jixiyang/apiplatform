@@ -17,12 +17,13 @@ import java.beans.PropertyVetoException;
 public class RegisterController {
     @Autowired
     RegisterService registerService;
-@Autowired
+    @Autowired
     ConsumerMapper consumerMapper;
+
     public RegisterController() throws PropertyVetoException {
     }
 
-    @RequestMapping(value = "/sp/sp_register",method = RequestMethod.POST)
+    @RequestMapping(value = "/sp/sp_register", method = RequestMethod.POST)
     public String RegisterSp(Sp sp
                            /*     @RequestParam(value = "sp_name") String sp_name,
                                @RequestParam(value = "sp_org_id") String sp_org_id,
@@ -32,7 +33,7 @@ public class RegisterController {
                                @RequestParam(value = "sp_representative_id") String sp_representative_id ,
                                @RequestParam(value = "sp_email") String sp_email ,
                                @RequestParam(value = "sp_password") String sp_password*/
-                        ){
+    ) {
       /* Sp sp=new Sp();
         sp.setSp_id(UUID.getUUID());
         sp.setSp_name(sp_name);
@@ -47,31 +48,33 @@ public class RegisterController {
         System.out.println("进入注册方法");
         System.out.println(sp.toString());
         sp.setSp_id(UUID.getUUID());
-       if(registerService.InsertSp(sp)){
-           return "success";
-       }
-       else{
-           return "error";
-       }
+        if (registerService.InsertSp(sp)) {
+            return "success";
+        } else {
+            return "error";
+        }
 
     }
-    @RequestMapping(value = "/consumer/consumer_register",method = RequestMethod.POST)
-public String ConsumerRegister(Consumer consumer){
+
+    @RequestMapping(value = "/consumer/consumer_register", method = RequestMethod.POST)
+    public String ConsumerRegister(Consumer consumer) {
         System.out.println(consumer.toString());
-                            consumer.setConsumer_id(UUID.getUUID());
-if(consumerMapper.addConsumer(consumer)==1){
-return "success";
-}else return "error";
+        consumer.setConsumer_id(UUID.getUUID());
+        if (consumerMapper.addConsumer(consumer) == 1) {
+            return "success";
+        } else return "error";
 
     }
+
     @RequestMapping(value = "/consumer/consumer_registerpage")
-    public ModelAndView consumerRegisterPage(){
-    ModelAndView mv=new ModelAndView("/consumer/consumer_register");
-    return mv;
+    public ModelAndView consumerRegisterPage() {
+        ModelAndView mv = new ModelAndView("/consumer/consumer_register");
+        return mv;
     }
+
     @RequestMapping(value = "/sp/sp_registerpage")
-    public ModelAndView spRegisterPage(){
-    ModelAndView mv =new ModelAndView("/sp/sp_register");
-return mv;
-}
+    public ModelAndView spRegisterPage() {
+        ModelAndView mv = new ModelAndView("/sp/sp_register");
+        return mv;
+    }
 }

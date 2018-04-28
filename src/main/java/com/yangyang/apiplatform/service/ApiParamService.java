@@ -1,7 +1,7 @@
 package com.yangyang.apiplatform.service;
 
 
-import com.yangyang.apiplatform.entity.ApiRequestParam;
+import com.yangyang.apiplatform.entity.ApiParam;
 import com.yangyang.apiplatform.mapper.ApiParamMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +23,9 @@ public class ApiParamService {
     }
     //根据Api_id去更新参数，先全部删除然后全部插入
     @Transactional
-    public boolean updateParamByApiID(List<ApiRequestParam> apiRequestParamList,String api_id){
+    public boolean updateParamByApiID(List<ApiParam> apiRequestParamList, String api_id){
         apiParamMapper.deleteApiParamByApiID(api_id);
-        for(ApiRequestParam apiRequestParam :apiRequestParamList){
+        for(ApiParam apiRequestParam :apiRequestParamList){
             if(!apiParamMapper.addApiParam(apiRequestParam)){ return false;
             }
         }

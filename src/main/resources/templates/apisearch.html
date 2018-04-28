@@ -116,7 +116,7 @@
 				params.pageSize = this.filter.pageSize
 				params.api = {}
 				params.api[this.filter.type] = this.filter.value
-				this.$http.post("/getData/search", JSON.stringify(params)).then((response) => {
+				this.$http.post("/consumer/getapilist", JSON.stringify(params)).then((response) => {
 					var data = response.body
 					this.tableData = data.data
 					this.tableDataLength = data.total
