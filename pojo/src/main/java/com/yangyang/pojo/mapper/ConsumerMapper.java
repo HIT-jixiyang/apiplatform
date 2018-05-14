@@ -2,10 +2,11 @@ package com.yangyang.pojo.mapper;
 
 
 import com.yangyang.pojo.entity.Consumer;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import com.yangyang.pojo.provider.ConsumerProvider;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Mapper
@@ -14,6 +15,12 @@ public interface ConsumerMapper {
 public Consumer getConsumerByEmail(String email);
     @Select("select * from consumer where consumer_id=#{id}")
     public Consumer getConsumerById(String id);
-    @Insert("insert into consumer(consumer_id,consumer_email,consumer_password,consumer_name,consumer_tel) values(#{consumer_id},#{consumer_email},#{consumer_password},#{consumer_name},#{consumer_tel})")
+    @InsertProvider(type = ConsumerProvider.class,method ="insertConsumer" )
     public int addConsumer(Consumer consumer);
+    @UpdateProvider(type = ConsumerProvider.class,method = "updateConsumerByConsumerExample")
+    public int updateConsumerByConsumerExample(Consumer consumer);
+    @Delete("delete from consumer where consumer_id=#{consumer_id}")
+    public int deleteConsumerByConsumerID(String consumer_id);
+    @SelectProvider(type = ConsumerProvider.class,method ="getConsumerPageListByConsumerExample" )
+    public List<Consumer> getConsumerPageListByConsumerExample(Integer pageNo,Integer pageNum,Consumer consumer);
 }

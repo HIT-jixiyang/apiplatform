@@ -26,7 +26,7 @@ public class AppService {
     @Autowired
     ApiMapper apiMapper;
 @Autowired
-AuthorizationService authorizationService;
+ApiAuthorizationService apiAuthorizationService;
     public boolean addApp(App app) {
         app.setApp_id(AppID.getAppID());
         if (appMapper.addApp(app) == 1) {
@@ -67,7 +67,7 @@ AuthorizationService authorizationService;
     public boolean deleteByApp_id(String app_id) {
         App app = appMapper.getAppByAppID(app_id);
         if (app != null) {
-            authorizationService.deleteAuthorizationByAppID(app_id);
+            apiAuthorizationService.deleteAuthorizationByAppID(app_id);
             if (appMapper.deleteAppByAppID(app_id)==1){
                 return true;
             }

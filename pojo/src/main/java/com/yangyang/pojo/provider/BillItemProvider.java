@@ -26,6 +26,42 @@ public class BillItemProvider {
         sql.append( " 1=1");
         return sql.toString() + " limit " + ((pageNo -1) * pageSize)  + "," + pageSize;
     }
+    public String getBillItemPageListByBillItemExampleAndTime(Integer pageNo, Integer pageSize, BillItem billItem,String api_name,String beginTime,String endTime) throws IllegalAccessException {
+        StringBuffer sql = new StringBuffer();
+        sql.append("select a.*,b.api_name from bill_item a,api b\n");
+        List<String[]> condition = SqlUtil.getNotNullField(billItem);
+        sql.append("where ");
+        if(beginTime!=null&&endTime!=null)
+        sql.append("create_time >= "+"\'"+beginTime+"\'" +" and create_time<= "+"\'"+endTime+"\'"+"\n and ");
+        if(condition.size() != 0){
+            sql.append(getWhere(condition));
+        }
+        //select a.*,b.api_name from bill_item a,api b
+        //where `app_id`=4 AND a.api_id=b.api_id and b.api_name LIKE '%加法%' and 1=1 LIMIT 0,100;
+        sql.append(" a.api_id=b.api_id and b.api_name LIKE "+"\'"
+                +"%"+api_name+"%"+"\'"+" and ");
+        sql.append( " 1=1");
+        System.out.println(sql.toString());
+        return sql.toString() + " limit " + ((pageNo -1) * pageSize)  + "," + pageSize;
+    }
+    public String getBillItemCountByAppIDAndApiName(BillItem billItem, String api_name,String beginTime, String endTime) throws IllegalAccessException {
+        StringBuffer sql = new StringBuffer();
+        sql.append("select count(*) from bill_item a,api b\n");
+        List<String[]> condition = SqlUtil.getNotNullField(billItem);
+        sql.append("where ");
+        if(beginTime!=null&&endTime!=null)
+            sql.append("create_time >= "+"\'"+beginTime+"\'" +" and create_time<= "+"\'"+endTime+"\'"+"\n and ");
+        if(condition.size() != 0){
+            sql.append(getWhere(condition));
+        }
+        sql.append(" a.api_id=b.api_id and b.api_name LIKE "+"\'"
+                +"%"+api_name+"%"+"\'"+" and ");
+        sql.append( " 1=1");
+        System.out.println(sql.toString());
+        return sql.toString();
+    }
+
+
 
     public String countPageList(BillItem billItem) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
@@ -58,7 +94,11 @@ public class BillItemProvider {
     private String getWhere(List<String[]> condition){
         StringBuffer where = new StringBuffer();
         for(int i = 0, len = condition.size(); i < len; i++){
-            where.append(condition.get(i)[0] + "=" + condition.get(i)[1] + " and");
+           // if(!condition.get(i)[0].equals("Api_name"))
+            where.append(condition.get(i)[0] + "=" + condition.get(i)[1] + " and ");
+ // else {
+      //          where.append(condition.get(i)[0] +" like %"+condition.get(i)[1]+"% " + " and ");
+          //  }
         }
         return where.toString();
     }
@@ -88,9 +128,9 @@ public String getResponseTimesByApiIDAndStatusCode(int offset,String api_id,Stri
     public static void main(String[] args) {
       //  System.out.println(new BillItemProvider().getNormalResponseTimesByApiID(20,"ef7deaca96d94cfeb21c1985c44525db","200"));
         BillItem billItem=new BillItem();
-        billItem.setApi_id("ef7deaca96d94cfeb21c1985c44525db");
+        billItem.setApp_id("4");
         try {
-            System.out.println(new BillItemProvider().getBillItemPageListByBillItemExample(new Integer(1),new Integer(100),billItem));
+            System.out.println(new BillItemProvider().getBillItemPageListByBillItemExampleAndTime(new Integer(1),new Integer(100),billItem,"天气",null,null));
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

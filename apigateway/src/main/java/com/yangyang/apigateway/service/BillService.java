@@ -38,7 +38,7 @@ public class BillService {
           map.put("api_id",api_id);
           map.put("app_id",app_id);
 
-        ResponseEntity<Map> responseEntity= restTemplate.postForEntity("http://127.0.0.1:10002/addbill", map,Map.class);
+        ResponseEntity<Map> responseEntity= restTemplate.postForEntity("http://127.0.0.1:10002/bill/addbill", map,Map.class);
          Map resultMap=responseEntity.getBody();
          Future<Object> future= new AsyncResult<>(resultMap);
          return future;
@@ -53,7 +53,7 @@ public class BillService {
         map.put("bill_item_id",billItem.getBill_item_id());
         map.put("request_time",billItem.getRequest_time());
         map.put("response_code",billItem.getResponse_code());
-        ResponseEntity<Map> responseEntity= restTemplate.postForEntity("http://127.0.0.1:10002/updatebill", (Object) map,Map.class);
+        ResponseEntity<Map> responseEntity= restTemplate.postForEntity("http://127.0.0.1:10002/bill/updatebill", (Object) map,Map.class);
         Map resultMap=responseEntity.getBody();
         Future<Object> future= new AsyncResult<>(resultMap);
         return future;

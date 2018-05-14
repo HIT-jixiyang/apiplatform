@@ -2,8 +2,12 @@ package com.yangyang.pojo.mapper;
 
 
 import com.yangyang.pojo.entity.ApiAuthorization;
+import com.yangyang.pojo.entity.ApiCategory;
+import com.yangyang.pojo.provider.ApiAuthorizationProvider;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @program: apiplatform
@@ -27,5 +31,10 @@ public interface ApiAuthorizationMapper {
     public int deleteApiAuthorizationByAppIDAndApiID(@Param(value = "app_id") String app_id);
     @Delete("delete from api_app where api_category_id=#{api_category_id}")
     public int deleteApiAuthorizationByApiCategoryID(@Param(value = "api_category_id") String api_category_id);
+   //传入页码，页面大小，app_id获得一页信息
+    @SelectProvider(type = ApiAuthorizationProvider.class,method ="getApiCategoryListPageByAppID" )
+    public List<ApiCategory> getApiCategoryListByAppID(Integer pageNo,Integer pageSize,String app_id);
+    @SelectProvider(type = ApiAuthorizationProvider.class,method = "getApiCategoryCountByAppID")
+    public int getApiCategoryCount(String app_id);
 
 }

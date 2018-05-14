@@ -26,7 +26,7 @@ public class ConsumerController {
     @Autowired
     ApiService apiService;
     @Autowired
-    AuthorizationService authorizationService;
+    ApiAuthorizationService apiAuthorizationService;
     @Autowired
     OrderService orderService;
 
@@ -84,17 +84,16 @@ public class ConsumerController {
 
     @PostMapping(value = "/consumer/addapp")
     @ResponseBody
-    public Map<String, Object> addApp(@RequestBody App app, HttpSession session) {
+    public RestResult addApp(@RequestBody App app, HttpSession session) {
         Map<String, Object> map = new HashMap<>();
         Consumer sessionconsumer = (Consumer) session.getAttribute("consumer");
         app.setConsumer_id(sessionconsumer.getConsumer_id());
         app.setApp_secret(RandomStrUtil.getRandomString(16));
         if (appService.addApp(app)) {
-            map.put("status", "success");
+            return new RestResult(ResultStatusCode.OK.getStatuscode(), ResultStatusCode.OK.getMessage(), null);
         } else {
-            map.put("status", "error");
+            return new RestResult(ResultStatusCode.SYSTEM_ERROR.getStatuscode(), ResultStatusCode.SYSTEM_ERROR.getMessage(), null);
         }
-        return map;
     }
 
     //根据前台传过来的参数找App列表，参数应该包括Consumer_id,第几页，每页多少
@@ -107,6 +106,14 @@ public class ConsumerController {
         Map<String, Object> appMap = appService.getAppPageList((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), app);
         return appMap;
     }
+    //根据前台传过来的app_id参数找api类列表，参数应该包括app_id,第几页，每页多少
+    @PostMapping(value = "/consumer/get_api_categorylist_by_app_id")
+    @ResponseBody
+    public Map<String, Object> getApiCategoryPageListByAppId(@RequestBody Map map, HttpSession session) {
+               Map<String, Object> appMap =  apiAuthorizationService.getApiCategoryPageListByApp_id((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), (String) map.get("app_id"));
+            return appMap;
+    }
+
 
     @PostMapping(value = "/consumer/delete_app_by_app_id")
     @ResponseBody
@@ -170,7 +177,7 @@ public class ConsumerController {
         apiAuthorization.setApi_category_id(ApiCategory_id);
         apiAuthorization.setApp_id(App_id);
         apiAuthorization.setEnabled(true);
-        if (authorizationService.addApiAuthorization(apiAuthorization)) {
+        if (apiAuthorizationService.addApiAuthorization(apiAuthorization)) {
             return "success";
         } else return "error";
     }

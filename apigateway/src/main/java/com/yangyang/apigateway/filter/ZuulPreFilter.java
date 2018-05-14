@@ -3,23 +3,16 @@ package com.yangyang.apigateway.filter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.yangyang.apigateway.service.BillService;
-import com.yangyang.pojo.entity.ApiAuthorization;
-import com.yangyang.pojo.entity.BillItem;
 import com.yangyang.pojo.service.ApiService;
 import com.yangyang.pojo.service.AppService;
-import com.yangyang.pojo.service.AuthorizationService;
+import com.yangyang.pojo.service.ApiAuthorizationService;
 import com.yangyang.utils.utils.BillItemID;
-import com.yangyang.utils.utils.GateWayToken;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.metrics.CounterService;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 /*
 *
  * @program: apiplatform
@@ -38,7 +31,7 @@ public class ZuulPreFilter extends ZuulFilter {
     @Autowired
     BillService billService;
     @Autowired
-    AuthorizationService authorizationService;
+    ApiAuthorizationService apiAuthorizationService;
     @Autowired
     CounterService counterService;
     @Override

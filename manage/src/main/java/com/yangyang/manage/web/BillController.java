@@ -4,10 +4,7 @@ import com.yangyang.pojo.entity.BillItem;
 import com.yangyang.pojo.service.BillItemService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +21,7 @@ public class BillController {
     @Autowired
     BillItemService billItemService;
    //记账请求
-    @PostMapping(value = "/addbill")
+    @PostMapping(value = "/bill/addbill")
     public Map<String,Object> addBillItemByConsumerIDAndApiID(@RequestBody Map map){
     String bill_item_id= (String) map.get("bill_item_id");
     String api_id= (String) map.get("api_id");
@@ -43,7 +40,7 @@ public class BillController {
        }
        return map1;
     }
-    @PostMapping(value = "/updatebill")
+    @PostMapping(value = "/bill/updatebill")
     public Map<String,Object> updateBillByBill(@RequestBody Map map){
         String bill_item_id= (String) map.get("bill_item_id");
         Float request_time= new Float((Double) map.get("request_time"));
@@ -62,4 +59,19 @@ public class BillController {
         }
         return map1;
     }
+    @PostMapping(value = "/bill/getBillList")
+    public Map<String,Object> getBillList(@RequestBody Map<String,Object> map){
+        Integer pageNo= (Integer) map.get("pageNo");
+        Integer pageSize= (Integer) map.get("pageSize");
+        String app_id= (String) map.get("app_id");
+        BillItem billItem=new BillItem();
+        billItem.setApp_id(app_id);
+       // BillItem billItem= (BillItem) map.get("billitem");
+        String beginTime= (String) map.get("begintime");
+        String endTime= (String) map.get("endtime");
+        String api_name= (String) map.get("api_name");
+        return billItemService.getBillItemByAppIDAndApiIDAndTime(pageNo,pageSize,billItem,api_name,beginTime,endTime);
+
+    }
+
 }
