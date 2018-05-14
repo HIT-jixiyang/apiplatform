@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+参数信息应该包括：
+参数key
+参数位置
+参数类型：这里统一为String
+是否必选
+对于get方式的，参数在url中
+对于post方式：标准参数中统一使用json格式的请求体，但是后台真正的api服务的请求体格式应该有以下四种：
+                        application/x-www-form-urlencoded
+                        multipart/form-data
+                        application/json
+                        text/xml
+-->
+<standardparam>
+    <header>
+        <param key="app_id" type="String" ismust="true">app_id</param>
+        <param key="app_secret" type="String" ismust="true">app_secret</param>
+        <param key="time_stamp" type="Long" ismust="true">time_stamp</param>
+    </header>
+    <path>
+    </path>
+    <body>
+        <param key="city" type="String" format="" position="header" ismust="true">city </param>
+        <param key="date" type="String" format="YYMMDDHH" position="body" ismust="false">date </param>
+        <param key="list" type="List">
+            <param key="listitem1" type="String">listitem </param>
+            <param key="listitem2" type="String"> listitem2</param>
+            <param key="listitem3" type="String">listitem3 </param>
+        </param>
+    </body>
+
+</standardparam>

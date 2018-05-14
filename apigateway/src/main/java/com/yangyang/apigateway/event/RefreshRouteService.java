@@ -18,6 +18,7 @@ public class RefreshRouteService {
     public void refreshRoute() {
         RoutesRefreshedEvent routesRefreshedEvent = new RoutesRefreshedEvent(routeLocator);
         publisher.publishEvent(routesRefreshedEvent);
+
     }
 
 }

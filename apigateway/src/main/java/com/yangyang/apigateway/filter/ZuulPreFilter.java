@@ -89,14 +89,12 @@ public class ZuulPreFilter extends ZuulFilter {
             String app_secret=appService.getAppSecretByApp_id(APPID);
             Integer timeout=apiService.getApiByApiID(api_id).getApi_timeout();
         LOGGER.info("api_id:"+api_id+" app_id:"+APPID+"  app_secret:"+app_secret+" timeout"+timeout);
-            ApiAuthorization apiAuthorization=authorizationService.getAuthorizationByApi_idAndAppID(api_id,APPID);
+/*            ApiAuthorization apiAuthorization=authorizationService.getAuthorizationByApi_idAndAppID(api_id,APPID);
             LOGGER.info(apiAuthorization.toString());
             if (apiAuthorization!=null){
                     setCounter(api_id);
                 LOGGER.info(GateWayToken.getGateWayToken(apiAuthorization.getApp_id(),app_secret,timeMill));
                 if (GateWayToken.getGateWayToken(apiAuthorization.getApp_id(),app_secret,timeMill).equals(gateWayToken)){
-
-
               //  counterService.increment("speed.minute."+api_id);
                     ctx.set("startTime",System.currentTimeMillis());
                     LOGGER.info(APPID+"验证通过");
@@ -118,7 +116,19 @@ public class ZuulPreFilter extends ZuulFilter {
 
 
                 return false;
-            }
+            }*/
+            counterService.increment("speed.second."+api_id);
+            ctx.set("startTime",System.currentTimeMillis());
+            LOGGER.info(APPID+"验证通过");
+            ctx.set("request_timeout",timeout);
+            ctx.set("api_id",api_id);
+            ctx.set("app_id",APPID);
+            LOGGER.info("app_id:"+APPID+"  api_id:"+api_id+"发起记账请求");
+            //记账请求
+            String bill_item_id= BillItemID.getBillItemID();
+            ctx.set("bill_item_id",bill_item_id);
+            billService.bill(bill_item_id,api_id,APPID);
+            return true;
         }
     }
     private void setCounter(String api_id){

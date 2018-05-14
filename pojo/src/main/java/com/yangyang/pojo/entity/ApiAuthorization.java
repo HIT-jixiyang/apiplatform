@@ -1,5 +1,9 @@
 package com.yangyang.pojo.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.util.Date;
 
 /**
@@ -8,51 +12,12 @@ import java.util.Date;
  * @author: JiXiYang
  * @create: 2018-04-19 16:49
  **/
+@Getter
+@Setter
+@ToString
 public class ApiAuthorization {
-    String api_id;
+    String api_category_id;
     String app_id;
     Date create_date;
     Boolean enabled;
-
-    public Boolean getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @Override
-    public String toString() {
-        return "ApiAuthorization{" +
-                "api_id='" + api_id + '\'' +
-                ", app_id='" + app_id + '\'' +
-                ", create_date=" + create_date +
-                ", enabled=" + enabled +
-                '}';
-    }
-
-    public String getApi_id() {
-        return api_id;
-    }
-
-    public void setApi_id(String api_id) {
-        this.api_id = api_id;
-    }
-
-    public String getApp_id() {
-        return app_id;
-    }
-
-    public void setApp_id(String app_id) {
-        this.app_id = app_id;
-    }
-
-    public Date getCreate_date() {
-        return create_date;
-    }
-
-    public void setCreate_date(Date create_date) {
-        this.create_date = create_date;
-    }
 }

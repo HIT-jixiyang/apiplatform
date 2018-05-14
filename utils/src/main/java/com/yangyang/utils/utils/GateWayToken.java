@@ -13,7 +13,7 @@ public class GateWayToken {
     appsecret以及当前时间戳获得一个唯一的密钥
      */
     public static String getGateWayToken(String  app_id,String app_secret,long timemills){
-        String token=MD5.getMD5(app_id+"hisense"+app_secret+"hisense"+timemills);
+        String token=MD5.getMD5(app_id+"hit"+app_secret+"hit"+timemills);
         return token;
     }
 

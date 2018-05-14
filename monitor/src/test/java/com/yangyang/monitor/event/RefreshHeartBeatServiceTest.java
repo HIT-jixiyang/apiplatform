@@ -1,6 +1,8 @@
 package com.yangyang.monitor.event;
 
 import com.yangyang.monitor.utils.HTTPUtils;
+import com.yangyang.pojo.entity.Api;
+import com.yangyang.pojo.mapper.ApiMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ public class RefreshHeartBeatServiceTest {
     @Autowired
     RefreshHeartBeatService refreshHeartBeatService;
     @Autowired
-   ApiMapper apiMapper;
+    ApiMapper apiMapper;
     @Test
     public void refreshHeartBearService() throws Exception {
         List<Api> apiList= apiMapper.getApiHeartList();

@@ -7,8 +7,8 @@ package com.yangyang.pojo.entity;
  * @create: 2018-05-06 15:45
  **/
 public enum  ResultStatusCode {
-OK(1,"OK"),
-    SYSTEM_ERROR(301,"System error");
+OK(1,"ok"),
+    SYSTEM_ERROR(0,"error");
 int statuscode;
 String message;
 

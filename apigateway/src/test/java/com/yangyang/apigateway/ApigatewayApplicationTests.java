@@ -1,14 +1,18 @@
 package com.yangyang.apigateway;
 
+import com.yangyang.apigateway.service.PerSecondCountService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 @RunWith(SpringRunner.class)
-public class ApigatewayApplicationTests {
 
+public class ApigatewayApplicationTests {
+/*@Autowired
+	PerSecondCountService perSecondCountService;*/
 	@Test
 	public void contextLoads() {
 		while (true){
@@ -20,6 +24,7 @@ public class ApigatewayApplicationTests {
 			RestTemplate restTemplate=new RestTemplate();
 			String count=restTemplate.getForObject("http://localhost:10000/monitor/getPerSecondRequestTimes?counter_name=counter.speed.second.ef7deaca96d94cfeb21c1985c44525db",String.class);
 			System.out.println(count);
+			//System.out.println(perSecondCountService.getRequestSpeedByCounterName("speed.second.ef7deaca96d94cfeb21c1985c44525db"));
 		}
 	}
 }

@@ -25,6 +25,7 @@ public class ApiCategoryProvider {
         sql.append( " 1=1");
         return sql.toString();
     }
+    //获取api类的某一页内容
     public String getApiCategoryPageListByApiCategoryExample(Integer pageNo, Integer pageSize, ApiCategory apiCategory) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
         sql.append("select * from api_category \n");
@@ -36,7 +37,18 @@ public class ApiCategoryProvider {
         sql.append( " 1=1");
         return sql.toString() + " limit " + ((pageNo -1) * pageSize)  + "," + pageSize;
     }
-
+//获取api类的页数
+    public String countPageList(ApiCategory apiCategory) throws IllegalAccessException {
+        StringBuffer sql = new StringBuffer();
+        sql.append("select count(1) from api_category\n");
+        sql.append("where ");
+        List<String[]> condition = SqlUtil.getNotNullField(apiCategory);
+        if(condition.size() != 0){
+            sql.append(getWhere(condition));
+        }
+        sql.append(" 1=1");
+        return sql.toString();
+    }
     private String getWhere(List<String[]> condition){
         StringBuffer where = new StringBuffer();
         for(int i = 0, len = condition.size(); i < len; i++){

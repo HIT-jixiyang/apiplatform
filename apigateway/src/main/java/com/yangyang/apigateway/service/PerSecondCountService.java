@@ -25,7 +25,7 @@ public class PerSecondCountService {
         RestTemplate restTemplate=new RestTemplate(requestFactory);
         ResponseEntity<Map> metrics=restTemplate.getForEntity("http://localhost:10000/metrics", Map.class);
         Map<String,Object> map=metrics.getBody();
-        Integer count = (Integer) map.get("counter"+countername);
+        Integer count = (Integer) map.get("counter."+countername);
         if(count==null){
             count=new Integer(0);
         }

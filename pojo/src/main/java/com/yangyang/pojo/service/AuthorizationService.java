@@ -22,7 +22,7 @@ public class AuthorizationService {
     AppService appService;
     @Transactional
     public boolean addApiAuthorization(ApiAuthorization apiAuthorization){
-        if(existAuthorization(apiAuthorization.getApi_id(),apiAuthorization.getApp_id())){
+        if(existAuthorization(apiAuthorization.getApi_category_id(),apiAuthorization.getApp_id())){
             System.out.println("授权信息已经存在，不需要再次授权");
             return false;
         }
@@ -36,18 +36,26 @@ public class AuthorizationService {
         }
     }
 
-    public boolean existAuthorization(String api_id, String app_id){
-        ApiAuthorization temp=apiAuthorizationMapper.getApiAuthorizationByAppIDAndApiID(api_id,app_id);
+    public boolean existAuthorization(String api_category_id, String app_id){
+        ApiAuthorization temp=apiAuthorizationMapper.getApiAuthorizationByAppIDAndApiCategoryID(api_category_id,app_id);
         if(temp!=null){
             return true;
         }else {
             return false;
         }
     }
-    public void deleteAuthorizationByApi_idAndAppID(String api_id, String app_id){
-        apiAuthorizationMapper.deleteApiAuthorizationByAppIDAndApiID(api_id,app_id);
+    public void deleteAuthorizationByApiCategoryIDAndAppID(String api_category_id, String app_id){
+        apiAuthorizationMapper.deleteApiAuthorizationByAppIDAndApiCategoryID(api_category_id,app_id);
+    }
+    public void deleteAuthorizationByAppID(String app_id){
+        apiAuthorizationMapper.deleteApiAuthorizationByAppIDAndApiID(app_id);
+    }
+
+    public void deleteAuthorizationByApiCategoryID(String api_category_id){
+        apiAuthorizationMapper.deleteApiAuthorizationByApiCategoryID(api_category_id);
     }
     public ApiAuthorization getAuthorizationByApi_idAndAppID(String api_id, String app_id){
-        return apiAuthorizationMapper.getApiAuthorizationByAppIDAndApiID(api_id,app_id);
+        return apiAuthorizationMapper.getApiAuthorizationByAppIDAndApiCategoryID(api_id,app_id);
     }
+
 }

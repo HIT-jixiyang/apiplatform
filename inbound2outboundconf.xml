@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project>
+    <api-category apicate_gory_id="0">
+        <api api_id="bcasklaskasdvkdkals">
+            <request-pugin path="classpath:/api-jars/bcasklaskasdvkdkals" jar-name="param-map.jar">
+                <class class-name="com.yangyang.utils.InboundParam2OutBoundParamHandler" desc="接入参数到接出参数的适配">
+                    <function name="inboundParam2OutBoundParam" result-type="Map<String,Object>">
+                        <paramlist>
+                            <param type="int">param1</param>
+                            <param type="string">param2</param>
+                            <param type="string">param3</param>
+                        </paramlist>
+                    </function>
+                </class>
+            </request-pugin>
+            <response-pugin path="classpath:/api-jars/bcasklaskasdvkdkals" jar-name="param-map.jar">
+                <class class-name="com.yangyang.utils.ResponseHandler" desc="返回报文适配">
+                    <function name="responseHandle" result-type="Map<String,Object>">
+                        <paramlist>
+                            <param type="int">param1</param>
+                            <param type="string">param2</param>
+                            <param type="string">param3</param>
+                        </paramlist>
+                    </function>
+                </class>
+            </response-pugin>
+        </api>
+    </api-category>
+</project>

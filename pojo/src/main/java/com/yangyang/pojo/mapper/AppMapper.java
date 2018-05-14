@@ -4,10 +4,7 @@ package com.yangyang.pojo.mapper;
 
 import com.yangyang.pojo.entity.App;
 import com.yangyang.pojo.provider.AppProvider;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,7 +29,12 @@ public int addApp(App app);
     @SelectProvider(type = AppProvider.class, method = "getAppPageList")
     List<Map> getAppPageList(Integer pageNo, Integer pageSize, App app);
 
-    // 获取api数
+    // 获取app数
     @SelectProvider(type = AppProvider.class, method = "countPageList")
     Integer countPageList(App app);
+    @Delete("DELETE FROM app WHERE app_id=#{app_id}")
+    public int deleteAppByAppID(String app_id);
+    @Update("update app set app_name=#{app_name},app_description=#{app_description} where app_id=#{app_id}")
+    public int updateAppByAppID(@Param(value = "app_name") String app_name,@Param(value = "app_description") String app_description,@Param(value = "app_id") String app_id);
+
 }

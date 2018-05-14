@@ -29,6 +29,7 @@ public class ConsumerController {
     AuthorizationService authorizationService;
     @Autowired
     OrderService orderService;
+
     @RequestMapping(value = "/consumer/consumer_login", method = RequestMethod.POST)
     public String Consumer_Login(@RequestBody Map map, HttpSession session) {
         //counterService.increment("consumer_log");
@@ -41,7 +42,7 @@ public class ConsumerController {
         if (consumer != null) {
             if (consumer.getConsumer_password().equals(password)) {
                 System.out.println("消费者登陆成功");
-                session.setAttribute("consumer",consumer);
+                session.setAttribute("consumer", consumer);
                 return "success";
             } else
                 return "error";
@@ -80,68 +81,98 @@ public class ConsumerController {
         ModelAndView mv = new ModelAndView("/consumer/consumer_houtai_appmanage");
         return mv;
     }
-@PostMapping(value = "/consumer/addapp")
-@ResponseBody
-public Map<String,Object> addApp(@RequestBody App app, HttpSession session){
-    Map<String,Object> map=new HashMap<>();
-Consumer sessionconsumer= (Consumer) session.getAttribute("consumer");
-    app.setConsumer_id(sessionconsumer.getConsumer_id());
-    app.setApp_secret(RandomStrUtil.getRandomString(16));
-    if(appService.addApp(app)){
-            map.put("status","success");
-        }else {
-        map.put("status","error");
+
+    @PostMapping(value = "/consumer/addapp")
+    @ResponseBody
+    public Map<String, Object> addApp(@RequestBody App app, HttpSession session) {
+        Map<String, Object> map = new HashMap<>();
+        Consumer sessionconsumer = (Consumer) session.getAttribute("consumer");
+        app.setConsumer_id(sessionconsumer.getConsumer_id());
+        app.setApp_secret(RandomStrUtil.getRandomString(16));
+        if (appService.addApp(app)) {
+            map.put("status", "success");
+        } else {
+            map.put("status", "error");
         }
         return map;
-}
-//根据前台传过来的参数找App列表，参数应该包括Consumer_id,第几页，每页多少
-@PostMapping(value = "/consumer/get_applist_by_consumer_id")
-@ResponseBody
-public Map<String,Object> getAppPageListByConsumerId(@RequestBody Map map , HttpSession session){
-    Consumer consumer= (Consumer) session.getAttribute("consumer");
-    App app=new App();
-    app.setConsumer_id(consumer.getConsumer_id());
-    Map<String,Object> appMap=appService.getAppPageList((Integer) map.get("pageNo"),(Integer) map.get("pageSize"), app);
-    return appMap;
-}
-@RequestMapping(value = "/consumer/apilist")
-    public ModelAndView getConsumerApplist(){
-    ModelAndView mv=new ModelAndView("consumer_apilist");
-    return mv;
-}
-@RequestMapping(value = "/consumer/buyapi")
-    public String buyApi(@RequestBody Map map){
-        String consumer_id= (String) map.get("consumer_id");
-        String api_id= (String) map.get("api_id");
-        Long total= (Long) map.get("total");
-    Order order=new Order();
-    order.setOrder_id(OrderID.getOrderID());
-    order.setConsumer_id(consumer_id);
-    order.setApi_id(api_id);
-    order.setOrder_remain(total);
-    order.setOrder_total(total);
-    if(orderService.addOrder(order)){
-        return "success";
     }
-    else return "error";
-}
+
+    //根据前台传过来的参数找App列表，参数应该包括Consumer_id,第几页，每页多少
+    @PostMapping(value = "/consumer/get_applist_by_consumer_id")
+    @ResponseBody
+    public Map<String, Object> getAppPageListByConsumerId(@RequestBody Map map, HttpSession session) {
+        Consumer consumer = (Consumer) session.getAttribute("consumer");
+        App app = new App();
+        app.setConsumer_id(consumer.getConsumer_id());
+        Map<String, Object> appMap = appService.getAppPageList((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), app);
+        return appMap;
+    }
+
+    @PostMapping(value = "/consumer/delete_app_by_app_id")
+    @ResponseBody
+    public RestResult deleteAppByAppID(@RequestBody Map<String, String> map) {
+        String app_id = map.get("app_id");
+        if (appService.deleteByApp_id(app_id)) {
+            return new RestResult(ResultStatusCode.OK.getStatuscode(), ResultStatusCode.OK.getMessage(), null);
+        }
+        return new RestResult(ResultStatusCode.SYSTEM_ERROR.getStatuscode(), ResultStatusCode.SYSTEM_ERROR.getMessage(), null);
+    }
+
+    @PostMapping(value = "/consumer/update_app_by_app_id")
+    @ResponseBody
+    public RestResult updateAppByAppID(@RequestBody Map<String, String> map) {
+        String app_id = map.get("app_id");
+        String app_name = map.get("app_name");
+        String app_description = map.get("app_description");
+        App app = new App();
+        app.setApp_id(app_id);
+        app.setApp_name(app_name);
+        app.setApp_description(app_description);
+        if (appService.updateAppByAppID(app)) {
+            return new RestResult(ResultStatusCode.OK.getStatuscode(), ResultStatusCode.OK.getMessage(), null);
+        }
+        return new RestResult(ResultStatusCode.SYSTEM_ERROR.getStatuscode(), ResultStatusCode.SYSTEM_ERROR.getMessage(), null);
+    }
+
+    @RequestMapping(value = "/consumer/apilist")
+    public ModelAndView getConsumerApplist() {
+        ModelAndView mv = new ModelAndView("consumer_apilist");
+        return mv;
+    }
+
+    @RequestMapping(value = "/consumer/buyapi")
+    public String buyApi(@RequestBody Map map) {
+        String consumer_id = (String) map.get("consumer_id");
+        String api_category_id = (String) map.get("api_category_id");
+        Long total = (Long) map.get("total");
+        Order order = new Order();
+        order.setOrder_id(OrderID.getOrderID());
+        order.setConsumer_id(consumer_id);
+        order.setApi_category_id(api_category_id);
+        order.setOrder_remain(total);
+        order.setOrder_total(total);
+        if (orderService.addOrder(order)) {
+            return "success";
+        } else return "error";
+    }
+
     @RequestMapping(value = "/consumer/getapilist", method = RequestMethod.POST)
     @ResponseBody
     public Object getApiPageList(@RequestBody Map map) {
         return apiService.getApiPageList((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), ClassUtil.mapToClass((Map) map.get("api"), Api.class));
     }
+
     @RequestMapping(value = "/consumer/addApiAuthorization")
-    public String addApiAuthorization(@RequestBody Map map){
-        String Api_id= (String) map.get("api_id");
-        String App_id= (String) map.get("app_id");
-        ApiAuthorization apiAuthorization=new ApiAuthorization();
-        apiAuthorization.setApi_id(Api_id);
+    public String addApiAuthorization(@RequestBody Map map) {
+        String ApiCategory_id = (String) map.get("api_category_id");
+        String App_id = (String) map.get("app_id");
+        ApiAuthorization apiAuthorization = new ApiAuthorization();
+        apiAuthorization.setApi_category_id(ApiCategory_id);
         apiAuthorization.setApp_id(App_id);
         apiAuthorization.setEnabled(true);
-    if(  authorizationService.addApiAuthorization(apiAuthorization)){
-        return "success";
-    }
-    else return "error";
+        if (authorizationService.addApiAuthorization(apiAuthorization)) {
+            return "success";
+        } else return "error";
     }
 }
 
