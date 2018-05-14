@@ -99,6 +99,7 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
     private HttpResponse forward(HttpClient httpclient, String verb, String uri, HttpServletRequest request, MultiValueMap<String, String> headers, MultiValueMap<String, String> params, InputStream requestEntity) throws Exception {
         Map<String, Object> info = this.helper.debug(verb, uri, headers, params, requestEntity);
         URL host = RequestContext.getCurrentContext().getRouteHost();
+       // URL host2=new URL("");
         System.out.println("host:"+host);
         HttpHost httpHost = this.getHttpHost(host);
         uri = StringUtils.cleanPath((host.getPath() + uri).replaceAll("/{2,}", "/"));
@@ -144,7 +145,7 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
       /*  Integer timeout= (Integer) context.get("request_timeout");
         LOGGER.info(""+timeout);*/
         this.httpClient=newClient(10000);
-
+LOGGER.info("原始路径"+request.getServletPath());
         MultiValueMap<String, String> headers = this.helper.buildZuulRequestHeaders(request);
         MultiValueMap<String, String> params = this.helper.buildZuulRequestQueryParams(request);
         String api_id= (String) context.get("api_id");
@@ -170,7 +171,7 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
             context.setChunkedRequestBody();
         }
         String uri = this.helper.buildZuulRequestURI(request);
-
+LOGGER.info("uri:"+uri);
         this.helper.addIgnoredHeaders(new String[0]);
 
         try {
