@@ -1,12 +1,15 @@
 package com.yangyang.manage.web;
 
 import com.yangyang.pojo.entity.BillItem;
+import com.yangyang.pojo.entity.RestResult;
+import com.yangyang.pojo.entity.ResultStatusCode;
 import com.yangyang.pojo.service.BillItemService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,8 +62,8 @@ public class BillController {
         }
         return map1;
     }
-    @PostMapping(value = "/bill/getBillList")
-    public Map<String,Object> getBillList(@RequestBody Map<String,Object> map){
+    @PostMapping(value = "/bill/getbilllist")
+    public RestResult getBillList(@RequestBody Map<String,Object> map){
         Integer pageNo= (Integer) map.get("pageNo");
         Integer pageSize= (Integer) map.get("pageSize");
         String app_id= (String) map.get("app_id");
@@ -70,8 +73,14 @@ public class BillController {
         String beginTime= (String) map.get("begintime");
         String endTime= (String) map.get("endtime");
         String api_name= (String) map.get("api_name");
-        return billItemService.getBillItemByAppIDAndApiIDAndTime(pageNo,pageSize,billItem,api_name,beginTime,endTime);
+      try{
+          Map<String,Object> mapList=billItemService.getBillItemByAppIDAndApiIDAndTime(pageNo,pageSize,billItem,api_name,beginTime,endTime);
+      }
+       catch (Exception e){
+           return  new RestResult(ResultStatusCode.SYSTEM_ERROR.getStatuscode(),ResultStatusCode.SYSTEM_ERROR.getMessage(),e);
 
+       }
+        return  new RestResult(ResultStatusCode.OK.getStatuscode(),ResultStatusCode.OK.getMessage(),billItemService.getBillItemByAppIDAndApiIDAndTime(pageNo,pageSize,billItem,api_name,beginTime,endTime));
     }
 
 }
