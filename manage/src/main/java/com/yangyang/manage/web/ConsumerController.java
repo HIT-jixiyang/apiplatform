@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@CrossOrigin
 @RestController
 public class ConsumerController {
     @Autowired
@@ -228,6 +228,42 @@ public class ConsumerController {
         }catch (Exception e){
             RestResult restResult=new RestResult(ResultStatusCode.SYSTEM_ERROR.getStatuscode(),ResultStatusCode.SYSTEM_ERROR.getMessage(),e);
                 return restResult;
+        }
+
+
+        //return null;
+    }
+
+    @PostMapping(value = "/consumer/get-apicategory-detail")
+    public RestResult getApiCategoryDetailByApiCategoryID(@RequestBody  Map map){
+        String api_category_id= (String) map.get("api_category_id");
+        try{
+            List<StandardInboundParam> paramList=standardInboundParamService.getStandardParamListByApiCategoryID(api_category_id);
+            List<StandardInboundParam> headerparams=new ArrayList<>();
+            List<StandardInboundParam> pathparams=new ArrayList<>();
+            StandardInboundParam bodyparam=new StandardInboundParam();
+            for (StandardInboundParam param:paramList){
+                switch (param.getStandard_inbound_param_position()){
+                    case 0:headerparams.add(param);break;
+                    case 1:pathparams.add(param);break;
+                    case 2:bodyparam=param;
+                }
+            }
+            Map<String,Object> map1=new HashMap<>();
+            map1.put("header",headerparams);
+            map1.put("path",pathparams);
+            map1.put("body",bodyparam);
+            Map<String,Object> detail_map=new HashMap<>();
+            detail_map.put("params",map1);
+            Map<String,Object> responseMap=new HashMap<>();
+            responseMap.put("normal-response","这是正常的返回报文样例，此处省略一千字");
+            responseMap.put("error-response","这是异常的返回报文样例，此处再次省略一千字");
+            detail_map.put("response",responseMap);
+            RestResult restResult=new RestResult(ResultStatusCode.OK.getStatuscode(),ResultStatusCode.OK.getMessage(),detail_map);
+            return restResult;
+        }catch (Exception e){
+            RestResult restResult=new RestResult(ResultStatusCode.SYSTEM_ERROR.getStatuscode(),ResultStatusCode.SYSTEM_ERROR.getMessage(),e);
+            return restResult;
         }
 
 
