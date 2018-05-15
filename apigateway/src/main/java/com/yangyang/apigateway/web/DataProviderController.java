@@ -15,6 +15,7 @@ import java.util.Map;
  * @author: JiXiYang
  * @create: 2018-05-08 20:52
  **/
+@CrossOrigin
 @RestController
 public class DataProviderController {
 @Autowired

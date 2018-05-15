@@ -2,6 +2,7 @@ package com.yangyang.manage.web;
 
 import com.yangyang.pojo.entity.RestResult;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -13,6 +14,7 @@ import java.util.Map;
  * @author: JiXiYang
  * @create: 2018-05-15 09:19
  **/
+@CrossOrigin
 @Controller
 public class AdminController {
     @PostMapping(value = "/admin/add-apicategory")

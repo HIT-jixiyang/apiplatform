@@ -22,6 +22,7 @@ import java.util.Map;
  * @author: JiXiYang
  * @create: 2018-05-14 20:03
  **/
+@CrossOrigin
 @Controller
 public class UploadController {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UploadController.class);

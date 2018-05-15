@@ -18,6 +18,7 @@ import java.util.Map;
  * @author: JiXiYang
  * @create: 2018-05-02 10:14
  **/
+@CrossOrigin
 @RestController
 public class BillController {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(BillController.class);

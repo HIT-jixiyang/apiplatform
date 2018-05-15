@@ -2,6 +2,7 @@ package com.yangyang.monitor.web;
 
 import com.yangyang.monitor.service.PerSecondCountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author: JiXiYang
  * @create: 2018-05-08 20:52
  **/
+@CrossOrigin
 @RestController
 public class DataProviderController {
 @Autowired
