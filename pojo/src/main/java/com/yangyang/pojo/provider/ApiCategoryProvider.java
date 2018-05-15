@@ -88,7 +88,7 @@ public class ApiCategoryProvider {
     public   String insertApiCategory(ApiCategory apiCategory) throws IllegalAccessException {
         List<String[]> condition = SqlUtil.getNotNullField(apiCategory);
         StringBuffer sql = new StringBuffer();
-        sql.append("insert into apicategory(");
+        sql.append("insert into standard_inbound_param(");
         sql.append(getApiCategoryColumn(condition));
         sql.append(") values (");
         sql.append(getApiCategoryValues(condition)+")");

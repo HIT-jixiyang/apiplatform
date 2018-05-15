@@ -1,9 +1,11 @@
 package com.yangyang.apiselector.service;
 
 import com.yangyang.pojo.entity.Api;
+import com.yangyang.pojo.entity.ApiCategory;
 import com.yangyang.pojo.entity.BillItem;
 import com.yangyang.pojo.mapper.ApiMapper;
 import com.yangyang.pojo.mapper.BillItemMapper;
+import com.yangyang.pojo.service.ApiCategoryService;
 import com.yangyang.pojo.service.ApiService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +29,16 @@ public class ComputWeightService {
     ApiMapper apiMapper;
     @Autowired
     ApiService apiService;
-
+@Autowired
+    ApiCategoryService apiCategoryService;
     @Scheduled(fixedRate = 10000)
-    public void computAverageResponseTimeInLast300() {
+    public void computApiAverageResponseTimeInLast300() {
         LOGGER.info("-----------开始计算近300次请求的平均请求时间---------------------");
         List<Api> apiList = apiService.getAllApi();
         for (Api api : apiList) {
             Float time = billItemMapper.getAverageResponseTimeByApiID(300, api.getApi_id());
+          //  Float time1 = billItemMapper.getAverageResponseTimeByApiCategory(1000, api.getApi_category_id());
+
            if(time!=null){
                api.setApi_average_response_time(time);
                apiMapper.updateApiByApiExample(api);
@@ -42,6 +47,20 @@ public class ComputWeightService {
     }
 
     @Scheduled(fixedRate = 10000)
+    public void computApiCategoryAverageResponseTimeInLast1000()
+    {
+        LOGGER.info("----------------开始计算api类的平均响应时间-------------");
+    List<String> apicategoryidlist=apiCategoryService.getAllCategoryID();
+        ApiCategory apiCategory=new ApiCategory();
+    for (String api_category_id:apicategoryidlist){
+        Float time=billItemMapper.getAverageResponseTimeByApiCategory(1000,api_category_id);
+        if(time!=null){
+           apiCategory.setApi_category_id(api_category_id);
+           apiCategory.setApi_category_avg_response_time(time);
+            apiCategoryService.updateApiCategoryByApiExample(apiCategory);
+        }
+    }
+    }
     public void computOkResponseTimesRateInLast1000() {
         LOGGER.info("-----------开始计算近1000次请求的成功次数---------------------");
         List<Api> apiList = apiService.getAllApi();

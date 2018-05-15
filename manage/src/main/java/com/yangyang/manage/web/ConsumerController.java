@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,6 +34,8 @@ public class ConsumerController {
     OrderService orderService;
     @Autowired
     ApiCategoryService apiCategoryService;
+    @Autowired
+    StandardInboundParamService standardInboundParamService;
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Consumer.class);
     @RequestMapping(value = "/consumer/consumer_login", method = RequestMethod.POST)
     public String Consumer_Login(@RequestBody Map map, HttpSession session) {
@@ -199,6 +203,35 @@ public class ConsumerController {
        
         RestResult restResult=new RestResult(ResultStatusCode.OK.getStatuscode(),ResultStatusCode.OK.getMessage(),map1);
         return restResult;
+    }
+    @PostMapping(value = "/consumer/get-stand-params")
+    public RestResult getStandardParamListByApiCategoryID(@RequestBody  Map map){
+        String api_category_id= (String) map.get("api_category_id");
+        try{
+            List<StandardInboundParam> paramList=standardInboundParamService.getStandardParamListByApiCategoryID(api_category_id);
+            List<StandardInboundParam> headerparams=new ArrayList<>();
+            List<StandardInboundParam> pathparams=new ArrayList<>();
+            StandardInboundParam bodyparam=new StandardInboundParam();
+            for (StandardInboundParam param:paramList){
+                switch (param.getStandard_inbound_param_position()){
+                    case 0:headerparams.add(param);break;
+                    case 1:pathparams.add(param);break;
+                    case 2:bodyparam=param;
+                }
+            }
+            Map<String,Object> map1=new HashMap<>();
+            map1.put("header",headerparams);
+            map1.put("path",pathparams);
+            map1.put("body",bodyparam);
+            RestResult restResult=new RestResult(ResultStatusCode.OK.getStatuscode(),ResultStatusCode.OK.getMessage(),map1);
+            return restResult;
+        }catch (Exception e){
+            RestResult restResult=new RestResult(ResultStatusCode.SYSTEM_ERROR.getStatuscode(),ResultStatusCode.SYSTEM_ERROR.getMessage(),e);
+                return restResult;
+        }
+
+
+        //return null;
     }
 }
 

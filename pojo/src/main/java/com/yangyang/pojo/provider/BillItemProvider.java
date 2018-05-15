@@ -125,14 +125,19 @@ public String getResponseTimesByApiIDAndStatusCode(int offset,String api_id,Stri
         return buffer.toString();
 }
 
+    public String getAverageResponseTimeByApiCategory(int offset,String api_category_id){
+        StringBuffer buffer=new StringBuffer();
+        buffer.append("select AVG(request_time) from bill_item ");
+        buffer.append("where api_id in ");
+        buffer.append(" ( select api_id from api where api_category_id=");
+        buffer.append(api_category_id+") ");
+        buffer.append(" and response_code='200' ");
+        buffer.append("ORDER BY create_time DESC LIMIT ");
+        buffer.append("0,"+offset);
+        return buffer.toString();
+    }
     public static void main(String[] args) {
-      //  System.out.println(new BillItemProvider().getNormalResponseTimesByApiID(20,"ef7deaca96d94cfeb21c1985c44525db","200"));
-        BillItem billItem=new BillItem();
-        billItem.setApp_id("4");
-        try {
-            System.out.println(new BillItemProvider().getBillItemPageListByBillItemExampleAndTime(new Integer(1),new Integer(100),billItem,"天气",null,null));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        //  System.out.println(new BillItemProvider().getNormalResponseTimesByApiID(20,"ef7deaca96d94cfeb21c1985c44525db","200"));
+        System.out.println(new BillItemProvider().getAverageResponseTimeByApiCategory(100,"0"));
     }
 }

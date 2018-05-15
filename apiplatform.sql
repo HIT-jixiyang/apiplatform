@@ -85,7 +85,7 @@ CREATE TABLE `api` (
 
 /*Data for the table `api` */
 
-insert  into `api`(`api_id`,`sp_id`,`api_token`,`api_max_in`,`api_enabled`,`api_description`,`api_path`,`api_name`,`api_bill_type`,`api_method`,`api_url`,`api_return_pattern`,`api_normal_return_demo`,`api_error_return_demo`,`api_timeout`,`api_category_id`,`api_average_response_time`,`api_ok_response_times`,`api_success_response_ratio`,`api_time_algorithm_score`,`api_stable_algorithm_score`,`api_cost_algorithm_score`,`api_jar_path`) values ('24987fb58daa4f56b4c76669312d3e7b','c430c9776a934ff1a856360185920c5d','111111111',111,1,'ali天气预报','/24987fb58daa4f56b4c76669312d3e7b/**','天气预报',1,0,'http://ali-weather.showapi.com/area-to-weather','0','','',30000,'1',99,0,0,0,0,0,NULL),('e1dd60ed08ff472395167e8b8c61a657','c430c9776a934ff1a856360185920c5d','111111111',1000,1,'免费的天气预报接口','/e1dd60ed08ff472395167e8b8c61a657/**','天气预报（免费）',1,0,'http://wthrcdn.etouch.cn/weather_mini','0','{\r\nzhengchang;\r\n}','{\r\ncuowu;\r\n}',30000,'0',0.111076,0,0.993103,0.908966,1.01276,0.986187,NULL),('ef7deaca96d94cfeb21c1985c44525db','c430c9776a934ff1a856360185920c5d','11111',100,1,'简单的加法','/ef7deaca96d94cfeb21c1985c44525db/**','加法',1,0,'http://127.0.0.1:8090/add','0','2','error',30000,'0',0.0798851,0,0.901554,1.12941,0.995459,1.02204,'C:UsersICESAppDataLocalTemp	omcat-docbase.3641359743601747229.10002jarsparam-map-1.0-SNAPSHOT.jar');
+insert  into `api`(`api_id`,`sp_id`,`api_token`,`api_max_in`,`api_enabled`,`api_description`,`api_path`,`api_name`,`api_bill_type`,`api_method`,`api_url`,`api_return_pattern`,`api_normal_return_demo`,`api_error_return_demo`,`api_timeout`,`api_category_id`,`api_average_response_time`,`api_ok_response_times`,`api_success_response_ratio`,`api_time_algorithm_score`,`api_stable_algorithm_score`,`api_cost_algorithm_score`,`api_jar_path`) values ('24987fb58daa4f56b4c76669312d3e7b','c430c9776a934ff1a856360185920c5d','111111111',111,1,'ali天气预报','/24987fb58daa4f56b4c76669312d3e7b/**','天气预报',1,0,'http://ali-weather.showapi.com/area-to-weather','0','','',30000,'1',99,0,0,0,0,0,NULL),('e1dd60ed08ff472395167e8b8c61a657','c430c9776a934ff1a856360185920c5d','111111111',1000,1,'免费的天气预报接口','/e1dd60ed08ff472395167e8b8c61a657/**','天气预报（免费）',1,0,'http://wthrcdn.etouch.cn/weather_mini','0','{\r\nzhengchang;\r\n}','{\r\ncuowu;\r\n}',30000,'0',0.113497,0,0.993103,0.905413,1.012,0.985426,NULL),('ef7deaca96d94cfeb21c1985c44525db','c430c9776a934ff1a856360185920c5d','11111',100,1,'简单的加法','/ef7deaca96d94cfeb21c1985c44525db/**','加法',1,0,'http://127.0.0.1:8090/add','0','2','error',30000,'0',0.0804746,0,0.901554,1.13637,0.996952,1.02353,'C:UsersICESAppDataLocalTemp	omcat-docbase.3641359743601747229.10002jarsparam-map-1.0-SNAPSHOT.jar');
 
 /*Table structure for table `api_app` */
 
@@ -119,12 +119,13 @@ CREATE TABLE `api_category` (
   `api_category_total_times` mediumtext,
   `api_category_price` float DEFAULT NULL,
   `api_category_bill_type` int(11) DEFAULT NULL COMMENT '0：按照访问次数计费，1:按照流量计费',
+  `api_category_request_type` int(1) DEFAULT '0' COMMENT 'api请求方式，0：get，1：post',
   PRIMARY KEY (`api_category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `api_category` */
 
-insert  into `api_category`(`api_category_id`,`api_category_name`,`api_category_desc`,`api_category_path`,`api_category_avg_response_time`,`api_category_comment`,`api_category_total_times`,`api_category_price`,`api_category_bill_type`) values ('0','天气预报','天气预报','/weather-ices',30,0,'100',0.001,0),('1','地理交通','交通','/traffic-ices',30,0,'100',0.001,1);
+insert  into `api_category`(`api_category_id`,`api_category_name`,`api_category_desc`,`api_category_path`,`api_category_avg_response_time`,`api_category_comment`,`api_category_total_times`,`api_category_price`,`api_category_bill_type`,`api_category_request_type`) values ('0','天气预报','天气预报','/weather-ices',0.0953447,0,'100',0.001,0,0),('1','地理交通','交通','/traffic-ices',0.0953447,0,'100',0.001,1,0);
 
 /*Table structure for table `api_param` */
 
@@ -314,13 +315,18 @@ DROP TABLE IF EXISTS `standard_inbound_param`;
 CREATE TABLE `standard_inbound_param` (
   `standard_inbound_param_id` varchar(32) NOT NULL COMMENT '标准接入参数编码',
   `standard_inbound_param_key` varchar(128) NOT NULL COMMENT '标准接入参数key值\n',
-  `standard_inbound_param_type` int(11) NOT NULL DEFAULT '0' COMMENT '标准接入参数类型。包括:Integer,Float,Double,String,Date\n',
+  `standard_inbound_param_type` varchar(36) NOT NULL DEFAULT 'String' COMMENT '标准接入参数类型。包括:Integer,Float,Double,String,Date\n',
   `api_category_id` varchar(16) NOT NULL,
   `standard_inbound_param_desc` text,
+  `standard_inbound_param_position` int(11) DEFAULT NULL COMMENT '0：header\n1:path\n2:body',
+  `standard_inbound_param_value_demo` text,
+  `standard_inbound_param_ismust` int(11) DEFAULT NULL COMMENT '0：可选，1：必选',
   PRIMARY KEY (`standard_inbound_param_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `standard_inbound_param` */
+
+insert  into `standard_inbound_param`(`standard_inbound_param_id`,`standard_inbound_param_key`,`standard_inbound_param_type`,`api_category_id`,`standard_inbound_param_desc`,`standard_inbound_param_position`,`standard_inbound_param_value_demo`,`standard_inbound_param_ismust`) values ('1','cityname','String','0',' 城市名',1,'威海',1),('2','app_id','String','0','应用名称',0,'1838002',1),('3','app_secret','String','0',' app的密钥用于加密',0,' asiodhasl',1),('4','date','Date','0','查询的日期',1,'2018-05-21',0),('5',' timestamp','Long ','0','时间戳用于超时验证',0,'29011082000',1);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

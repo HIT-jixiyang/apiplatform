@@ -30,5 +30,7 @@ public int updateBillItemByBillExample(BillItem billItem);
 public Float getAverageResponseTimeByApiID(int offset, String api_id);
 @SelectProvider(type = BillItemProvider.class,method = "getResponseTimesByApiIDAndStatusCode")
 public int getResponseTimesByApiIDAndStatusCode(int offset, String api_id, String response_code);
+@SelectProvider(type = BillItemProvider.class,method = "getAverageResponseTimeByApiCategory")
+public Float getAverageResponseTimeByApiCategory(int offset,String api_category_id);
 
 }
