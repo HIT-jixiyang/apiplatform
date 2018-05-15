@@ -32,5 +32,5 @@ public class Api {
     private Float api_time_algorithm_score;
     private Float api_stable_algorithm_score;
     private Float api_cost_algorithm_score;
-
+    private String api_jar_path;
 }

@@ -30,10 +30,12 @@ public interface ApiCategoryMapper {
     public int updateApiCategoryByApiExample(ApiCategory apiCategory);
     // 获取分页列表
     @SelectProvider(type = ApiCategoryProvider.class, method = "getApiCategoryPageListByApiCategoryExample")
-    List<Map> getApiPageListByApiExample(Integer pageNo, Integer pageSize, ApiCategory apiCategory);
-
-    // 获取api数
+    List<ApiCategory> getApiCategoryPageListByApiCategoryExample(Integer pageNo, Integer pageSize, ApiCategory apiCategory,String name);
+    // 获取apicategoey数
     @SelectProvider(type = ApiCategoryProvider.class, method = "countPageList")
-    Integer countPageList(Api api);
+    Integer countPageList(ApiCategory apiCategory,String name);
+    @Delete("delete from api_category where api_category_id=#{api_category_id}")
+    Integer deleteApiCategory(@Param(value = "api_category_id") String api_category_id);
+
 
 }

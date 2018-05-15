@@ -13,6 +13,7 @@ import java.util.List;
  * @create: 2018-05-11 15:40
  **/
 public class ApiCategoryProvider {
+    //获取所有api类
     public String getApiCategoryListByApiCategoryExample(ApiCategory apiCategory) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
         sql.append("select * from api_category \n");
@@ -26,7 +27,7 @@ public class ApiCategoryProvider {
         return sql.toString();
     }
     //获取api类的某一页内容
-    public String getApiCategoryPageListByApiCategoryExample(Integer pageNo, Integer pageSize, ApiCategory apiCategory) throws IllegalAccessException {
+    public String getApiCategoryPageListByApiCategoryExample(Integer pageNo, Integer pageSize, ApiCategory apiCategory,String name) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
         sql.append("select * from api_category \n");
         List<String[]> condition = SqlUtil.getNotNullField(apiCategory);
@@ -34,17 +35,27 @@ public class ApiCategoryProvider {
         if(condition.size() != 0){
             sql.append(getWhere(condition));
         }
-        sql.append( " 1=1");
+       if(name!=null){
+           sql.append( " api_category_name like '%"+name+"%' and ");
+       }
+
+           sql.append(" 1=1");
+
+
         return sql.toString() + " limit " + ((pageNo -1) * pageSize)  + "," + pageSize;
     }
+
 //获取api类的页数
-    public String countPageList(ApiCategory apiCategory) throws IllegalAccessException {
+    public String countPageList(ApiCategory apiCategory,String name) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
         sql.append("select count(1) from api_category\n");
         sql.append("where ");
         List<String[]> condition = SqlUtil.getNotNullField(apiCategory);
         if(condition.size() != 0){
             sql.append(getWhere(condition));
+        }
+        if(name!=null){
+            sql.append( " api_category_name like '%"+name+"%' and ");
         }
         sql.append(" 1=1");
         return sql.toString();

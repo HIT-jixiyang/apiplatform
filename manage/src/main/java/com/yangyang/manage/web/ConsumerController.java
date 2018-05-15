@@ -7,6 +7,7 @@ import com.yangyang.pojo.service.*;
 import com.yangyang.utils.utils.ClassUtil;
 import com.yangyang.utils.utils.OrderID;
 import com.yangyang.utils.utils.RandomStrUtil;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,7 +30,9 @@ public class ConsumerController {
     ApiAuthorizationService apiAuthorizationService;
     @Autowired
     OrderService orderService;
-
+    @Autowired
+    ApiCategoryService apiCategoryService;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Consumer.class);
     @RequestMapping(value = "/consumer/consumer_login", method = RequestMethod.POST)
     public String Consumer_Login(@RequestBody Map map, HttpSession session) {
         //counterService.increment("consumer_log");
@@ -180,6 +183,22 @@ public class ConsumerController {
         if (apiAuthorizationService.addApiAuthorization(apiAuthorization)) {
             return "success";
         } else return "error";
+    }
+    @RequestMapping(value = "/consumer/get-apicategory-list", method = RequestMethod.POST)
+    @ResponseBody
+    public RestResult getApiCategoryPageList(@RequestBody Map<String,Object> map) {
+        Integer pageNo= (Integer) map.get("pageNo");
+        Integer pageSize= (Integer) map.get("pageSize");
+        String name= (String) map.get("api_category_name");
+        Map<String,Object> map1 = null;
+        try{
+           map1=apiCategoryService.getApiCategoryPageListByApiCategoryExample(pageNo,pageSize,new ApiCategory(),name);
+        }catch (Exception e){
+            RestResult restResult=new RestResult(ResultStatusCode.SYSTEM_ERROR.getStatuscode(),ResultStatusCode.SYSTEM_ERROR.getMessage(),e);
+        }
+       
+        RestResult restResult=new RestResult(ResultStatusCode.OK.getStatuscode(),ResultStatusCode.OK.getMessage(),map1);
+        return restResult;
     }
 }
 
