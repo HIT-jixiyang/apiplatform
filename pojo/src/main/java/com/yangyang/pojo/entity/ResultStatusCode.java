@@ -8,7 +8,8 @@ package com.yangyang.pojo.entity;
  **/
 public enum  ResultStatusCode {
 OK(1,"ok"),
-    SYSTEM_ERROR(0,"error");
+    SYSTEM_ERROR(0,"error"),
+LOGIN_ERROR(401,"登录失败");
 int statuscode;
 String message;
 

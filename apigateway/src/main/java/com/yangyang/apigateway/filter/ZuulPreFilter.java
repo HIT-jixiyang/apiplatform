@@ -13,6 +13,7 @@ import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URL;
 /*
 *
  * @program: apiplatform
@@ -53,7 +54,8 @@ public class ZuulPreFilter extends ZuulFilter {
     public Object run() {
       //  System.out.println("执行到过滤器");
         RequestContext ctx = RequestContext.getCurrentContext();
-       if(checkPerssion(ctx)){
+        ctx.setSendZuulResponse(true);
+       /*if(checkPerssion(ctx)){
            LOGGER.info("转发！");
            ctx.setSendZuulResponse(true);
        }
@@ -62,16 +64,16 @@ public class ZuulPreFilter extends ZuulFilter {
            ctx.setResponseStatusCode(401);// 返回错误码
            ctx.setResponseBody("unable");// 返回错误内容
            ctx.set("isSuccess", false);
-       }
+       }*/
         return null;
     }
 
     private boolean checkPerssion(RequestContext ctx){
         HttpServletRequest request = ctx.getRequest();
-        String APPID=request.getHeader("APPID");
-        Long timeMill=new Long(request.getHeader("TIMEMILL"));
-        String gateWayToken=request.getHeader("GW-TOKEN");
-        if (request.getHeader("APPID")==null||request.getHeader("GW-TOKEN")==null){
+        String APPID=request.getHeader("app_id");
+        Long timeMill=new Long(request.getHeader("timestamp"));
+        String gateWayToken=request.getHeader("gw_token");
+        if (request.getHeader("app_id")==null||request.getHeader("GW-TOKEN")==null){
             System.out.println("请求中没有发现App信息");
             ctx.setResponseStatusCode(401);// 返回错误码
             ctx.setResponseBody("unable");// 返回错误内容
@@ -129,4 +131,5 @@ public class ZuulPreFilter extends ZuulFilter {
         counterService.increment("speed.second.requesttotal");
 
     }
+
 }

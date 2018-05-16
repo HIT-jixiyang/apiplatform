@@ -4,6 +4,7 @@ package com.yangyang.manage.web;
 import com.yangyang.pojo.entity.*;
 import com.yangyang.pojo.mapper.ConsumerMapper;
 import com.yangyang.pojo.service.*;
+import com.yangyang.utils.utils.AppID;
 import com.yangyang.utils.utils.ClassUtil;
 import com.yangyang.utils.utils.OrderID;
 import com.yangyang.utils.utils.RandomStrUtil;
@@ -38,7 +39,7 @@ public class ConsumerController {
     StandardInboundParamService standardInboundParamService;
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Consumer.class);
     @RequestMapping(value = "/consumer/consumer_login", method = RequestMethod.POST)
-    public String Consumer_Login(@RequestBody Map map, HttpSession session) {
+    public RestResult Consumer_Login(@RequestBody Map map, HttpSession session) {
         //counterService.increment("consumer_log");
         String email = (String) map.get("consumer_email");
         String password = (String) map.get("consumer_password");
@@ -50,10 +51,10 @@ public class ConsumerController {
             if (consumer.getConsumer_password().equals(password)) {
                 System.out.println("消费者登陆成功");
                 session.setAttribute("consumer", consumer);
-                return "success";
+                return new RestResult(ResultStatusCode.OK.getStatuscode(),ResultStatusCode.OK.getMessage(),consumer);
             } else
-                return "error";
-        } else return "error";
+                return new RestResult(ResultStatusCode.LOGIN_ERROR.getStatuscode(),ResultStatusCode.LOGIN_ERROR.getMessage(),null);
+        } else  return new RestResult(ResultStatusCode.LOGIN_ERROR.getStatuscode(),ResultStatusCode.LOGIN_ERROR.getMessage(),null);
 
     }
 
@@ -91,10 +92,15 @@ public class ConsumerController {
 
     @PostMapping(value = "/consumer/addapp")
     @ResponseBody
-    public RestResult addApp(@RequestBody App app, HttpSession session) {
-        Map<String, Object> map = new HashMap<>();
-        Consumer sessionconsumer = (Consumer) session.getAttribute("consumer");
-        app.setConsumer_id(sessionconsumer.getConsumer_id());
+    public RestResult addApp(@RequestBody Map map, HttpSession session) {
+        String app_name= (String) map.get("app_name");
+        String app_desc= (String) map.get("app_description");
+        String consumer_id= (String) map.get("consumer_id");
+        App app=new App();
+        app.setApp_id(AppID.getAppID());
+        app.setApp_name(app_name);
+        app.setApp_description(app_desc);
+        app.setConsumer_id(consumer_id);
         app.setApp_secret(RandomStrUtil.getRandomString(16));
         if (appService.addApp(app)) {
             return new RestResult(ResultStatusCode.OK.getStatuscode(), ResultStatusCode.OK.getMessage(), null);
@@ -107,9 +113,9 @@ public class ConsumerController {
     @PostMapping(value = "/consumer/get_applist_by_consumer_id")
     @ResponseBody
     public Map<String, Object> getAppPageListByConsumerId(@RequestBody Map map, HttpSession session) {
-        Consumer consumer = (Consumer) session.getAttribute("consumer");
+        String consumer_id= (String) map.get("consumer_id");
         App app = new App();
-        app.setConsumer_id(consumer.getConsumer_id());
+        app.setConsumer_id(consumer_id);
         Map<String, Object> appMap = appService.getAppPageList((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), app);
         return appMap;
     }
@@ -256,8 +262,8 @@ public class ConsumerController {
             Map<String,Object> detail_map=new HashMap<>();
             detail_map.put("params",map1);
             Map<String,Object> responseMap=new HashMap<>();
-            responseMap.put("normal-response","这是正常的返回报文样例，此处省略一千字");
-            responseMap.put("error-response","这是异常的返回报文样例，此处再次省略一千字");
+            responseMap.put("normal_response","这是正常的返回报文样例，此处省略一千字");
+            responseMap.put("error_response","这是异常的返回报文样例，此处再次省略一千字");
             detail_map.put("response",responseMap);
             RestResult restResult=new RestResult(ResultStatusCode.OK.getStatuscode(),ResultStatusCode.OK.getMessage(),detail_map);
             return restResult;

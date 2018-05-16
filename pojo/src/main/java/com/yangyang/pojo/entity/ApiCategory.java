@@ -18,4 +18,5 @@ public class ApiCategory {
   private Float api_category_price;
   private Long api_category_bill_type;
   private Integer api_category_request_type;
+  private Integer api_category_enabled;
 }

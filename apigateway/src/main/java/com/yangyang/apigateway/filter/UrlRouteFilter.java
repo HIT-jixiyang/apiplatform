@@ -1,8 +1,12 @@
 package com.yangyang.apigateway.filter;
 
 import com.netflix.zuul.context.RequestContext;
+import com.yangyang.pojo.entity.Api;
+import com.yangyang.pojo.entity.ApiCategory;
 import com.yangyang.pojo.entity.ApiParam;
+import com.yangyang.pojo.service.ApiCategoryService;
 import com.yangyang.pojo.service.ApiParamService;
+import com.yangyang.pojo.service.ApiService;
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.RedirectStrategy;
@@ -32,6 +36,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +52,11 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
     ApiParamService apiParamService;
     @Autowired
     CounterService counterService;
+    @Autowired
+    ApiCategoryService apiCategoryService;
+    @Autowired
+    ApiService apiService;
+
     @Override
     public String filterType() {
         return "route";
@@ -64,17 +74,20 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
 
     CloseableHttpClient httpClient;
     private boolean sslHostnameValidationEnabled;
+
     public UrlRouteFilter(ProxyRequestHelper helper, ZuulProperties properties) {
         super(helper, properties);
         System.out.println("进入自定义路由");
-        this.helper=helper;
-        this.properties=properties;
+        this.helper = helper;
+        this.properties = properties;
         this.sslHostnameValidationEnabled = properties.isSslHostnameValidationEnabled();
     }
+
     private String getVerb(HttpServletRequest request) {
         String sMethod = request.getMethod();
         return sMethod.toUpperCase();
     }
+
     private InputStream getRequestBody(HttpServletRequest request) {
         ServletInputStream requestEntity = null;
 
@@ -96,11 +109,12 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
 
         return httpclient.execute(httpHost, httpRequest);
     }
-    private HttpResponse forward(HttpClient httpclient, String verb, String uri, HttpServletRequest request, MultiValueMap<String, String> headers, MultiValueMap<String, String> params, InputStream requestEntity) throws Exception {
+
+    private HttpResponse forward(HttpClient httpclient, URL host, String verb, String uri, HttpServletRequest request, MultiValueMap<String, String> headers, MultiValueMap<String, String> params, InputStream requestEntity) throws Exception {
         Map<String, Object> info = this.helper.debug(verb, uri, headers, params, requestEntity);
-        URL host = RequestContext.getCurrentContext().getRouteHost();
-       // URL host2=new URL("");
-        System.out.println("host:"+host);
+        //URL host = RequestContext.getCurrentContext().getRouteHost();
+        // URL host2=new URL("");
+        System.out.println("host:" + host);
         HttpHost httpHost = this.getHttpHost(host);
         uri = StringUtils.cleanPath((host.getPath() + uri).replaceAll("/{2,}", "/"));
         int contentLength = request.getContentLength();
@@ -109,7 +123,7 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
             contentType = ContentType.parse(request.getContentType());
         }
 
-        InputStreamEntity entity = new InputStreamEntity(requestEntity, (long)contentLength, contentType);
+        InputStreamEntity entity = new InputStreamEntity(requestEntity, (long) contentLength, contentType);
         HttpRequest httpRequest = this.buildHttpRequest(verb, uri, entity, headers, params);
 
         System.out.println(httpHost.getHostName() + " " + httpHost.getPort() + " " + httpHost.getSchemeName());
@@ -124,66 +138,76 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
         Header[] var3 = headers;
         int var4 = headers.length;
 
-        for(int var5 = 0; var5 < var4; ++var5) {
+        for (int var5 = 0; var5 < var4; ++var5) {
             Header header = var3[var5];
             String name = header.getName();
             if (!map.containsKey(name)) {
                 map.put(name, new ArrayList());
             }
 
-            ((List)map.get(name)).add(header.getValue());
+            ((List) map.get(name)).add(header.getValue());
         }
 
         return map;
     }
+
     @Override
     public Object run() {
-        LOGGER.info("开始路由"+System.currentTimeMillis());
+        LOGGER.info("开始路由" + System.currentTimeMillis());
 
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
       /*  Integer timeout= (Integer) context.get("request_timeout");
         LOGGER.info(""+timeout);*/
-        this.httpClient=newClient(10000);
-LOGGER.info("原始路径"+request.getServletPath());
+        this.httpClient = newClient(10000);
+        String servletPath = request.getServletPath();
+        LOGGER.info("原始路径" + servletPath);
+
+
         MultiValueMap<String, String> headers = this.helper.buildZuulRequestHeaders(request);
         MultiValueMap<String, String> params = this.helper.buildZuulRequestQueryParams(request);
-        String api_id= (String) context.get("api_id");
-
+        //  String api_id= (String) context.get("api_id");
+        headers.remove("app_id");
+        headers.remove("app_secret");
+        headers.remove("gw-token");
+        List<String> strategy = headers.get("strategy");
+        URL host = null;
+        host = getURL(servletPath + "/**", 2);
         String verb = this.getVerb(request);
         InputStream requestEntity = this.getRequestBody(request);
-        List<ApiParam> apiParamList=apiParamService.getConstantParamByApiID(api_id);
+      /*  List<ApiParam> apiParamList=apiParamService.getConstantParamByApiID(api_id);
      Set<String> keyset= headers.keySet();
       for(String key :keyset){
           LOGGER.info("key："+key);
-      }
+      }*/
      /* Set<String> paramSet=params.keySet();
         for ()*/
-     if(apiParamList!=null)
+   /*  if(apiParamList!=null)
          for(ApiParam constantParam:apiParamList){
             switch (constantParam.getApi_after_param_position()){
                 //header参数
                 case 0: headers.add(constantParam.getApi_after_param_key(),constantParam.getApi_param_value());
 
             }
-        }
+        }*/
         if (request.getContentLength() < 0) {
             context.setChunkedRequestBody();
         }
         String uri = this.helper.buildZuulRequestURI(request);
-LOGGER.info("uri:"+uri);
+        LOGGER.info("uri:" + uri);
         this.helper.addIgnoredHeaders(new String[0]);
 
         try {
-            HttpResponse response = this.forward(this.httpClient, verb, uri, request, headers, params, requestEntity);
+            HttpResponse response = this.forward(this.httpClient, host, verb, uri, request, headers, params, requestEntity);
             this.setResponse(response);
         } catch (Exception var9) {
             context.set("error.status_code", Integer.valueOf(500));
             context.set("error.exception", var9);
         }
-        System.out.println("请求结束"+System.currentTimeMillis());
+        System.out.println("请求结束" + System.currentTimeMillis());
         return null;
     }
+
     private void setResponse(HttpResponse response) throws IOException {
         this.helper.setResponse(response.getStatusLine().getStatusCode(), response.getEntity() == null ? null : response.getEntity().getContent(), this.revertHeaders(response.getAllHeaders()));
     }
@@ -209,9 +233,45 @@ LOGGER.info("uri:"+uri);
             public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
                 return false;
             }
+
             public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
                 return null;
             }
         }).build();
+    }
+
+    private URL getURL(String path, Integer strategy) {
+        ApiCategory apiCategory = apiCategoryService.getApiCategoryByPath(path);
+        Api api;
+        switch (strategy) {
+            case 0:
+                api = apiService.getApiByCostAlgorithmAndApiCategoryID(apiCategory.getApi_category_id());
+                try {
+                    URL url = new URL(api.getApi_url());
+                    return url;
+                } catch (MalformedURLException e) {
+                    LOGGER.info("创建url出错");
+                    e.printStackTrace();
+                }
+            case 1:
+                api = apiService.getApiByTimeAlgorithmAndApiCategoryID(apiCategory.getApi_category_id());
+                try {
+                    URL url = new URL(api.getApi_url());
+                    return url;
+                } catch (MalformedURLException e) {
+                    LOGGER.info("创建url出错");
+                    e.printStackTrace();
+                }
+            case 2:
+                api = apiService.getApiByStableAlgorithmAndApiCategoryID(apiCategory.getApi_category_id());
+                try {
+                    URL url = new URL(api.getApi_url());
+                    return url;
+                } catch (MalformedURLException e) {
+                    LOGGER.info("创建url出错");
+                    e.printStackTrace();
+                }
+        }
+        return null;
     }
 }

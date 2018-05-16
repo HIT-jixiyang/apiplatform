@@ -87,4 +87,16 @@ public class ApiService {
     public Float getAverageSuccessRatioByCategoryID(String api_category_id){
         return apiMapper.getAverageSuccessRatioByCategoryID(api_category_id);
     }
+    public Api getApiByCostAlgorithmAndApiCategoryID(String api_category_id){
+        List<Api> apiList=  apiMapper.getLowestCostApiList(api_category_id,1);
+    return apiList.get(0);
+    }
+    public Api getApiByTimeAlgorithmAndApiCategoryID(String api_category_id){
+        List<Api> apiList=  apiMapper.getMostFastApiList(api_category_id,1);
+        return apiList.get(0);
+    }
+    public Api getApiByStableAlgorithmAndApiCategoryID(String api_category_id){
+        List<Api> apiList=  apiMapper.getMostStableApiList(api_category_id,1);
+        return apiList.get(0);
+    }
 }

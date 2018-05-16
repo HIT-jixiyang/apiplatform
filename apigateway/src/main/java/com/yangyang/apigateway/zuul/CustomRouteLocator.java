@@ -3,6 +3,7 @@ package com.yangyang.apigateway.zuul;
 
 import com.yangyang.apigateway.entity.ZuulRouteVO;
 import com.yangyang.apigateway.utils.ApiToZuulRoute;
+import com.yangyang.pojo.service.ApiCategoryService;
 import com.yangyang.pojo.service.ApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,8 @@ import java.util.Map;
 public class CustomRouteLocator extends SimpleRouteLocator implements RefreshableRouteLocator {
 @Autowired
 ApiService apiService;
+@Autowired
+    ApiCategoryService apiCategoryService;
     public final static Logger logger = LoggerFactory.getLogger(CustomRouteLocator.class);
 
     private JdbcTemplate jdbcTemplate;
@@ -77,7 +80,8 @@ ApiService apiService;
 
     private Map<String, ZuulProperties.ZuulRoute> locateRoutesFromDB(){
         Map<String, ZuulProperties.ZuulRoute> routes = new LinkedHashMap<>();
-        List<ZuulRouteVO> results = ApiToZuulRoute.apiToZuulRoute(apiService.getAllApi());
+        //List<ZuulRouteVO> results = ApiToZuulRoute.apiToZuulRoute(apiService.getAllApi());
+        List<ZuulRouteVO> results = ApiToZuulRoute.apiCategoryToZuulRoute(apiCategoryService.getAllApiCategory());
         for (ZuulRouteVO result : results) {
             System.out.println(result.toString());
             if(org.apache.commons.lang3.StringUtils.isBlank(result.getPath()) || org.apache.commons.lang3.StringUtils.isBlank(result.getUrl()) ){

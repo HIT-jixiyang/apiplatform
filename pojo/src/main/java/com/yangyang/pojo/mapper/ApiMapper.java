@@ -63,5 +63,4 @@ public interface ApiMapper {
     public Float getAverageCostByCategoryID(@Param(value = "api_category_id") String api_category_id);
 @Select("SELECT AVG(api_success_response_ratio) FROM  api WHERE api_category_id=#{api_category_id}")
     public Float getAverageSuccessRatioByCategoryID(@Param(value = "api_category_id") String api_category_id);
-
 }

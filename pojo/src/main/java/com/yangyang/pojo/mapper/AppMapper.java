@@ -18,8 +18,8 @@ import java.util.Map;
  **/
 @Mapper
 public interface AppMapper {
-@Insert("insert into app(app_id,app_secret,app_description,app_name,consumer_id) values(#{app_id},#{app_secret},#{app_description},#{app_name},#{consumer_id})")
-public int addApp(App app);
+@Insert("insert into app(app_id,app_secret,app_description,app_name,consumer_id) values (#{app_id},#{app_secret},#{app_description},#{app_name},#{consumer_id})")
+public Integer addApp(App app);
 @Select("select * from app where consumer_id=#{consumer_id} ")
     public List<App> getAppListByConsumerID(String Consumer_id);
 @Select("select * from app where app_id=#{app_id}")

@@ -37,5 +37,10 @@ public class ApiCategoryService {
         map.put("data",apiCategoryMapper.countPageList(apiCategory,name));
         return map;
     }
-
+public List<ApiCategory> getAllApiCategory(){
+        return apiCategoryMapper.getAllApiCategory();
+}
+public ApiCategory getApiCategoryByPath(String path){
+    return apiCategoryMapper.getApiCategoryByPath(path);
+}
 }
