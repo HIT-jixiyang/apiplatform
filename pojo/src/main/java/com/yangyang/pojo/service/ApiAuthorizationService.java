@@ -1,6 +1,5 @@
 package com.yangyang.pojo.service;
 
-import com.yangyang.pojo.entity.Api;
 import com.yangyang.pojo.entity.ApiAuthorization;
 import com.yangyang.pojo.mapper.ApiAuthorizationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +57,8 @@ public class ApiAuthorizationService {
     public void deleteAuthorizationByApiCategoryID(String api_category_id){
         apiAuthorizationMapper.deleteApiAuthorizationByApiCategoryID(api_category_id);
     }
-    public ApiAuthorization getAuthorizationByApi_idAndAppID(String api_id, String app_id){
-        return apiAuthorizationMapper.getApiAuthorizationByAppIDAndApiCategoryID(api_id,app_id);
+    public ApiAuthorization getAuthorizationByApiCategoryIDAndAppID(String api_category_id, String app_id){
+        return apiAuthorizationMapper.getApiAuthorizationByAppIDAndApiCategoryID(api_category_id,app_id);
     }
     public Map<String, Object> getApiCategoryPageListByApp_id(Integer pageNo, Integer pageSize, String app_id) {
         Map<String, Object> result = new HashMap<>();

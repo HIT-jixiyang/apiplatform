@@ -3,17 +3,20 @@ package com.yangyang.apigateway.filter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.yangyang.apigateway.service.BillService;
+import com.yangyang.pojo.entity.ApiAuthorization;
+import com.yangyang.pojo.entity.ApiCategory;
+import com.yangyang.pojo.service.ApiAuthorizationService;
+import com.yangyang.pojo.service.ApiCategoryService;
 import com.yangyang.pojo.service.ApiService;
 import com.yangyang.pojo.service.AppService;
-import com.yangyang.pojo.service.ApiAuthorizationService;
 import com.yangyang.utils.utils.BillItemID;
+import com.yangyang.utils.utils.GateWayToken;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.URL;
 /*
 *
  * @program: apiplatform
@@ -35,6 +38,8 @@ public class ZuulPreFilter extends ZuulFilter {
     ApiAuthorizationService apiAuthorizationService;
     @Autowired
     CounterService counterService;
+    @Autowired
+    ApiCategoryService apiCategoryService;
     @Override
     public String filterType() {
         return "pre";
@@ -54,8 +59,8 @@ public class ZuulPreFilter extends ZuulFilter {
     public Object run() {
       //  System.out.println("执行到过滤器");
         RequestContext ctx = RequestContext.getCurrentContext();
-        ctx.setSendZuulResponse(true);
-       /*if(checkPerssion(ctx)){
+     // ctx.setSendZuulResponse(true);
+      if(checkPerssion(ctx)){
            LOGGER.info("转发！");
            ctx.setSendZuulResponse(true);
        }
@@ -64,43 +69,35 @@ public class ZuulPreFilter extends ZuulFilter {
            ctx.setResponseStatusCode(401);// 返回错误码
            ctx.setResponseBody("unable");// 返回错误内容
            ctx.set("isSuccess", false);
-       }*/
+       }
         return null;
     }
 
     private boolean checkPerssion(RequestContext ctx){
         HttpServletRequest request = ctx.getRequest();
-        String APPID=request.getHeader("app_id");
-        Long timeMill=new Long(request.getHeader("timestamp"));
-        String gateWayToken=request.getHeader("gw_token");
-        if (request.getHeader("app_id")==null||request.getHeader("GW-TOKEN")==null){
+        String app_id=request.getHeader("app_id");
+        Long timestamp=new Long(request.getHeader("timestamp"));
+        String gw_token=request.getHeader("gw_token");
+        if (request.getHeader("app_id")==null||request.getHeader("gw_token")==null){
             System.out.println("请求中没有发现App信息");
             ctx.setResponseStatusCode(401);// 返回错误码
             ctx.setResponseBody("unable");// 返回错误内容
             ctx.set("isSuccess", false);
             return true;
         }else{
-            String api_id=request.getServletPath().substring(1);
-            String app_secret=appService.getAppSecretByApp_id(APPID);
-            Integer timeout=apiService.getApiByApiID(api_id).getApi_timeout();
-        LOGGER.info("api_id:"+api_id+" app_id:"+APPID+"  app_secret:"+app_secret+" timeout"+timeout);
-/*            ApiAuthorization apiAuthorization=authorizationService.getAuthorizationByApi_idAndAppID(api_id,APPID);
+            String api_category_path=request.getServletPath();
+           ApiCategory apiCategory= apiCategoryService.getApiCategoryByPath(api_category_path+"/**");
+            String app_secret=appService.getAppSecretByApp_id(app_id);
+         //   Integer timeout=apiService.getApiByApiID(api_id).getApi_timeout();
+           ApiAuthorization apiAuthorization=apiAuthorizationService.getAuthorizationByApiCategoryIDAndAppID(apiCategory.getApi_category_id(),app_id);
             LOGGER.info(apiAuthorization.toString());
             if (apiAuthorization!=null){
-                    setCounter(api_id);
-                LOGGER.info(GateWayToken.getGateWayToken(apiAuthorization.getApp_id(),app_secret,timeMill));
-                if (GateWayToken.getGateWayToken(apiAuthorization.getApp_id(),app_secret,timeMill).equals(gateWayToken)){
+
+              //  LOGGER.info(GateWayToken.getGateWayToken(apiAuthorization.getApp_id(),app_secret,timeMill));
+                if (GateWayToken.getGateWayToken(apiAuthorization.getApp_id(),app_secret,timestamp).equals(gw_token)){
               //  counterService.increment("speed.minute."+api_id);
-                    ctx.set("startTime",System.currentTimeMillis());
-                    LOGGER.info(APPID+"验证通过");
-                    ctx.set("request_timeout",timeout);
-                    ctx.set("api_id",api_id);
-                    ctx.set("app_id",APPID);
-                    LOGGER.info("app_id:"+APPID+"  api_id:"+api_id+"发起记账请求");
-                   //记账请求
-                    String bill_item_id= BillItemID.getBillItemID();
-                    ctx.set("bill_item_id",bill_item_id);
-                    billService.bill(bill_item_id,api_id,APPID);
+                ctx.set("app_id",app_id);
+                   // billService.bill(bill_item_id,api_id,APPID);
                     return true;
                 }else {
                     ctx.setSendZuulResponse(false);
@@ -108,22 +105,9 @@ public class ZuulPreFilter extends ZuulFilter {
                     return false;
                 }
             }else {
-
-
                 return false;
-            }*/
-            counterService.increment("speed.second."+api_id);
-            ctx.set("startTime",System.currentTimeMillis());
-            LOGGER.info(APPID+"验证通过");
-            ctx.set("request_timeout",timeout);
-            ctx.set("api_id",api_id);
-            ctx.set("app_id",APPID);
-            LOGGER.info("app_id:"+APPID+"  api_id:"+api_id+"发起记账请求");
-            //记账请求
-            String bill_item_id= BillItemID.getBillItemID();
-            ctx.set("bill_item_id",bill_item_id);
-            billService.bill(bill_item_id,api_id,APPID);
-            return true;
+            }
+           // counterService.increment("speed.second."+api_id);
         }
     }
     private void setCounter(String api_id){

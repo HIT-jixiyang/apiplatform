@@ -11,6 +11,7 @@ import com.yangyang.utils.utils.RandomStrUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -256,14 +257,27 @@ public class ConsumerController {
                 }
             }
             Map<String,Object> map1=new HashMap<>();
-            map1.put("header",headerparams);
-            map1.put("path",pathparams);
-            map1.put("body",bodyparam);
+            if(headerparams!=null){
+                map1.put("header",headerparams);
+            }else {
+                map1.put("header","[]");
+            }
+          if(pathparams!=null){
+              map1.put("path",pathparams);
+          }
+          else {
+              map1.put("path","[]");
+          }
+          if(bodyparam.getStandard_inbound_param_value_demo()!=null){
+              map1.put("body",bodyparam.getStandard_inbound_param_value_demo());
+          }
+          else map1.put("body","{}");
+
             Map<String,Object> detail_map=new HashMap<>();
             detail_map.put("params",map1);
             Map<String,Object> responseMap=new HashMap<>();
-            responseMap.put("normal_response","这是正常的返回报文样例，此处省略一千字");
-            responseMap.put("error_response","这是异常的返回报文样例，此处再次省略一千字");
+            responseMap.put("normal_response","{'info':'这是正常的返回报文样例，此处省略一千字'}");
+            responseMap.put("error_response","{'info':'这是异常的返回报文样例，此处省略一千字'}");
             detail_map.put("response",responseMap);
             RestResult restResult=new RestResult(ResultStatusCode.OK.getStatuscode(),ResultStatusCode.OK.getMessage(),detail_map);
             return restResult;

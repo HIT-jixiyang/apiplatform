@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+参数信息应该包括：
+参数key
+参数位置
+参数类型：这里统一为String
+是否必选
+对于get方式的，参数在url中
+对于post方式：标准参数中统一使用json格式的请求体，但是后台真正的api服务的请求体格式应该有以下四种：
+                        application/x-www-form-urlencoded
+                        multipart/form-data
+                        application/json
+                        text/xml
+-->
+<response-body content-type="application/json">
+    <item key="status" type="Integer">
+        200
+    </item>
+    <item key="message" type="String">
+        success
+    </item>
+    <item key="data" type="Objest">
+        <item key="yesterday" type="Object">
+            <item key="date" type="String">16日星期三</item>
+            <item key="high" type="String">高温 28℃ </item>
+            <item key="fx" type="String"> 南风</item>
+            <item key="low" type="String"> 低温 21℃</item>
+            <item key="fl" type="String"> <![CDATA[<3级]]></item>
+            <item key="type" type="String"> 多云</item>
+        </item>
+        <item key="forcast" type="Array" >
+            <item key="date" type="String">17日星期四</item>
+            <item key="high" type="String">高温 25℃ </item>
+            <item key="fengxiang" type="String"> 南风</item>
+            <item key="low" type="String"> 低温 21℃</item>
+            <item key="fengli" type="String"> <![CDATA[<3级]]></item>
+            <item key="type" type="String"> 小雨</item>
+        </item>
+        <item key="city" type="String"> 北京</item>
+        <item key="aqi" type="String"> 85</item>
+        <item key="wendu" type="String"> 22</item>
+        <item key="ganmao" type="String">相对今天出现了较大幅度降温，较易发生感冒，体质较弱的朋友请注意适当防护</item>
+    </item>
+</response-body><!--
+<standardparam>
+    <header>
+        <param key="app_id" type="String" ismust="true">app_id</param>
+        <param key="app_secret" type="String" ismust="true">app_secret</param>
+        <param key="time_stamp" type="Long" ismust="true">time_stamp</param>
+    </header>
+    <path>
+    </path>
+    <body>
+        <param key="city" type="String" format="" position="header" ismust="true">city </param>
+        <param key="date" type="String" format="YYMMDDHH" position="body" ismust="false">date </param>
+        <param key="list" type="List">
+            <param key="listitem1" type="String">listitem </param>
+            <param key="listitem2" type="String"> listitem2</param>
+            <param key="listitem3" type="String">listitem3 </param>
+        </param>
+    </body>
+
+</standardparam>-->

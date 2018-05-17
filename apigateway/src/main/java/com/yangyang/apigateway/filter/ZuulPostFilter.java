@@ -8,7 +8,6 @@ import com.yangyang.pojo.entity.BillItem;
 import org.apache.http.Consts;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
@@ -65,18 +64,19 @@ public class ZuulPostFilter extends ZuulFilter{
     }
 private void billUpdate(RequestContext context){
     HttpServletRequest request = context.getRequest();
-    long statrtTime = (long) context.get("startTime");//请求的开始时间
+    long startTime = (long) context.get("startTime");//请求的开始时间
     String api_id= (String) context.get("api_id");
     String app_id= (String) context.get("app_id");
     String bill_item_id= (String) context.get("bill_item_id");
     String response_code= String.valueOf(context.getResponseStatusCode());
+    LOGGER.info(startTime+"---"+api_id+"----"+app_id+"----"+bill_item_id);
 if(api_id!=null&&app_id!=null&&bill_item_id!=null){
     BillItem billItem=new BillItem();
     billItem.setBill_item_id(bill_item_id);
     billItem.setApp_id(app_id);
     billItem.setApi_id(api_id);
     billItem.setResponse_code(response_code);
-    long duration=System.currentTimeMillis() - statrtTime;//请求耗时
+    long duration=System.currentTimeMillis() - startTime;//请求耗时
     LOGGER.info("请求路径"+request.getServletPath()+" --- "+"duration:"+" "+duration);
     Float request_time= new Float(duration/1000.0);
     billItem.setRequest_time(request_time);

@@ -23,7 +23,7 @@ public class CustomRouteLocator extends SimpleRouteLocator implements Refreshabl
 @Autowired
 ApiService apiService;
 @Autowired
-    ApiCategoryService apiCategoryService;
+ApiCategoryService apiCategoryService;
     public final static Logger logger = LoggerFactory.getLogger(CustomRouteLocator.class);
 
     private JdbcTemplate jdbcTemplate;
@@ -81,7 +81,7 @@ ApiService apiService;
     private Map<String, ZuulProperties.ZuulRoute> locateRoutesFromDB(){
         Map<String, ZuulProperties.ZuulRoute> routes = new LinkedHashMap<>();
         //List<ZuulRouteVO> results = ApiToZuulRoute.apiToZuulRoute(apiService.getAllApi());
-        List<ZuulRouteVO> results = ApiToZuulRoute.apiCategoryToZuulRoute(apiCategoryService.getAllApiCategory());
+       List<ZuulRouteVO> results = ApiToZuulRoute.apiCategoryToZuulRoute(apiCategoryService.getAllApiCategory());
         for (ZuulRouteVO result : results) {
             System.out.println(result.toString());
             if(org.apache.commons.lang3.StringUtils.isBlank(result.getPath()) || org.apache.commons.lang3.StringUtils.isBlank(result.getUrl()) ){

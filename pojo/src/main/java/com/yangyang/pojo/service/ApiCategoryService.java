@@ -33,8 +33,8 @@ public class ApiCategoryService {
     }
     public Map<String,Object> getApiCategoryPageListByApiCategoryExample(Integer pageNo, Integer pageSize, ApiCategory apiCategory,String name){
         Map<String,Object> map=new HashMap<>();
-        map.put("total",apiCategoryMapper.getApiCategoryPageListByApiCategoryExample(pageNo,pageSize,apiCategory,name));
-        map.put("data",apiCategoryMapper.countPageList(apiCategory,name));
+        map.put("data",apiCategoryMapper.getApiCategoryPageListByApiCategoryExample(pageNo,pageSize,apiCategory,name));
+        map.put("total",apiCategoryMapper.countPageList(apiCategory,name));
         return map;
     }
 public List<ApiCategory> getAllApiCategory(){
