@@ -2,6 +2,7 @@ package com.yangyang.pojo.service;
 
 import com.yangyang.pojo.entity.StandardInboundParam;
 import com.yangyang.pojo.mapper.StandardInboundParamMapper;
+import com.yangyang.utils.utils.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,8 @@ public class StandardInboundParamService {
     try {
         standardInboundParamMapper.deleteStandardParamByApiCategoryID(api_category_id);
         for (StandardInboundParam param :standardInboundParams){
+            param.setApi_category_id(api_category_id);
+            param.setStandard_inbound_param_id(UUID.getUUID());
             standardInboundParamMapper.insertStandardInboundParam(param);
         }
     }catch (Exception e){

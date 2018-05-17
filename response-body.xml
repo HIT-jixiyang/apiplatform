@@ -13,35 +13,36 @@
                         text/xml
 -->
 <response-body content-type="application/json">
-    <item key="status" type="Integer">
+    <item key="status" type="Integer" desc="">
         200
     </item>
-    <item key="message" type="String">
+    <item key="message" type="String" desc="">
         success
     </item>
-    <item key="data" type="Objest">
-        <item key="yesterday" type="Object">
-            <item key="date" type="String">16日星期三</item>
-            <item key="high" type="String">高温 28℃ </item>
-            <item key="fx" type="String"> 南风</item>
-            <item key="low" type="String"> 低温 21℃</item>
-            <item key="fl" type="String"> <![CDATA[<3级]]></item>
-            <item key="type" type="String"> 多云</item>
+    <item key="data" type="Object" desc="">
+        <item key="yesterday" type="Object" desc="">
+            <item key="date" type="String" desc="">16日星期三</item>
+            <item key="high" type="String" desc="">高温 28℃ </item>
+            <item key="fx" type="String" desc=""> 南风</item>
+            <item key="low" type="String" desc=""> 低温 21℃</item>
+            <item key="fl" type="String" desc=""> <![CDATA[<3级]]></item>
+            <item key="type" type="String" desc=""> 多云</item>
         </item>
         <item key="forcast" type="Array" >
-            <item key="date" type="String">17日星期四</item>
-            <item key="high" type="String">高温 25℃ </item>
-            <item key="fengxiang" type="String"> 南风</item>
-            <item key="low" type="String"> 低温 21℃</item>
-            <item key="fengli" type="String"> <![CDATA[<3级]]></item>
-            <item key="type" type="String"> 小雨</item>
+            <item key="date" type="String" desc="">17日星期四</item>
+            <item key="high" type="String" desc="">高温 25℃ </item>
+            <item key="fengxiang" type="String" desc=""> 南风</item>
+            <item key="low" type="String" desc=""> 低温 21℃</item>
+            <item key="fengli" type="String" desc=""> <![CDATA[<3级]]></item>
+            <item key="type" type="String" desc=""> 小雨</item>
         </item>
-        <item key="city" type="String"> 北京</item>
-        <item key="aqi" type="String"> 85</item>
-        <item key="wendu" type="String"> 22</item>
-        <item key="ganmao" type="String">相对今天出现了较大幅度降温，较易发生感冒，体质较弱的朋友请注意适当防护</item>
+        <item key="city" type="String" desc=""> 北京</item>
+        <item key="aqi" type="String" desc=""> 85</item>
+        <item key="wendu" type="String" desc=""> 22</item>
+        <item key="ganmao" type="String" desc="">相对今天出现了较大幅度降温，较易发生感冒，体质较弱的朋友请注意适当防护</item>
     </item>
-</response-body><!--
+</response-body>
+        <!--
 <standardparam>
     <header>
         <param key="app_id" type="String" ismust="true">app_id</param>
