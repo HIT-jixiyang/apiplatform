@@ -44,10 +44,10 @@ ApiAuthorizationService apiAuthorizationService;
         return appMapper.getAppByAppID(app_id);
     }
 
-    public Map<String, Object> getAppPageList(Integer pageNo, Integer pageSize, App app) {
+    public Map<String, Object> getAppPageList(Integer pageNo, Integer pageSize, App app,String name) {
         Map<String, Object> result = new HashMap<>();
-        result.put("data", appMapper.getAppPageList(pageNo, pageSize, app));
-        result.put("total", appMapper.countPageList(app));
+        result.put("data", appMapper.getAppPageList(pageNo, pageSize, app,name));
+        result.put("total", appMapper.countPageList(app,name));
         return result;
     }
 

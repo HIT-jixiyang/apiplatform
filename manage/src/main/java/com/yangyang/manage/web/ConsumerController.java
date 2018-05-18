@@ -115,9 +115,10 @@ public class ConsumerController {
     @ResponseBody
     public Map<String, Object> getAppPageListByConsumerId(@RequestBody Map map, HttpSession session) {
         String consumer_id= (String) map.get("consumer_id");
+        String name = (String) map.get("name");
         App app = new App();
         app.setConsumer_id(consumer_id);
-        Map<String, Object> appMap = appService.getAppPageList((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), app);
+        Map<String, Object> appMap = appService.getAppPageList((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), app,name);
         return appMap;
     }
     //根据前台传过来的app_id参数找api类列表，参数应该包括app_id,第几页，每页多少
