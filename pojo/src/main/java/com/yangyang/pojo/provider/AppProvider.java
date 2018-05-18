@@ -3,6 +3,7 @@ package com.yangyang.pojo.provider;
 
 
 import com.yangyang.pojo.entity.App;
+import com.yangyang.pojo.entity.App;
 import com.yangyang.utils.utils.SqlUtil;
 
 import java.util.List;
@@ -37,6 +38,23 @@ public class AppProvider {
         }
         sql.append(" 1=1");
         return sql.toString();
+    }
+    public String getAppPageListByAppExample(Integer pageNo, Integer pageSize, App app, String name) throws IllegalAccessException {
+        StringBuffer sql = new StringBuffer();
+        sql.append("select * from app \n");
+        List<String[]> condition = SqlUtil.getNotNullField(app);
+        sql.append("where ");
+        if(condition.size() != 0){
+            sql.append(getWhere(condition));
+        }
+        if(name!=null){
+            sql.append( " app_name like '%"+name+"%' and ");
+        }
+
+        sql.append(" 1=1");
+
+
+        return sql.toString() + " limit " + ((pageNo -1) * pageSize)  + "," + pageSize;
     }
 
     private String getWhere(List<String[]> condition){

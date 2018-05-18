@@ -23,6 +23,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.github.tobato</groupId>
+			<artifactId>fastdfs-client</artifactId>
+			<version>1.26.1-RELEASE</version>
+		</dependency>
+		<dependency>
 			<groupId>com.yangyang</groupId>
 			<artifactId>pojo</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
