@@ -52,7 +52,7 @@ public class ApiService {
         return apiMapper.getAllApiList();
     }
 
-    public Object getApiPageList(Integer pageNo, Integer pageSize, Api api) {
+    public Map<String, Object> getApiPageList(Integer pageNo, Integer pageSize, Api api) {
         Map<String, Object> result = new HashMap<>();
         result.put("data", apiMapper.getApiPageListByApiExample(pageNo, pageSize, api));
         result.put("total", apiMapper.countPageList(api));

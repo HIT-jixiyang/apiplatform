@@ -57,15 +57,6 @@ public class RegisterController {
 
     }
 
-    @RequestMapping(value = "/consumer/consumer_register", method = RequestMethod.POST)
-    public String ConsumerRegister(Consumer consumer) {
-        System.out.println(consumer.toString());
-        consumer.setConsumer_id(UUID.getUUID());
-        if (consumerMapper.addConsumer(consumer) == 1) {
-            return "success";
-        } else return "error";
-
-    }
 
     @RequestMapping(value = "/consumer/consumer_registerpage")
     public ModelAndView consumerRegisterPage() {

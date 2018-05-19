@@ -22,7 +22,7 @@ public class ApiProvider {
         }
         sql.append(" a.sp_id=s.sp_id and a.api_category_id=c.api_category_id and");
         sql.append( " 1=1");
-        return sql.toString() + " limit " + ((pageNo -1) * pageSize)  + "," + pageSize;
+        return sql.toString() + " order by api_create_time desc limit " + ((pageNo -1) * pageSize)  + "," + pageSize;
     }
 
 

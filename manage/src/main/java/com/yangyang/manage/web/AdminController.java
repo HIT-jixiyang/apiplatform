@@ -92,4 +92,52 @@ public class AdminController {
             // TODO: handle exception
         }
     }
+    /*
+    * 管理员更新API状态，传入verify为0表示将api状态置为未审核
+    * verify为1表示已经审核
+    * 传入adapt为0表示将api状态置为为适配
+    * 传入1则表示已经适配
+    * */
+    @RequestMapping(value = "/admin/update-api-verify-state")
+    public RestResult updateApiVerifyState(@RequestBody Map map){
+        String api_id= (String) map.get("api_id");
+        Integer verify= (Integer) map.get("verify");
+         Api api=new Api();
+         api.setApi_id(api_id);
+         api.setApi_verify_state(verify);
+        try{
+            apiService.updateApi(api);
+            return new RestResult(1,"修改成功",null);
+        }catch (Exception e){
+            return new RestResult(0,"修改失败",e.toString());
+        }
+    }
+    @RequestMapping(value = "/admin/update-api-adapt-state")
+    public RestResult updateApiAdaptState(@RequestBody Map map) {
+        String api_id = (String) map.get("api_id");
+        Integer adapt = (Integer) map.get("adapt");
+        Api api = new Api();
+        api.setApi_id(api_id);
+        api.setApi_adapt_state(adapt);
+        try {
+            apiService.updateApi(api);
+            return new RestResult(1, "修改成功", null);
+        } catch (Exception e) {
+            return new RestResult(0, "修改失败", e.toString());
+        }
+    }
+    /*想查询未审核的Api或者未适配的Api就传入对应的api模板
+    * */
+    @RequestMapping(value = "/admin/getapilist")
+    public Map<String, Object> getApiListByTimeDesc(@RequestBody Map map){
+        Api api=ClassUtil.mapToClass((Map) map.get("api"),Api.class);
+        return apiService.getApiPageList((Integer) map.get("pageNo"),(Integer) map.get("pageSize"),api);
+        //return null;
+    }
+    @RequestMapping(value = "/admin/modify-user-state")
+    public RestResult modifyUserState(@RequestBody Map map){
+        Integer role= (Integer) map.get("role");//role为0表示consumer，为1表示服务提供商
+
+        return  null;
+    }
 }

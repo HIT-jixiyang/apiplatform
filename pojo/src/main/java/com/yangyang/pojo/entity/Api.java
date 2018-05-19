@@ -34,4 +34,7 @@ public class Api {
     private Float api_cost_algorithm_score;
     private String api_jar_path;
 private Integer api_env;
+private String api_param_xml;
+private Integer api_verify_state;
+private Integer api_adapt_state;
 }

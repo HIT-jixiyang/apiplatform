@@ -71,14 +71,16 @@ CREATE TABLE `api` (
   `api_category_id` varchar(16) DEFAULT NULL COMMENT 'api分类编码，同一类api拥有相同的前缀',
   `api_average_response_time` float DEFAULT '99' COMMENT '近200次访问请求的平均响应时间',
   `api_ok_response_times` int(11) DEFAULT '0' COMMENT 'api在近1000次访问请求中的成功次数',
-  `api_success_response_ratio` float DEFAULT '0',
-  `api_time_algorithm_score` float DEFAULT '0',
+  `api_success_response_ratio` float DEFAULT '0' COMMENT 'api返回成功的比率',
+  `api_time_algorithm_score` float DEFAULT '0' COMMENT 'api按照时间算法得到的分数',
   `api_stable_algorithm_score` float DEFAULT '0' COMMENT '稳定性算法得分',
   `api_cost_algorithm_score` float DEFAULT '0',
   `api_jar_path` varchar(512) DEFAULT NULL,
   `api_env` int(1) DEFAULT '0' COMMENT '0：测试，1：线上',
-  `api_state` int(1) DEFAULT '0' COMMENT '0：未通过审核，1:已经通过审核，正在适配，2：已经通过审核，适配完毕',
+  `api_verify_state` int(1) DEFAULT '0' COMMENT '0：未通过审核，1:已经通过审核，正在适配，2：已经通过审核，适配完毕',
   `api_param_xml` text COMMENT 'api参数的xml描述文档',
+  `api_adapt_state` int(1) DEFAULT NULL,
+  `api_create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`api_id`),
   UNIQUE KEY `api_id` (`api_id`) USING HASH,
   KEY `api_sp` (`sp_id`),
@@ -87,7 +89,7 @@ CREATE TABLE `api` (
 
 /*Data for the table `api` */
 
-insert  into `api`(`api_id`,`sp_id`,`api_token`,`api_max_in`,`api_enabled`,`api_description`,`api_path`,`api_name`,`api_bill_type`,`api_method`,`api_url`,`api_return_pattern`,`api_normal_return_demo`,`api_error_return_demo`,`api_timeout`,`api_category_id`,`api_average_response_time`,`api_ok_response_times`,`api_success_response_ratio`,`api_time_algorithm_score`,`api_stable_algorithm_score`,`api_cost_algorithm_score`,`api_jar_path`,`api_env`,`api_state`,`api_param_xml`) values ('24987fb58daa4f56b4c76669312d3e7b','c430c9776a934ff1a856360185920c5d','111111111',111,1,'ali天气预报','/24987fb58daa4f56b4c76669312d3e7b/**','天气预报',1,0,'http://ali-weather.showapi.com/area-to-weather','0','','',30000,'1',99,0,0,0,0,0,'group1/M00/00/00/wKgRgVr4ZPGAT5VgAAAWdv2QN-s325.jar',0,0,NULL),('e1dd60ed08ff472395167e8b8c61a657','c430c9776a934ff1a856360185920c5d','111111111',1000,1,'免费的天气预报接口','/e1dd60ed08ff472395167e8b8c61a657/**','天气预报（免费）',1,0,'http://wthrcdn.etouch.cn/weather_mini','0','{\r\nzhengchang;\r\n}','{\r\ncuowu;\r\n}',30000,'0',0.113497,0,0.993103,0.905413,1.012,0.985426,'E:\\gitres\\apiplatform\\apigateway\\src\\main\\resources\\jar\\param-map-1.0-SNAPSHOT.jar',0,0,NULL),('ef7deaca96d94cfeb21c1985c44525db','c430c9776a934ff1a856360185920c5d','11111',100,1,'简单的加法','/ef7deaca96d94cfeb21c1985c44525db/**','加法',1,0,'http://127.0.0.1:8090/add','0','2','error',30000,'0',0.0804746,0,0.901554,1.13637,0.996952,1.02353,'E:\\gitres\\apiplatform\\apigateway\\src\\main\\resources\\jar\\param-map-1.0-SNAPSHOT.jar',0,0,NULL);
+insert  into `api`(`api_id`,`sp_id`,`api_token`,`api_max_in`,`api_enabled`,`api_description`,`api_path`,`api_name`,`api_bill_type`,`api_method`,`api_url`,`api_return_pattern`,`api_normal_return_demo`,`api_error_return_demo`,`api_timeout`,`api_category_id`,`api_average_response_time`,`api_ok_response_times`,`api_success_response_ratio`,`api_time_algorithm_score`,`api_stable_algorithm_score`,`api_cost_algorithm_score`,`api_jar_path`,`api_env`,`api_verify_state`,`api_param_xml`,`api_adapt_state`,`api_create_time`) values ('24987fb58daa4f56b4c76669312d3e7b','c430c9776a934ff1a856360185920c5d','111111111',111,1,'ali天气预报','/24987fb58daa4f56b4c76669312d3e7b/**','天气预报',1,0,'http://ali-weather.showapi.com/area-to-weather','0','','',30000,'1',99,0,0,0,0,0,'group1/M00/00/00/wKgRgVr4ZPGAT5VgAAAWdv2QN-s325.jar',0,0,NULL,NULL,'2018-05-19 21:40:53'),('e1dd60ed08ff472395167e8b8c61a657','c430c9776a934ff1a856360185920c5d','111111111',1000,1,'免费的天气预报接口','/e1dd60ed08ff472395167e8b8c61a657/**','天气预报（免费）',1,0,'http://wthrcdn.etouch.cn/weather_mini','0','{\r\nzhengchang;\r\n}','{\r\ncuowu;\r\n}',30000,'0',0.113497,0,0.993103,0.905413,1.012,0.985426,'E:\\gitres\\apiplatform\\apigateway\\src\\main\\resources\\jar\\param-map-1.0-SNAPSHOT.jar',0,0,NULL,NULL,'2018-05-19 21:40:53'),('ef7deaca96d94cfeb21c1985c44525db','c430c9776a934ff1a856360185920c5d','11111',100,1,'简单的加法','/ef7deaca96d94cfeb21c1985c44525db/**','加法',1,0,'http://127.0.0.1:8090/add','0','2','error',30000,'0',0.0804746,0,0.901554,1.13637,0.996952,1.02353,'E:\\gitres\\apiplatform\\apigateway\\src\\main\\resources\\jar\\param-map-1.0-SNAPSHOT.jar',0,0,NULL,NULL,'2018-05-19 21:40:53');
 
 /*Table structure for table `api_app` */
 
