@@ -250,7 +250,7 @@ public class ConsumerController {
         try {
             List<StandardInboundParam> paramList = standardInboundParamService.getStandardParamListByApiCategoryID(api_category_id);
             List<StandardInboundParam> headerparams = new ArrayList<>();
-            List<StandardInboundParam> pathparams = new ArrayList<>();
+            List<StandardInboundParam> queryparams = new ArrayList<>();
             StandardInboundParam bodyparam = new StandardInboundParam();
             for (StandardInboundParam param : paramList) {
                 switch (param.getStandard_inbound_param_position()) {
@@ -258,7 +258,7 @@ public class ConsumerController {
                         headerparams.add(param);
                         break;
                     case 1:
-                        pathparams.add(param);
+                        queryparams.add(param);
                         break;
                     case 2:
                         bodyparam = param;
@@ -270,10 +270,10 @@ public class ConsumerController {
             } else {
                 map1.put("header", "[]");
             }
-            if (pathparams != null) {
-                map1.put("path", pathparams);
+            if (queryparams != null) {
+                map1.put("query", queryparams);
             } else {
-                map1.put("path", "[]");
+                map1.put("query", "[]");
             }
             if (bodyparam.getStandard_inbound_param_value_demo() != null) {
                 map1.put("body", bodyparam.getStandard_inbound_param_value_demo());
