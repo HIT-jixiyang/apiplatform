@@ -114,8 +114,9 @@ public class ConsumerController {
     public Map<String, Object> getAppPageListByConsumerId(@RequestBody Map map, HttpSession session) {
         String consumer_id = (String) map.get("consumer_id");
         App app = new App();
+        String name= (String) map.get("name");
         app.setConsumer_id(consumer_id);
-        Map<String, Object> appMap = appService.getAppPageList((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), app);
+        Map<String, Object> appMap = appService.getAppPageList((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), app,name);
         return appMap;
     }
 

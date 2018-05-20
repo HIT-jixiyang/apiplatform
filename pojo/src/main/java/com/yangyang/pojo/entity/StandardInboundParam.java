@@ -16,4 +16,5 @@ public class StandardInboundParam {
   private String standard_inbound_param_desc;
   private Integer standard_inbound_param_position;
   private String standard_inbound_param_value_demo;
+  private Integer standard_inbound_param_ismust;
 }

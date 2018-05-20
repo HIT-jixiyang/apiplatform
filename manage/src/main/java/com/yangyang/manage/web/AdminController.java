@@ -5,8 +5,10 @@ import com.yangyang.pojo.entity.*;
 import com.yangyang.pojo.service.ApiCategoryService;
 import com.yangyang.pojo.service.ApiService;
 import com.yangyang.pojo.service.StandardInboundParamService;
+import com.yangyang.utils.XmlUtil;
 import com.yangyang.utils.utils.ApiCategoryID;
 import com.yangyang.utils.utils.ClassUtil;
+import com.yangyang.utils.utils.UUID;
 import com.yangyang.utils.utils.UploadFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,26 +38,47 @@ public class AdminController {
     ApiService apiService;
     @Autowired
     FastDFSClient fastDFSClient;
+
+    @PostMapping(value = "/admin/test-param-xml")
+    public RestResult isParamXml(@RequestBody Map map){
+        String param_xml= (String) map.get("param_xml");
+        return XmlUtil.getHeadersAndQuerysFromXml(param_xml);
+    }
     @PostMapping(value = "/admin/add-apicategory")
     public RestResult addApiCategory(@RequestBody Map<String,Object> map){
-
             Map<String,Object> api_category= (Map<String, Object>) map.get("api_category");
             ApiCategory apiCategory= ClassUtil.mapToClass(api_category,ApiCategory.class);
             apiCategory.setApi_category_id(ApiCategoryID.getID());
             System.out.println(apiCategory.toString());
-            List<Map> paramList= (List<Map>) map.get("paramlist");
-            List<StandardInboundParam> standardInboundParamList=new ArrayList<>();
-            StandardInboundParam standardInboundParam=null;
-            if (paramList.size()>0){
-                for (Map map1 :paramList){
-                    standardInboundParam=ClassUtil.mapToClass(map1,StandardInboundParam.class);
-                    standardInboundParamList.add(standardInboundParam);
-                }
-                System.out.println(standardInboundParamList.toString());
-                return  apiCategoryService.addApiCategory(apiCategory,standardInboundParamList);
-            }
-
-          return new RestResult(0,"error",null);
+            String param_xml= (String) map.get("param_xml");
+            String body= (String) map.get("body_param");
+StandardInboundParam param=new StandardInboundParam();
+param.setStandard_inbound_param_id(UUID.getUUID());
+param.setApi_category_id(apiCategory.getApi_category_id());
+if (body!=null)
+param.setStandard_inbound_param_ismust(1);
+else
+    param.setStandard_inbound_param_ismust(0);
+     param.setStandard_inbound_param_value_demo(body);
+     param.setStandard_inbound_param_type("String");
+     param.setStandard_inbound_param_desc("");
+     param.setStandard_inbound_param_position(2);
+     param.setStandard_inbound_param_key("body");
+       try {
+           RestResult restResult= XmlUtil.getHeadersAndQuerysFromXml(param_xml);
+           List<StandardInboundParam> list= (List<StandardInboundParam>) restResult.getData();
+           List<StandardInboundParam> standardInboundParamList=new ArrayList<>();
+           if (list.size()>0){
+               for(StandardInboundParam param1:list){
+            param1.setApi_category_id(apiCategory.getApi_category_id());
+            param1.setStandard_inbound_param_id(UUID.getUUID());
+               }
+           }
+           return  apiCategoryService.addApiCategory(apiCategory,list);
+       }
+       catch (Exception e){
+           return new RestResult(0,"error",null);
+       }
     }
     @PostMapping(value = "/admin/modify-apicategory")
     public RestResult modifyApiCategory(@RequestBody Map<String,Object> map){

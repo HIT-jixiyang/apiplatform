@@ -1,9 +1,11 @@
-package com.yangyang.utils.utils;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+package com.yangyang.utils;
 
-import org.dom4j.*;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
+import java.util.Iterator;
 
 public class XmlTest {
     public static void main(String[] args) {
@@ -33,7 +35,7 @@ public class XmlTest {
                     "\n" +
                     "</standardparam>";
             // 将xml格式字符串转化为DOM对象
-            org.dom4j.Document document = DocumentHelper.parseText(xmlResult);
+            Document document = DocumentHelper.parseText(xmlResult);
             // 获取根结点对象
             Element rootElement = document.getRootElement();
             // 循环根节点，获取其子节点
