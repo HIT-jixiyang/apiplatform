@@ -2,7 +2,8 @@
 SQLyog Ultimate v12.09 (64 bit)
 MySQL - 5.7.20-log : Database - apiplatform
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -18,7 +19,7 @@ USE `apiplatform`;
 
 /*Table structure for table `account` */
 
-DROP TABLE IF EXISTS `account`;
+DROP TABLE IF EXISTS `account` ;
 
 CREATE TABLE `account` (
   `account_id` varchar(32) NOT NULL,

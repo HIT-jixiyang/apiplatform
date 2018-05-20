@@ -16,7 +16,7 @@ import java.util.List;
  **/
 public class AppProvider {
 
-    public String getAppPageList(Integer pageNo, Integer pageSize, App app) throws IllegalAccessException {
+/*    public String getAppPageList(Integer pageNo, Integer pageSize, App app) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
         sql.append("select a.* from app a\n");
         List<String[]> condition = SqlUtil.getNotNullField(app);
@@ -26,9 +26,9 @@ public class AppProvider {
         }
         sql.append( " 1=1");
         return sql.toString() + " limit " + ((pageNo -1) * pageSize)  + "," + pageSize;
-    }
+    }*/
 
-    public String countPageList(App app) throws IllegalAccessException {
+    public String countPageList(App app,String name) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
         sql.append("select count(1) from app\n");
         sql.append("where ");
@@ -36,10 +36,13 @@ public class AppProvider {
         if(condition.size() != 0){
             sql.append(getWhere(condition));
         }
+        if(name!=null){
+            sql.append( " app_name like '%"+name+"%' and ");
+        }
         sql.append(" 1=1");
         return sql.toString();
     }
-    public String getAppPageListByAppExample(Integer pageNo, Integer pageSize, App app, String name) throws IllegalAccessException {
+    public String getAppPageList(Integer pageNo, Integer pageSize, App app, String name) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
         sql.append("select * from app \n");
         List<String[]> condition = SqlUtil.getNotNullField(app);

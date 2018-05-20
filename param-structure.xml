@@ -14,15 +14,15 @@
 -->
 <standardparam>
     <header>
-        <param key="app_id" type="String" ismust="true" desc="">app_id</param>
-        <param key="app_secret" type="String" ismust="true">app_secret</param>
-        <param key="time_stamp" type="Long" ismust="true">time_stamp</param>
+        <param key="app_id" type="String" ismust="true" desc="">19329829</param>
+        <param key="app_secret" type="String" ismust="true">ankalala</param>
+        <param key="time_stamp" type="Long" ismust="true">132973982</param>
     </header>
     <query>
     </query>
     <body>
-        <param key="city" type="String" format="" position="header" ismust="true">city </param>
-        <param key="date" type="String" format="YYMMDDHH" position="body" ismust="false">date </param>
+        <param key="city" type="String" format="" position="header" ismust="true">北京</param>
+        <param key="date" type="String" format="YYMMDDHH" position="body" ismust="false">2018-05-21 </param>
         <param key="list" type="List">
             <param key="listitem1" type="String">listitem1 </param>
             <param key="listitem2" type="String"> listitem2</param>

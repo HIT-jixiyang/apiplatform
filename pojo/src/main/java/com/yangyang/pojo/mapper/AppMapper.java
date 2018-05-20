@@ -27,11 +27,11 @@ public Integer addApp(App app);
 
     // 获取app分页列表
     @SelectProvider(type = AppProvider.class, method = "getAppPageList")
-    List<Map> getAppPageList(Integer pageNo, Integer pageSize, App app);
+    List<Map> getAppPageList(Integer pageNo, Integer pageSize, App app,String name);
 
     // 获取app数
     @SelectProvider(type = AppProvider.class, method = "countPageList")
-    Integer countPageList(App app);
+    Integer countPageList(App app,String name);
     @Delete("DELETE FROM app WHERE app_id=#{app_id}")
     public int deleteAppByAppID(String app_id);
     @Update("update app set app_name=#{app_name},app_description=#{app_description} where app_id=#{app_id}")

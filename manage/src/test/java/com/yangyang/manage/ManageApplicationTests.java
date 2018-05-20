@@ -28,7 +28,7 @@ AppService appService;
 	public  void testGetAppList(){
 		App app=new App();
 		app.setConsumer_id("87de254182574856af64d323869b686d");
-		Map<String, Object> appList=appService.getAppPageList(1,10,app);
+		Map<String, Object> appList=appService.getAppPageList(1,10,app,null);
 	}
 
 }
