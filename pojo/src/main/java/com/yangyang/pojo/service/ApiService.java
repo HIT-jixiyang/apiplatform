@@ -22,20 +22,8 @@ public class ApiService {
 
     //插入API同时插入参数列表
     @Transactional
-    public boolean addApi(Api api, List<ApiParam> apiParamList) {
-        boolean flag = false;
+    public boolean addApi(Api api) {
         if (!apiMapper.addApi(api)) return false;
-
-        for (ApiParam p : apiParamList) {
-            p.setApi_id(api.getApi_id());
-            //由于常量参数不变，所以只有后端参数，不对用户可见
-            if(p.getApi_param_isconstant()){
-                p.setApi_pre_param_key("");
-                p.setApi_pre_param_position(0);
-
-            }
-            if (!apiParamMapper.addApiParam(p)) return false;
-        }
         return true;
 
     }

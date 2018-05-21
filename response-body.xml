@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <!--
 参数信息应该包括：
 参数key
@@ -12,52 +12,55 @@
                         application/json
                         text/xml
 -->
-<response-body content-type="application/json">
-    <item key="status" type="Integer" desc="">
-        200
-    </item>
-    <item key="message" type="String" desc="">
-        success
-    </item>
-    <item key="data" type="Object" desc="">
-        <item key="yesterday" type="Object" desc="">
-            <item key="date" type="String" desc="">16日星期三</item>
-            <item key="high" type="String" desc="">高温 28℃ </item>
-            <item key="fx" type="String" desc=""> 南风</item>
-            <item key="low" type="String" desc=""> 低温 21℃</item>
-            <item key="fl" type="String" desc=""> <![CDATA[<3级]]></item>
-            <item key="type" type="String" desc=""> 多云</item>
+<response-body content-type='application/json'>
+    <headers>
+        <head>
+        </head>
+    </headers>
+    <body>
+        <item key='status' type='Integer' desc=''>200</item>
+        <item key='message' type='String' desc=''>success</item>
+        <item key='data' type='Object' desc=''>
+            <item key='yesterday' type='Object' desc=''>
+                <item key='date' type='String' desc=''>16日星期三</item>
+                <item key='high' type='String' desc=''>高温 28℃ </item>
+                <item key='fx' type='String' desc=''> 南风</item>
+                <item key='low' type='String' desc=''> 低温 21℃</item>
+                <item key='fl' type='String' desc=''> <![CDATA[<3级]]></item>
+                <item key='type' type='String' desc=''> 多云</item>
+            </item>
+            <item key='forcast' type='Array' >
+                <item key='date' type='String' desc='日期'>17日星期四</item>
+                <item key='high' type='String' desc='最高温度'>高温 25℃ </item>
+                <item key='fengxiang' type='String' desc='风向'> 南风</item>
+                <item key='low' type='String' desc='最低温度'> 低温 21℃</item>
+                <item key='fengli' type='String' desc='风力'> <![CDATA[<3级]]></item>
+                <item key='type' type='String' desc='天气状态'> 小雨</item>
+            </item>
+            <item key='city' type='String' desc='城市名称'> 北京</item>
+            <item key='aqi' type='String' desc='api'> 85</item>
+            <item key='wendu' type='String' desc='温度'> 22</item>
+            <item key='ganmao' type='String' desc='是否容易感冒'>相对今天出现了较大幅度降温，较易发生感冒，体质较弱的朋友请注意适当防护</item>
         </item>
-        <item key="forcast" type="Array" >
-            <item key="date" type="String" desc="">17日星期四</item>
-            <item key="high" type="String" desc="">高温 25℃ </item>
-            <item key="fengxiang" type="String" desc=""> 南风</item>
-            <item key="low" type="String" desc=""> 低温 21℃</item>
-            <item key="fengli" type="String" desc=""> <![CDATA[<3级]]></item>
-            <item key="type" type="String" desc=""> 小雨</item>
-        </item>
-        <item key="city" type="String" desc=""> 北京</item>
-        <item key="aqi" type="String" desc=""> 85</item>
-        <item key="wendu" type="String" desc=""> 22</item>
-        <item key="ganmao" type="String" desc="">相对今天出现了较大幅度降温，较易发生感冒，体质较弱的朋友请注意适当防护</item>
-    </item>
+    </body>
+
 </response-body>
         <!--
 <standardparam>
     <header>
-        <param key="app_id" type="String" ismust="true">app_id</param>
-        <param key="app_secret" type="String" ismust="true">app_secret</param>
-        <param key="time_stamp" type="Long" ismust="true">time_stamp</param>
+        <param key='app_id' type='String' ismust='true'>app_id</param>
+        <param key='app_secret' type='String' ismust='true'>app_secret</param>
+        <param key='time_stamp' type='Long' ismust='true'>time_stamp</param>
     </header>
     <path>
     </path>
     <body>
-        <param key="city" type="String" format="" position="header" ismust="true">city </param>
-        <param key="date" type="String" format="YYMMDDHH" position="body" ismust="false">date </param>
-        <param key="list" type="List">
-            <param key="listitem1" type="String">listitem </param>
-            <param key="listitem2" type="String"> listitem2</param>
-            <param key="listitem3" type="String">listitem3 </param>
+        <param key='city' type='String' format='' position='header' ismust='true'>city </param>
+        <param key='date' type='String' format='YYMMDDHH' position='body' ismust='false'>date </param>
+        <param key='list' type='List'>
+            <param key='listitem1' type='String'>listitem </param>
+            <param key='listitem2' type='String'> listitem2</param>
+            <param key='listitem3' type='String'>listitem3 </param>
         </param>
     </body>
 

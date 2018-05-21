@@ -102,6 +102,12 @@
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>1.3.2</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.netflix.netflix-commons/netflix-commons-util -->
+		<dependency>
+			<groupId>com.netflix.netflix-commons</groupId>
+			<artifactId>netflix-commons-util</artifactId>
+			<version>0.3.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>mysql</groupId>

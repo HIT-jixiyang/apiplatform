@@ -8,13 +8,17 @@ import com.yangyang.pojo.entity.BillItem;
 import org.apache.http.Consts;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
-
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /*
 *
@@ -52,9 +56,14 @@ public class ZuulPostFilter extends ZuulFilter{
 
         billUpdate(context);
         InputStream stream = context.getResponseDataStream();
+
+      /*  HttpServletResponse response=context.getResponse();
+        Collection<String> headerNames=  response.getHeaderNames();
+        String type=response.getContentType();
+        LOGGER.info(headerNames.toString()+"-------------"+type);*/
+        List<com.netflix.util.Pair<String, String>> headers=  context.getZuulResponseHeaders();
         try {
             String body = StreamUtils.copyToString(stream, Charset.forName("UTF-8"));
-
          byte[] bytes=body.getBytes(Consts.UTF_8);
         context.setResponseDataStream(new ServletInputStreamWrapper(bytes));
         } catch (IOException e) {

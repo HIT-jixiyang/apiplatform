@@ -22,7 +22,7 @@ public class SqlUtil {
                 temp[0] = "`" + field.getName() + "`";
                 temp[1] = field.get(obj).toString();
                 if(val instanceof String){
-                    temp[1] = "'"+temp[1]+"'";
+                    temp[1] = "\""+temp[1]+"\"";
                 }
                 res.add(temp);
             }

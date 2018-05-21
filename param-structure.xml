@@ -12,27 +12,29 @@
                         application/json
                         text/xml
 -->
-<standardparam>
+<!--
+标准请求报文
+-->
+<stand-request content-type='application/json'>
     <headers>
         <param key='app_id' type='String' ismust='true' desc=' '>19329829</param>
         <param key='app_secret' type='String' ismust='true' desc=' '>ankalala</param>
-        <param key='time_stamp' type='Long' ismust= 'true' desc=' '>132973982</param>
+        <param key='time_stamp' type='Long' ismust='true' desc=' '>132973982</param>
     </headers>
     <querys>
     </querys>
     <body>
-        <param key='city' type='String' format=''  ismust='true'>北京</param>
-        <param key='date' type='String' format='YYMMDDHH'  ismust='false'>2018-05-21 </param>
-        <param key='list' type='List'>
-            <param key='listitem1' type='String'>listitem1 </param>
-            <param key='listitem2' type='String'> listitem2</param>
-            <param key='listitem3' type='String'>listitem3 </param>
+        <param key='city' type='String' format='' ismust='true'>北京</param>
+        <param key='date' type='String' format='YYMMDDHH' ismust='false'>2018-05-21</param>
+        <param key='forecast' type='List' size="uncertain||8">
+            <param key='high' type='String'>28℃</param>
+            <param key='low' type='String'>16℃</param>
+            <param key='type' type='String'>晴转多云</param>
         </param>
-        <param key='list' type='Object'>
-            <param key='listitem1' type='String'>listitem </param>
-            <param key='listitem2' type='String'> listitem2</param>
-            <param key='listitem3' type='String'>listitem3 </param>
+        <param key='yesterday' type='Object'>
+            <param key='high' type='String'>26℃</param>
+            <param key='low' type='String'>15℃</param>
+            <param key='type' type='String'>小雨</param>
         </param>
     </body>
-
-</standardparam>
+</stand-request>

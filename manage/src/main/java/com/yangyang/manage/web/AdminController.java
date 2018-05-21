@@ -52,7 +52,7 @@ public class AdminController {
             System.out.println(apiCategory.toString());
             String param_xml= (String) map.get("param_xml");
             String body= (String) map.get("body_param");
-StandardInboundParam param=new StandardInboundParam();
+            StandardInboundParam param=new StandardInboundParam();
 param.setStandard_inbound_param_id(UUID.getUUID());
 param.setApi_category_id(apiCategory.getApi_category_id());
 if (body!=null)
