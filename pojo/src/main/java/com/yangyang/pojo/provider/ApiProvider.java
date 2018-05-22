@@ -12,7 +12,7 @@ import java.util.List;
  * @Date: Created in 9:25 2018/4/7 0007
  */
 public class ApiProvider {
-    public String getApiPageListByApiExample(Integer pageNo, Integer pageSize, Api api) throws IllegalAccessException {
+    public String getApiPageListByApiExample(Integer pageNo, Integer pageSize, Api api,String key) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
         sql.append("select a.*,s.sp_name,c.api_category_name from api a,service_provider s,api_category c \n");
         List<String[]> condition = SqlUtil.getNotNullField(api);
@@ -21,8 +21,12 @@ public class ApiProvider {
             sql.append(getWhere(condition));
         }
         sql.append(" a.sp_id=s.sp_id and a.api_category_id=c.api_category_id and");
-        sql.append( " 1=1");
-        return sql.toString() + " order by api_create_time desc limit " + ((pageNo -1) * pageSize)  + "," + pageSize;
+        if (key!=null&&key!=""){
+            sql.append(" ( a.api_name like '%"+key+"%' or a.api_description like '%"+key+"%' ) and");
+        }
+        sql.append( " 1=1 "+ " order by a.api_create_time desc limit " + ((pageNo -1) * pageSize)  + "," + pageSize);
+        System.out.println(sql);
+        return sql.toString();
     }
 
 
@@ -51,13 +55,16 @@ public class ApiProvider {
         return sql.toString();
     }
 
-    public String countPageList(Api api) throws IllegalAccessException {
+    public String countPageList(Api api,String key) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
         sql.append("select count(1) from api\n");
         sql.append("where ");
         List<String[]> condition = SqlUtil.getNotNullField(api);
         if(condition.size() != 0){
             sql.append(getWhere(condition));
+        }
+        if (key!=null&&key!=""){
+            sql.append(" ( api_name like '%"+key+"%' or api_description like '%"+key+"%' ) and");
         }
         sql.append(" 1=1");
         return sql.toString();

@@ -16,7 +16,7 @@ public class RegisterService {
 
     public boolean InsertSp(Sp sp) {
         System.out.println("Service收到"+sp.toString());
-if(spMapper.addSp(sp)){
+if(spMapper.addSp(sp)==1){
     return true;
 }else{
     return  false;

@@ -2,9 +2,7 @@ package com.yangyang.manage.web;
 
 import com.yangyang.manage.component.FastDFSClient;
 import com.yangyang.pojo.entity.*;
-import com.yangyang.pojo.service.ApiCategoryService;
-import com.yangyang.pojo.service.ApiService;
-import com.yangyang.pojo.service.StandardInboundParamService;
+import com.yangyang.pojo.service.*;
 import com.yangyang.utils.XmlUtil;
 import com.yangyang.utils.utils.ApiCategoryID;
 import com.yangyang.utils.utils.ClassUtil;
@@ -38,6 +36,10 @@ public class AdminController {
     ApiService apiService;
     @Autowired
     FastDFSClient fastDFSClient;
+    @Autowired
+    ConsumerService consumerService;
+    @Autowired
+    SpService spService;
 
     @PostMapping(value = "/admin/test-param-xml")
     public RestResult isParamXml(@RequestBody Map map){
@@ -153,14 +155,46 @@ else
     * */
     @RequestMapping(value = "/admin/getapilist")
     public Map<String, Object> getApiListByTimeDesc(@RequestBody Map map){
-        Api api=ClassUtil.mapToClass((Map) map.get("api"),Api.class);
-        return apiService.getApiPageList((Integer) map.get("pageNo"),(Integer) map.get("pageSize"),api);
+        Integer api_verify_state= (Integer) map.get("api_verify_state");
+        Integer api_adapt_state= (Integer) map.get("api_adapt_state");
+        String key= (String) map.get("key");
+        Api api=new Api();
+        if(api_verify_state!=null){
+            api.setApi_verify_state(api_verify_state);
+        }
+        if(api_adapt_state!=null){
+            api.setApi_adapt_state(api_adapt_state);
+        }
+        //Api api=ClassUtil.mapToClass((Map) map.get("api"),Api.class);
+        return apiService.getApiPageList((Integer) map.get("pageNo"),(Integer) map.get("pageSize"),api,key);
         //return null;
     }
-    @RequestMapping(value = "/admin/modify-user-state")
+    @RequestMapping(value = "/admin/user-pass")
     public RestResult modifyUserState(@RequestBody Map map){
         Integer role= (Integer) map.get("role");//role为0表示consumer，为1表示服务提供商
-
-        return  null;
+        try {
+            if(role==0){
+                String consumer_id= (String) map.get("consumer_id");
+                Consumer consumer=new Consumer();
+                consumer.setConsumer_id(consumer_id);
+                consumer.setConsumer_state(1);
+                consumerService.updateConsumer(consumer);
+                return new RestResult(1,"修改成功",null);
+            }
+            if(role==1){
+                String sp_id= (String) map.get("sp_id");
+                Sp sp=new Sp();
+                sp.setSp_id(sp_id);
+                sp.setSp_state(1);
+                spService.updateSp(sp);
+                return new RestResult(1,"修改成功",null);
+            }
+            return new RestResult(0,"角色编码不对，请检查",null);
+        }
+        catch (Exception e){
+        return new RestResult(0,"修改失败",e.toString());
+        }
+        //return  null;
     }
+
 }

@@ -40,10 +40,10 @@ public class ApiService {
         return apiMapper.getAllApiList();
     }
 
-    public Map<String, Object> getApiPageList(Integer pageNo, Integer pageSize, Api api) {
+    public Map<String, Object> getApiPageList(Integer pageNo, Integer pageSize, Api api,String key) {
         Map<String, Object> result = new HashMap<>();
-        result.put("data", apiMapper.getApiPageListByApiExample(pageNo, pageSize, api));
-        result.put("total", apiMapper.countPageList(api));
+        result.put("data", apiMapper.getApiPageListByApiExample(pageNo, pageSize, api,key));
+        result.put("total", apiMapper.countPageList(api,key));
         return result;
     }
     @Transactional

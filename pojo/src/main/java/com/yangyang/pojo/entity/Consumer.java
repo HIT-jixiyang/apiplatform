@@ -8,11 +8,15 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Consumer {
-String consumer_id;
-String consumer_name;
-String consumer_password;
-String consumer_email;
-String consumer_tel;
-Integer consumer_type;//0：内部用户,1:外部用户
+    private String consumer_id;
+    private String consumer_name;
+    private String consumer_password;
+    private String consumer_email;
+    private String consumer_tel;
+    private Integer consumer_type;
+    private Integer consumer_state;
+    private String consumer_intro;
+    private String consumer_card_id;
+    private java.sql.Timestamp consumer_create_time;
 
 }

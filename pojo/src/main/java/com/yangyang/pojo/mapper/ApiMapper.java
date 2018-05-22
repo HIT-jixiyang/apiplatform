@@ -29,14 +29,14 @@ public interface ApiMapper {
 
     // 获取api分页列表
     @SelectProvider(type = ApiProvider.class, method = "getApiPageListByApiExample")
-    List<Map> getApiPageListByApiExample(Integer pageNo, Integer pageSize, Api api);
+    List<Map> getApiPageListByApiExample(Integer pageNo, Integer pageSize, Api api,String key);
 
     @SelectProvider(type = ApiProvider.class, method = "getApiAndPriceListByApiExample")
     List<Map> getApiAndPriceListByApiExample(Api api);
 
     // 获取api数
     @SelectProvider(type = ApiProvider.class, method = "countPageList")
-    Integer countPageList(Api api);
+    Integer countPageList(Api api,String key);
 
     @Select("select * from api where api_id=#{api_id}")
     public Api getApiByApiID(String api_id);

@@ -12,15 +12,23 @@ import java.util.List;
 @Mapper
 public interface ConsumerMapper {
     @Select("select * from consumer where consumer_email=#{email}")
-public Consumer getConsumerByEmail(String email);
+    public Consumer getConsumerByEmail(String email);
+
     @Select("select * from consumer where consumer_id=#{id}")
     public Consumer getConsumerById(String id);
-    @InsertProvider(type = ConsumerProvider.class,method ="insertConsumer" )
-    public int addConsumer(Consumer consumer);
-    @UpdateProvider(type = ConsumerProvider.class,method = "updateConsumerByConsumerExample")
+
+    @InsertProvider(type = ConsumerProvider.class, method = "insertConsumer")
+    public Integer addConsumer(Consumer consumer);
+
+    @UpdateProvider(type = ConsumerProvider.class, method = "updateConsumerByConsumerExample")
     public int updateConsumerByConsumerExample(Consumer consumer);
+
     @Delete("delete from consumer where consumer_id=#{consumer_id}")
     public int deleteConsumerByConsumerID(String consumer_id);
-    @SelectProvider(type = ConsumerProvider.class,method ="getConsumerPageListByConsumerExample" )
-    public List<Consumer> getConsumerPageListByConsumerExample(Integer pageNo,Integer pageNum,Consumer consumer);
+
+    @SelectProvider(type = ConsumerProvider.class, method = "getConsumerPageListByConsumerExample")
+    public List<Consumer> getConsumerPageListByConsumerExample(Integer pageNo, Integer pageSize, Consumer consumer, String key);
+
+    @SelectProvider(type = ConsumerProvider.class, method = "countPageList")
+    public Integer getCountList(Consumer consumer, String key);
 }

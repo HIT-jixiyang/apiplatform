@@ -1,42 +1,42 @@
 package com.yangyang.pojo.provider;
 
-import com.yangyang.pojo.entity.Consumer;
+import com.yangyang.pojo.entity.Sp;
 import com.yangyang.utils.utils.SqlUtil;
 import java.util.List;
 /**
- * @program: Consumerplatform
+ * @program: Spplatform
  * @description:
  * @author: JiXiYang
  * @create: 2018-05-14 10:35
  **/
-public class ConsumerProvider {
-    public String getConsumerPageListByConsumerExample(Integer pageNo, Integer pageSize, Consumer consumer,String key) throws IllegalAccessException {
+public class SpProvider {
+    public String getSpPageListBySpExample(Integer pageNo, Integer pageSize, Sp sp,String key) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from consumer \n");
-        List<String[]> condition = SqlUtil.getNotNullField(consumer);
+        sql.append("select * from service_provider \n");
+        List<String[]> condition = SqlUtil.getNotNullField(sp);
         sql.append("where ");
         if(condition.size() != 0){
             sql.append(getWhere(condition));
         }
         if(key!=null&&key!="")
-        sql.append(" ( consumer_name like '%"+key+"%' or consumer_intro like '%"+key+"%' ) and ");
-        sql.append( " 1=1 order by consumer_create_time desc ");
+            sql.append(" ( sp_name like '%"+key+"%' or sp_description like '%"+key+"%' ) and ");
+        sql.append( " 1=1 order by sp_create_time desc ");
         return sql.toString() + " limit " + ((pageNo -1) * pageSize)  + "," + pageSize;
     }
 
 
 
-    public String countPageList(Consumer consumer,String key) throws IllegalAccessException {
+    public String countPageList(Sp sp,String key) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select count(*) from consumer \n");
-        List<String[]> condition = SqlUtil.getNotNullField(consumer);
+        sql.append("select count(*) from service_provider \n");
+        List<String[]> condition = SqlUtil.getNotNullField(sp);
         sql.append("where ");
         if(condition.size() != 0){
             sql.append(getWhere(condition));
         }
         if(key!=null&&key!="")
-        sql.append(" ( consumer_name like '%"+key+"%' or consumer_intro like '%"+key+"%' ) and ");
-        sql.append( " 1=1");
+            sql.append(" ( sp_name like '%"+key+"%' or sp_description like '%"+key+"%') and ");
+        sql.append( " 1=1 order by sp_create_time desc ");
         return sql.toString();
     }
 
@@ -47,13 +47,13 @@ public class ConsumerProvider {
         }
         return where.toString();
     }
-    public String updateConsumerByConsumerExample(Consumer consumer) throws IllegalAccessException {
+    public String updateSpBySpExample(Sp sp) throws IllegalAccessException {
 
-        List<String[]> condition = SqlUtil.getNotNullField(consumer);
+        List<String[]> condition = SqlUtil.getNotNullField(sp);
         StringBuffer sql = new StringBuffer();
-        sql.append("update consumer set \n");
+        sql.append("update service_provider set \n");
         sql.append(getSet(condition));
-        sql.append(" where consumer_id ="+"\""+consumer.getConsumer_id()+"\"");
+        sql.append(" where sp_id ="+"\""+sp.getSp_id()+"\"");
         return sql.toString();
     }
     private String getSet(List<String[]> condition){
@@ -65,16 +65,16 @@ public class ConsumerProvider {
         set.append(condition.get(len-1)[0] + "=" + condition.get(len-1)[1]);
         return set.toString();
     }
-    public   String insertConsumer(Consumer Consumer) throws IllegalAccessException {
-        List<String[]> condition = SqlUtil.getNotNullField(Consumer);
+    public   String insertSp(Sp sp) throws IllegalAccessException {
+        List<String[]> condition = SqlUtil.getNotNullField(sp);
         StringBuffer sql = new StringBuffer();
-        sql.append("insert into consumer(");
-        sql.append(getConsumerColumn(condition));
+        sql.append("insert into service_provider(");
+        sql.append(getSpColumn(condition));
         sql.append(") values (");
-        sql.append(getConsumerValues(condition)+")");
+        sql.append(getSpValues(condition)+")");
         return sql.toString();
     }
-    private  String getConsumerColumn(List<String[]> condition){
+    private  String getSpColumn(List<String[]> condition){
         StringBuffer columns = new StringBuffer();
         int len = condition.size();
         for(int i = 0; i < len-1; i++){
@@ -83,7 +83,7 @@ public class ConsumerProvider {
         columns.append(condition.get(len-1)[0] );
         return  columns.toString();
     }
-    private String getConsumerValues(List<String[]> condition){
+    private String getSpValues(List<String[]> condition){
         StringBuffer values=new StringBuffer();
         for(int i = 0; i < condition.size()-1; i++){
             values.append(condition.get(i)[1] +  " ,");
@@ -91,9 +91,10 @@ public class ConsumerProvider {
         values.append(condition.get(condition.size()-1)[1]);
         return values.toString();
     }
-    public static void main(String[] args) throws IllegalAccessException {
-        Consumer Consumer=new Consumer();
 
-        System.out.println(new ConsumerProvider().getConsumerPageListByConsumerExample(1,90,Consumer,"Y"));
+    public static void main(String[] args) throws IllegalAccessException {
+        Sp sp=new Sp();
+
+        System.out.println(new SpProvider().getSpPageListBySpExample(1,90,sp,"Y"));
     }
 }
