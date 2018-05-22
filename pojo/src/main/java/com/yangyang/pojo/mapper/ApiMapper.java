@@ -41,7 +41,7 @@ public interface ApiMapper {
     @Select("select * from api where api_id=#{api_id}")
     public Api getApiByApiID(String api_id);
     @SelectProvider(type = ApiProvider.class,method = "getApiListByApiExample")
-    public List<Api> getApiListByApiExample(Api api);
+    public List<Api> getApiListByApiExample(Integer pageNo,Integer pageSize,Api api);
     /*
     @Select("select api_id as service_id,api_ip")
     public List<ZuulRouteVO> getZuulApiBySp_id(String sp_id);*/

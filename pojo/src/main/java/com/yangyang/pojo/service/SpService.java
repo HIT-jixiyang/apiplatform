@@ -24,5 +24,9 @@ public class SpService {
         map.put("data",spMapper.getSpPageListBySpExample(pageNo,pageSize,sp,key));
         return map;
     }
-
+public Sp getSpBySpID(String sp_id){
+        Sp sp=new Sp();
+        sp.setSp_id(sp_id);
+        return  spMapper.getSpPageListBySpExample(1,1,sp,null).get(0);
+}
 }

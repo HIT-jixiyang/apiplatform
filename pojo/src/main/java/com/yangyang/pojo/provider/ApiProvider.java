@@ -42,7 +42,7 @@ public class ApiProvider {
         sql.append( " 1=1");
         return sql.toString();
     }
-    public String getApiListByApiExample(Api api) throws IllegalAccessException {
+    public String getApiListByApiExample(Integer pageNo,Integer pageSize,Api api) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
         sql.append("select * from api \n");
         List<String[]> condition = SqlUtil.getNotNullField(api);
@@ -51,7 +51,7 @@ public class ApiProvider {
         if(condition.size() != 0){
             sql.append(getWhere(condition));
         }
-        sql.append( " 1=1");
+        sql.append( " 1=1 "+" limit " + ((pageNo -1) * pageSize)  + "," + pageSize);
         return sql.toString();
     }
 
