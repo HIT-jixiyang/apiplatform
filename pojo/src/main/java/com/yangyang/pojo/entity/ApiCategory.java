@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.sql.Timestamp;
+
 @ToString
 @Setter
 @Getter
@@ -21,4 +23,6 @@ public class ApiCategory {
   private Integer api_category_enabled;
   private String api_category_normal_response;
   private String api_category_error_response;
+  private String api_category_param_xml;
+  private Timestamp api_category_create_time;
 }

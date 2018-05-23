@@ -97,7 +97,7 @@ public class XmlUtil {
 
                         standardInboundParam.setStandard_inbound_param_type(typeattr.getValue());
                         standardInboundParam.setStandard_inbound_param_key(keyattr.getValue());
-                        standardInboundParam.setStandard_inbound_param_position(0);
+                        standardInboundParam.setStandard_inbound_param_position(1);
                         standardInboundParam.setStandard_inbound_param_desc(descattr.getValue()==null?"":descattr.getValue());
                         standardInboundParam.setStandard_inbound_param_ismust(ismustattr.getValue().equals("true")?1:0);
                         standardInboundParam.setStandard_inbound_param_value_demo(value);

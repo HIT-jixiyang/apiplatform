@@ -10,6 +10,7 @@ import com.yangyang.utils.utils.ApiCategoryID;
 import com.yangyang.utils.utils.ClassUtil;
 import com.yangyang.utils.utils.UUID;
 import com.yangyang.utils.utils.UploadFileUtil;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ public class AdminController {
     SpService spService;
     @Autowired
     ConsumerMapper consumerMapper;
-
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
     @PostMapping(value = "/admin/test-param-xml")
     public RestResult isParamXml(@RequestBody Map map) {
         String param_xml = (String) map.get("param_xml");
@@ -55,10 +56,17 @@ public class AdminController {
     @PostMapping(value = "/admin/add-apicategory")
     public RestResult addApiCategory(@RequestBody Map<String, Object> map) {
         Map<String, Object> api_category = (Map<String, Object>) map.get("api_category");
+
         ApiCategory apiCategory = ClassUtil.mapToClass(api_category, ApiCategory.class);
         apiCategory.setApi_category_id(ApiCategoryID.getID());
         System.out.println(apiCategory.toString());
         String param_xml = (String) map.get("param_xml");
+        param_xml=param_xml.replace("\"","'");
+        String normal_response=apiCategory.getApi_category_normal_response();
+        String error_response=apiCategory.getApi_category_error_response();
+        apiCategory.setApi_category_normal_response(normal_response.replace("\"","'"));
+        apiCategory.setApi_category_error_response(error_response.replace("\"","'"));
+        apiCategory.setApi_category_param_xml(param_xml);
         String body = (String) map.get("body_param");
         StandardInboundParam param = new StandardInboundParam();
         param.setStandard_inbound_param_id(UUID.getUUID());
@@ -84,10 +92,10 @@ public class AdminController {
             }
             return apiCategoryService.addApiCategory(apiCategory, list);
         } catch (Exception e) {
-            return new RestResult(0, "error", null);
+            LOGGER.info(e.toString());
+            return new RestResult(0, "error", e.toString());
         }
     }
-
     @PostMapping(value = "/admin/modify-apicategory")
     public RestResult modifyApiCategory(@RequestBody Map<String, Object> map) {
         return null;

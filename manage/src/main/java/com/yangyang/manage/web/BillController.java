@@ -63,7 +63,7 @@ public class BillController {
         }
         return map1;
     }
-    @PostMapping(value = "/bill/getbilllist")
+    @PostMapping(value = "/bill/list")
     public RestResult getBillList(@RequestBody Map<String,Object> map){
         Integer pageNo= (Integer) map.get("pageNo");
         Integer pageSize= (Integer) map.get("pageSize");
