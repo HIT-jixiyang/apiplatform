@@ -3,6 +3,7 @@ package com.yangyang.pojo.service;
 
 import com.yangyang.pojo.entity.Api;
 import com.yangyang.pojo.entity.ApiParam;
+import com.yangyang.pojo.entity.RestResult;
 import com.yangyang.pojo.mapper.ApiMapper;
 import com.yangyang.pojo.mapper.ApiParamMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,20 @@ public class ApiService {
     ApiMapper apiMapper;
     @Autowired
     ApiParamMapper apiParamMapper;
-
+@Autowired
+LeafService leafService;
     //插入API同时插入参数列表
     @Transactional
     public boolean addApi(Api api) {
-        if (!apiMapper.addApi(api)) return false;
+        if (!apiMapper.addApi(api))
+            return false;
+        String normal_response=api.getApi_normal_return_demo();
+        try{
+            leafService.addOriginLeafInfosByJsonExample(normal_response,api.getApi_id());
+        }catch (Exception e){
+            return false;
+        }
         return true;
-
     }
 
     public List<Api> getApiListBySpId(String sp_id) {

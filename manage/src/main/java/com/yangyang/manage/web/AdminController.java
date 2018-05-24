@@ -16,12 +16,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.print.DocFlavor;
 import javax.servlet.http.HttpServletRequest;
+import java.io.StringReader;
 import java.rmi.MarshalledObject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @program: apiplatform
@@ -46,6 +45,10 @@ public class AdminController {
     SpService spService;
     @Autowired
     ConsumerMapper consumerMapper;
+    @Autowired
+    LeafService leafService;
+    @Autowired
+    LeafMapService leafMapService;
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
     @PostMapping(value = "/admin/test-param-xml")
     public RestResult isParamXml(@RequestBody Map map) {
@@ -58,6 +61,7 @@ public class AdminController {
         Map<String, Object> api_category = (Map<String, Object>) map.get("api_category");
 
         ApiCategory apiCategory = ClassUtil.mapToClass(api_category, ApiCategory.class);
+
         apiCategory.setApi_category_id(ApiCategoryID.getID());
         System.out.println(apiCategory.toString());
         String param_xml = (String) map.get("param_xml");
@@ -250,6 +254,7 @@ public class AdminController {
             return new RestResult(0, "查询码错误", null);
 
         } catch (Exception e) {
+            LOGGER.error(e.toString());
             return new RestResult(0, "查询失败", e.toString());
         }
     }
@@ -287,5 +292,36 @@ public class AdminController {
         } catch (Exception e) {
             return new RestResult(0, "查询失败", e.toString());
         }
+    }
+    @PostMapping(value = "/admin/addMapforApi")
+    public RestResult adaptApiResponse(@RequestBody Map<String,Object> map){
+        String api_id= (String) map.get("api_id");
+        String api_category_id = (String) map.get("api_category_id");
+        Leaf leaf=new Leaf();
+        leaf.setApi_id(api_id);
+        List<Leaf> originLeafList=leafService.getLeafListByLeafExample(leaf);
+        Leaf leaf1=new Leaf();
+        leaf1.setApi_category_id(api_category_id);
+        List<Leaf> standardLeafList=leafService.getLeafListByLeafExample(leaf1);
+        Map<Integer,Integer> leafmaps= (Map<Integer, Integer>) map.get("leafmaps");
+        Set<Integer> set=leafmaps.keySet();
+       List<LeafMap> leafMapList=new ArrayList<>();
+       try {
+           for (Integer key:set){
+               LeafMap leafMap=new LeafMap();
+               leafMap.setApi_id(api_id);
+               leafMap.setOrigin_leaf_id(key);
+               leafMap.setStandard_leaf_id(leafmaps.get(key));
+               leafMap.setOrigin_leaf_type(originLeafList.get(key).getLeaf_type());
+               leafMap.setOrigin_leaf_format(originLeafList.get(key).getLeaf_format());
+               leafMap.setStandard_leaf_format(standardLeafList.get(key).getLeaf_format());
+               leafMapList.add(leafMap);
+           }
+           leafMapService.addMapList(leafMapList);
+        return new RestResult(1,"适配成功",null);
+       }catch (Exception e){
+           LOGGER.error(e.toString());
+           return new RestResult(0,"适配失败",e.toString());
+       }
     }
 }

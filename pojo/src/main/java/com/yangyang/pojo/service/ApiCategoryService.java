@@ -24,18 +24,25 @@ public class ApiCategoryService {
     @Autowired
     ApiCategoryMapper apiCategoryMapper;
     @Autowired
+    LeafService leafService;
+    @Autowired
     StandardInboundParamService standardInboundParamService;
     public List<String> getAllCategoryID(){
         return  apiCategoryMapper.getAllCategoryID();
     }
 @Transactional
     public RestResult addApiCategory(ApiCategory apiCategory, List<StandardInboundParam> paramList){
+
         if (getApiCategoryByPath(apiCategory.getApi_category_path())!=null){
             return new RestResult(0,"路径重复，添加失败",null);
-        }else {
-            if(apiCategoryMapper.addApiCategory(apiCategory)!=1||!standardInboundParamService.ModifyStandardParamList(apiCategory.getApi_category_id(),paramList)){
+        }else if(apiCategoryMapper.addApiCategory(apiCategory)!=1||!standardInboundParamService.ModifyStandardParamList(apiCategory.getApi_category_id(),paramList)){
                 return new RestResult(0,"内部错误，添加失败",null);
             }
+        String normal_response=apiCategory.getApi_category_normal_response();
+        try{
+            leafService.addStandardLeafInfosByJsonExample(normal_response,apiCategory.getApi_category_id());
+        }catch (Exception e){
+            return new RestResult(0,"返回样例格式错误",e.toString());
         }
         return new RestResult(1,"OK",apiCategory.getApi_category_id());
     }
@@ -57,4 +64,5 @@ public List<ApiCategory> getAllApiCategory(){
 public ApiCategory getApiCategoryByPath(String path){
     return apiCategoryMapper.getApiCategoryByPath(path);
 }
+
 }
