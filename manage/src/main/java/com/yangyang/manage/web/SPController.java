@@ -105,7 +105,11 @@ public class SPController {
         }
 
     }
-
+    @PostMapping(value = "/sp/test-param-xml")
+    public RestResult isParamXml(@RequestBody Map map) {
+        String param_xml = (String) map.get("param_xml");
+        return XmlUtil.getHeadersAndQuerysFromXml(param_xml);
+    }
 
     @PostMapping(value = "/sp/modify-api")
     public RestResult modifyApi(@RequestBody Map map) {
