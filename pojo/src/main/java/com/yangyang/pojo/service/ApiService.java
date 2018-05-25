@@ -3,9 +3,11 @@ package com.yangyang.pojo.service;
 
 import com.yangyang.pojo.entity.Api;
 import com.yangyang.pojo.entity.ApiParam;
+import com.yangyang.pojo.entity.ApiPrice;
 import com.yangyang.pojo.entity.RestResult;
 import com.yangyang.pojo.mapper.ApiMapper;
 import com.yangyang.pojo.mapper.ApiParamMapper;
+import com.yangyang.pojo.mapper.ApiPriceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +24,12 @@ public class ApiService {
     ApiParamMapper apiParamMapper;
 @Autowired
 LeafService leafService;
+@Autowired
+    ApiPriceMapper apiPriceMapper;
     //插入API同时插入参数列表
     @Transactional
-    public boolean addApi(Api api) {
-        if (!apiMapper.addApi(api))
+    public boolean addApi(Api api, ApiPrice apiPrice) {
+        if (!apiMapper.addApi(api)||!apiPriceMapper.addApiPrice(apiPrice))
             return false;
         String normal_response=api.getApi_normal_return_demo();
         try{

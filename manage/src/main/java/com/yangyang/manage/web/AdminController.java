@@ -50,6 +50,7 @@ public class AdminController {
     @Autowired
     LeafMapService leafMapService;
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
+
     @PostMapping(value = "/admin/test-param-xml")
     public RestResult isParamXml(@RequestBody Map map) {
         String param_xml = (String) map.get("param_xml");
@@ -65,11 +66,11 @@ public class AdminController {
         apiCategory.setApi_category_id(ApiCategoryID.getID());
         System.out.println(apiCategory.toString());
         String param_xml = (String) map.get("param_xml");
-        param_xml=param_xml.replace("\"","'");
-        String normal_response=apiCategory.getApi_category_normal_response();
-        String error_response=apiCategory.getApi_category_error_response();
-        apiCategory.setApi_category_normal_response(normal_response.replace("\"","'"));
-        apiCategory.setApi_category_error_response(error_response.replace("\"","'"));
+        param_xml = param_xml.replace("\"", "'");
+        String normal_response = apiCategory.getApi_category_normal_response();
+        String error_response = apiCategory.getApi_category_error_response();
+        apiCategory.setApi_category_normal_response(normal_response.replace("\"", "'"));
+        apiCategory.setApi_category_error_response(error_response.replace("\"", "'"));
         apiCategory.setApi_category_param_xml(param_xml);
         String body = (String) map.get("body_param");
         StandardInboundParam param = new StandardInboundParam();
@@ -100,6 +101,7 @@ public class AdminController {
             return new RestResult(0, "error", e.toString());
         }
     }
+
     @PostMapping(value = "/admin/modify-apicategory")
     public RestResult modifyApiCategory(@RequestBody Map<String, Object> map) {
         return null;
@@ -278,50 +280,73 @@ public class AdminController {
             return new RestResult(0, "查询失败", e.toString());
         }
     }
+
     @PostMapping(value = "/admin/get-consumer-detail")
     public RestResult getConsumerDetail(@RequestBody Map map) {
         String consumer_id = (String) map.get("consumer_id");
         try {
             Map<String, Object> result = new HashMap<>();
 
-           if(consumer_id!=null){
-               Consumer consumer=consumerMapper.getConsumerById(consumer_id);
-               return new RestResult(1, "查询成功", consumer);
-           }
-           return new RestResult(0,"消费者编码不合法",null);
+            if (consumer_id != null) {
+                Consumer consumer = consumerMapper.getConsumerById(consumer_id);
+                return new RestResult(1, "查询成功", consumer);
+            }
+            return new RestResult(0, "消费者编码不合法", null);
         } catch (Exception e) {
             return new RestResult(0, "查询失败", e.toString());
         }
     }
+
     @PostMapping(value = "/admin/addMapforApi")
-    public RestResult adaptApiResponse(@RequestBody Map<String,Object> map){
-        String api_id= (String) map.get("api_id");
+    public RestResult adaptApiResponse(@RequestBody Map<String, Object> map) {
+        String api_id = (String) map.get("api_id");
         String api_category_id = (String) map.get("api_category_id");
-        Leaf leaf=new Leaf();
+        Leaf leaf = new Leaf();
         leaf.setApi_id(api_id);
-        List<Leaf> originLeafList=leafService.getLeafListByLeafExample(leaf);
-        Leaf leaf1=new Leaf();
+        List<Leaf> originLeafList = leafService.getLeafListByLeafExample(leaf);
+        Leaf leaf1 = new Leaf();
         leaf1.setApi_category_id(api_category_id);
-        List<Leaf> standardLeafList=leafService.getLeafListByLeafExample(leaf1);
-        Map<Integer,Integer> leafmaps= (Map<Integer, Integer>) map.get("leafmaps");
-        Set<Integer> set=leafmaps.keySet();
-       List<LeafMap> leafMapList=new ArrayList<>();
-       try {
-           for (Integer key:set){
-               LeafMap leafMap=new LeafMap();
-               leafMap.setApi_id(api_id);
-               leafMap.setOrigin_leaf_id(key);
-               leafMap.setStandard_leaf_id(leafmaps.get(key));
-               leafMap.setOrigin_leaf_type(originLeafList.get(key).getLeaf_type());
-               leafMap.setOrigin_leaf_format(originLeafList.get(key).getLeaf_format());
-               leafMap.setStandard_leaf_format(standardLeafList.get(key).getLeaf_format());
-               leafMapList.add(leafMap);
-           }
-           leafMapService.addMapList(leafMapList);
-        return new RestResult(1,"适配成功",null);
-       }catch (Exception e){
-           LOGGER.error(e.toString());
-           return new RestResult(0,"适配失败",e.toString());
-       }
+        List<Leaf> standardLeafList = leafService.getLeafListByLeafExample(leaf1);
+        Map<Integer, Integer> leafmaps = (Map<Integer, Integer>) map.get("leafmaps");
+        Set<Integer> set = leafmaps.keySet();
+        List<LeafMap> leafMapList = new ArrayList<>();
+        try {
+            for (Integer key : set) {
+                LeafMap leafMap = new LeafMap();
+                leafMap.setApi_id(api_id);
+                leafMap.setOrigin_leaf_id(key);
+                leafMap.setStandard_leaf_id(leafmaps.get(key));
+                leafMap.setOrigin_leaf_type(originLeafList.get(key).getLeaf_type());
+                leafMap.setOrigin_leaf_format(originLeafList.get(key).getLeaf_format());
+                leafMap.setStandard_leaf_format(standardLeafList.get(key).getLeaf_format());
+                leafMapList.add(leafMap);
+            }
+            leafMapService.addMapList(leafMapList);
+            return new RestResult(1, "适配成功", null);
+        } catch (Exception e) {
+            LOGGER.error(e.toString());
+            return new RestResult(0, "适配失败", e.toString());
+        }
+    }
+
+    @PostMapping(value = "get-leaf-infos")
+    public RestResult getLeafInfos(@RequestBody Map map) {
+        String api_id = (String) map.get("api_id");
+        String api_category_id = (String) map.get("api_category_id");
+        if(api_id!=null&&api_category_id!=null){
+            Leaf apiLeafExample = new Leaf();
+            apiLeafExample.setApi_id(api_id);
+            Leaf api_categoryLeafExample = new Leaf();
+            api_categoryLeafExample.setApi_category_id(api_category_id);
+            List<Leaf> apileafList = leafService.getLeafListByLeafExample(apiLeafExample);
+            List<Leaf> apicategotyLeafList = leafService.getLeafListByLeafExample(api_categoryLeafExample);
+            Map<String, Object> resultMap = new HashMap<>();
+            resultMap.put("apileaflist", apileafList);
+            resultMap.put("apicategoryleaflist", apicategotyLeafList);
+            return new RestResult(1, "OK", resultMap);
+        }else {
+            return new RestResult(0,"查询失败,请求信息没有发现api与apicategory的信息",null);
+        }
+
     }
 }

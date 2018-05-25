@@ -26,7 +26,7 @@ public class JsonMapService {
     private MultiValueMap<Integer,Leaf> LeafInfos =new LinkedMultiValueMap<>();
     private Map<Integer,Integer> leafmap;//叶子结点映射关系
     @SuppressWarnings("rawtypes")
-    public void analysisStandardJson(Object objJson, String parent_type){
+    public void analysisStandardJson(Object objJson, String parent_type,String path){
         //如果obj为json数组
 
         if(objJson instanceof JSONArray){
@@ -34,7 +34,7 @@ public class JsonMapService {
             for(int i=0;i<objArray.size();i++){
 
                 int id=ID;
-                analysisStandardJson(objArray.get(i),"Array");
+                analysisStandardJson(objArray.get(i),"Array",path);
                 if(i!=objArray.size()-1){
                     ID=id;
                 }
@@ -50,11 +50,11 @@ public class JsonMapService {
                 //如果得到的是数组
                 if(object instanceof JSONArray){
                     JSONArray objArray = (JSONArray)object;
-                    analysisStandardJson(objArray,"Array");
+                    analysisStandardJson(objArray,"Array",path+"."+key);
                 }
                 //如果key中是一个json对象
                 else if(object instanceof JSONObject){
-                    analysisStandardJson((JSONObject)object,"Object");
+                    analysisStandardJson((JSONObject)object,"Object",path+"."+key);
                 }
                 //如果key中是其他
                 else{
@@ -69,6 +69,7 @@ public class JsonMapService {
                         leaf.setLeaf_value(object);
                         leaf.setLeaf_format("");
                         leaf.setLeaf_type(String.valueOf(object.getClass()));
+                        leaf.setLeaf_path(path);
                         leafList.add(leaf);
 
                         this.LeafInfos.put(ID,leafList);
@@ -82,17 +83,18 @@ public class JsonMapService {
                         leaf.setLeaf_value(object);
                         leaf.setLeaf_format("");
                         leaf.setLeaf_type(String.valueOf(object.getClass()));
+                        leaf.setLeaf_path(path);
                         leafList.add(leaf);
                         this.LeafInfos.put(ID,leafList);
                     }
-                    System.out.println(ID+"------"+"["+key+"]:"+object.toString()+" "+parent_type);
+                    System.out.println(ID+"------"+"["+key+"]:"+object.toString()+" "+parent_type+"---"+path);
                 }
             }
         }
     }
 
     @SuppressWarnings("rawtypes")
-    public void analysisOriginJson(Object objJson, String parent_type){
+    public void analysisOriginJson(Object objJson, String parent_type,String path){
         //如果obj为json数组
 
         if(objJson instanceof JSONArray){
@@ -100,7 +102,7 @@ public class JsonMapService {
             for(int i=0;i<objArray.size();i++){
 
                 int id=ID;
-                analysisOriginJson(objArray.get(i),"Array");
+                analysisOriginJson(objArray.get(i),"Array",path);
                 if(i!=objArray.size()-1){
                     ID=id;
                 }
@@ -116,11 +118,11 @@ public class JsonMapService {
                 //如果得到的是数组
                 if(object instanceof JSONArray){
                     JSONArray objArray = (JSONArray)object;
-                    analysisOriginJson(objArray,"Array");
+                    analysisOriginJson(objArray,"Array",path+"."+key);
                 }
                 //如果key中是一个json对象
                 else if(object instanceof JSONObject){
-                    analysisOriginJson((JSONObject)object,"Object");
+                    analysisOriginJson((JSONObject)object,"Object",path+"."+key);
                 }
                 //如果key中是其他
                 else{
@@ -135,6 +137,7 @@ public class JsonMapService {
                         leaf.setLeaf_value(object);
                         leaf.setLeaf_format("");
                         leaf.setLeaf_type(String.valueOf(object.getClass()));
+                        leaf.setLeaf_path(path);
                         leafList.add(leaf);
                         this.LeafInfos.put(ID,leafList);
                     } else {
@@ -147,10 +150,11 @@ public class JsonMapService {
                         leaf.setLeaf_value(object);
                         leaf.setLeaf_format("");
                         leaf.setLeaf_type(String.valueOf(object.getClass()));
+                        leaf.setLeaf_path(path);
                         leafList.add(leaf);
                         this.LeafInfos.put(ID,leafList);
                     }
-                    System.out.println(ID+"------"+"["+key+"]:"+object.toString()+" "+parent_type);
+                    System.out.println(ID+"------"+"["+key+"]:"+object.toString()+" "+parent_type+"---"+path);
                 }
             }
         }
@@ -161,11 +165,11 @@ public class JsonMapService {
             this.api_id=api_id;
             ID=0;
             Object o= JSONArray.parseArray(originJsonstr);
-            analysisOriginJson(o,"Array");
+            analysisOriginJson(o,"Array","root");
         }catch (Exception e){
             try {
                 JSONObject jsonObject = JSONObject.parseObject(originJsonstr);
-                analysisOriginJson(jsonObject,"Object");
+                analysisOriginJson(jsonObject,"Object","root");
             }catch (Exception e1){
                 System.out.println("字符串逗我呢");
             }
@@ -179,11 +183,11 @@ public class JsonMapService {
             this.api_category_id=api_category_id;
             ID=0;
             Object o= JSONArray.parseArray(standardJson);
-            analysisStandardJson(o,"Array");
+            analysisStandardJson(o,"Array","root");
         }catch (Exception e){
             try {
                 JSONObject jsonObject = JSONObject.parseObject(standardJson);
-                analysisStandardJson(jsonObject,"Object");
+                analysisStandardJson(jsonObject,"Object","root");
             }catch (Exception e1){
                 System.out.println("字符串逗我呢");
             }
@@ -383,8 +387,8 @@ public class JsonMapService {
         map.put(3,4);//标准json的3号叶子将对应到原始json的4号叶子
         String json=new JsonMapService().getHandledString(standardJson,originJson,map);
         System.out.println(json);
-       MultiValueMap<Integer,Leaf> map1=new JsonMapService().getOriginLeafInfos("",originJson);
+        MultiValueMap<Integer,Leaf> map1=new JsonMapService().getOriginLeafInfos("",originJson);
         MultiValueMap<Integer,Leaf> map2=new JsonMapService().getStandardLeafInfos("",standardJson);
-      //  System.out.println(new JsonMapService().getStandardLeafInfos("",standardJson));
+        //  System.out.println(new JsonMapService().getStandardLeafInfos("",standardJson));
     }
 }

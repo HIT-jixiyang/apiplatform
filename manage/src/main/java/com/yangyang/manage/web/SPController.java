@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.print.DocFlavor;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +78,7 @@ public class SPController {
     @PostMapping(value = "/sp/addapi")
     public RestResult addApi(@RequestBody Map map, HttpSession session) {
         Map<String, Object> api_map = (Map<String, Object>) map.get("api");
+       Map<String,Object> price_map= (Map<String, Object>) map.get("api_price");
         Api api = ClassUtil.mapToClass(api_map, Api.class);
         api.setApi_id(System.currentTimeMillis() + RandomStrUtil.getRandomString(7));
         api.setApi_enabled(1);
@@ -88,13 +90,21 @@ public class SPController {
         api.setApi_cost_algorithm_score((float) 0);
         api.setApi_success_response_ratio((float) 0);
         api.setApi_env(0);
+          String xml=api.getApi_param_xml();
+        api.setApi_param_xml(xml.replace("\"","'"));
+        ApiPrice apiPrice=new ApiPrice();
+        apiPrice.setApi_id(api.getApi_id());
+        apiPrice.setPrice_id(UUID.getUUID());
+        apiPrice.setContent((Integer) price_map.get("content"));
+        apiPrice.setPrice(new Float((Double) price_map.get("price")));
+        apiPrice.setPrice_type(2);
 
         LOGGER.info("添加的api信息:" + api.toString());
         RestResult restResult1 = XmlUtil.getHeadersAndQuerysFromXml(api.getApi_param_xml());
         if (restResult1.getStatus() == 0) {
             return restResult1;//xml校验失败，不能添加至数据库
         }
-        if (apiService.addApi(api)) {
+        if (apiService.addApi(api,apiPrice)) {
             RestResult restResult = new RestResult(ResultStatusCode.OK.getStatuscode(), ResultStatusCode.OK.getMessage(), null);
             return restResult;
         }
