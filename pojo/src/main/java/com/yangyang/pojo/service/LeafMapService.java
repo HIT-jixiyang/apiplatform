@@ -41,4 +41,14 @@ public class LeafMapService {
             return false;
         }
     }
+    public List<LeafMap> getLeafMapListByApiID(String api_id){
+        try {
+            LeafMap leafMap=new LeafMap();
+            leafMap.setApi_id(api_id);
+            return leafMapMapper.getLeafMapListByLeafMapExample(leafMap);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+        return null;
+        }
+    }
 }

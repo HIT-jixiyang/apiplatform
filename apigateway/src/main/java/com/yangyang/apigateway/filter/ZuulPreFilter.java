@@ -92,7 +92,6 @@ public class ZuulPreFilter extends ZuulFilter {
            ApiAuthorization apiAuthorization=apiAuthorizationService.getAuthorizationByApiCategoryIDAndAppID(apiCategory.getApi_category_id(),app_id);
             LOGGER.info(apiAuthorization.toString());
             if (apiAuthorization!=null){
-
               //  LOGGER.info(GateWayToken.getGateWayToken(apiAuthorization.getApp_id(),app_secret,timeMill));
                 if (GateWayToken.getGateWayToken(apiAuthorization.getApp_id(),app_secret,timestamp).equals(gw_token)){
               //  counterService.increment("speed.minute."+api_id);
@@ -113,7 +112,6 @@ public class ZuulPreFilter extends ZuulFilter {
     private void setCounter(String api_id){
         counterService.increment("speed.second."+api_id);
         counterService.increment("speed.second.requesttotal");
-
     }
 
 }

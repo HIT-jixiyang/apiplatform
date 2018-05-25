@@ -190,12 +190,13 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
         LOGGER.info(api.toString());
 
         LOGGER.info(app_id+"验证通过");
-        LOGGER.info("app_id:"+app_id+"  api_category_id:"+api.getApi_id()+"发起记账请求");
+        LOGGER.info("app_id:"+app_id+"  api_id:"+api.getApi_id()+"发起记账请求");
         //记账请求
         String bill_item_id= BillItemID.getBillItemID();
         context.set("bill_item_id",bill_item_id);
         context.set("startTime",System.currentTimeMillis());
         context.set("api_id",api.getApi_id());
+        context.set("api_category");
         billService.bill(bill_item_id,api.getApi_id(),app_id);
         Boolean flag=true;
         if(flag) {
@@ -239,7 +240,6 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
         String uri = this.helper.buildZuulRequestURI(request);
         LOGGER.info("uri:" + uri);
         this.helper.addIgnoredHeaders(new String[0]);
-
         try {
             HttpResponse response = this.forward(this.httpClient,host,  verb, uri, request, headers, querys, requestEntity);
             this.setResponse(response);
@@ -285,6 +285,7 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
 
     private URL getURL(String path, String strategy, RequestContext context) {
         ApiCategory apiCategory = apiCategoryService.getApiCategoryByPath(path);
+        context.set("standardResponse",apiCategory.getApi_category_normal_response());
         Api api;
         switch (strategy) {
             case "0":

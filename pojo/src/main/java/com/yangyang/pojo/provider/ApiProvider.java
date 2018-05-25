@@ -14,13 +14,13 @@ import java.util.List;
 public class ApiProvider {
     public String getApiPageListByApiExample(Integer pageNo, Integer pageSize, Api api,String key) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select a.*,s.sp_name,c.api_category_name from api a,service_provider s,api_category c \n");
+        sql.append("select a.*,s.sp_name,c.api_category_name ,d.price,d.content from api a,service_provider s,api_category c ,api_price d \n");
         List<String[]> condition = SqlUtil.getNotNullField(api);
         sql.append("where ");
         if(condition.size() != 0){
             sql.append(getWhere(condition));
         }
-        sql.append(" a.sp_id=s.sp_id and a.api_category_id=c.api_category_id and");
+        sql.append(" a.sp_id=s.sp_id and a.api_category_id=c.api_category_id and a.api_id=d.api_id and d.price_type=2 and ");
         if (key!=null&&key!=""){
             sql.append(" ( a.api_name like '%"+key+"%' or a.api_description like '%"+key+"%' ) and");
         }
@@ -133,7 +133,7 @@ StringBuffer values=new StringBuffer();
         api.setApi_bill_type(0);
         api.setApi_param_xml("<?xml version='1.0' encoding='UTF-8' ?> <standardparam> <headers><header key='app_id' type='String' ismust='true' desc=' '>19329829</header><header key='app_secret' type='String' ismust='true' desc=' '>ankalala</header><header key='time_stamp' type='Long' ismust= 'true' desc=' '>132973982</header> </headers> </standardparam>");
         api.setApi_return_pattern("application/json");
-
         System.out.println(new ApiProvider().insertApi(api));
+        System.out.println(new ApiProvider().getApiPageListByApiExample(1,100,new Api(),null));
     }
 }

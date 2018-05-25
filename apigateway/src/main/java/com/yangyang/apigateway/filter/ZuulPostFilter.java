@@ -4,7 +4,11 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.http.ServletInputStreamWrapper;
 import com.yangyang.apigateway.service.BillService;
+import com.yangyang.pojo.entity.Api;
 import com.yangyang.pojo.entity.BillItem;
+import com.yangyang.pojo.entity.LeafMap;
+import com.yangyang.pojo.service.JsonMapService;
+import com.yangyang.pojo.service.LeafMapService;
 import org.apache.http.Consts;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +39,10 @@ public class ZuulPostFilter extends ZuulFilter{
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ZuulPostFilter.class);
     @Autowired
     BillService billService;
+    @Autowired
+    JsonMapService jsonMapService;
+    @Autowired
+    LeafMapService leafMapService;
     @Override
     public String filterType() {
         return "post";
@@ -56,7 +65,7 @@ public class ZuulPostFilter extends ZuulFilter{
 
         billUpdate(context);
         InputStream stream = context.getResponseDataStream();
-
+        Api api= (Api) context.get("api");
       /*  HttpServletResponse response=context.getResponse();
         Collection<String> headerNames=  response.getHeaderNames();
         String type=response.getContentType();
@@ -64,6 +73,12 @@ public class ZuulPostFilter extends ZuulFilter{
         List<com.netflix.util.Pair<String, String>> headers=  context.getZuulResponseHeaders();
         try {
             String body = StreamUtils.copyToString(stream, Charset.forName("UTF-8"));
+            List<LeafMap> leafMapList=leafMapService.getLeafMapListByApiID(api.getApi_id());
+            Map<Integer,Integer> map=new HashMap<>();
+            for (LeafMap leafMap:leafMapList){
+                map.put(leafMap.getStandard_leaf_id(),leafMap.getOrigin_leaf_id());
+            }
+            String standardBody=jsonMapService.getHandledString((String) context.get("standardResponse"),api.getApi_normal_return_demo(),map);
          byte[] bytes=body.getBytes(Consts.UTF_8);
         context.setResponseDataStream(new ServletInputStreamWrapper(bytes));
         } catch (IOException e) {
@@ -79,7 +94,7 @@ private void billUpdate(RequestContext context){
     String bill_item_id= (String) context.get("bill_item_id");
     String response_code= String.valueOf(context.getResponseStatusCode());
     LOGGER.info(startTime+"---"+api_id+"----"+app_id+"----"+bill_item_id);
-if(api_id!=null&&app_id!=null&&bill_item_id!=null){
+    if(api_id!=null&&app_id!=null&&bill_item_id!=null){
     BillItem billItem=new BillItem();
     billItem.setBill_item_id(bill_item_id);
     billItem.setApp_id(app_id);

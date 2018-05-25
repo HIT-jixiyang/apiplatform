@@ -16,7 +16,7 @@ public interface LeafMapMapper {
     @InsertProvider(type = LeafMapProvider.class,method = "insertLeafMap")
     public Integer addLeafMap(LeafMap leafmap);
     @SelectProvider(type = LeafMapProvider.class,method = "getLeafMapListByLeafMapExample")
-    public List<Leaf> getLeafListByLeafExample(LeafMap leafMap);
+    public List<LeafMap> getLeafMapListByLeafMapExample(LeafMap leafMap);
     @Delete("delete from leafmap where api_id=#{api_id}")
     public Integer removeLeafMap(String api_id);
 
