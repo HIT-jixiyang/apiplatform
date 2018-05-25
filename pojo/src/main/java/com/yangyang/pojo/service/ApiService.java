@@ -64,6 +64,9 @@ LeafService leafService;
         result.put("total", apiMapper.countPageList(api,null));
         return result;
     }
+    public Map getApidetailByApiID(String api_id){
+        return apiMapper.getApidetailByApiID(api_id);
+    }
 
     @Transactional
     public void deleteApiByApiID(String api_id) {

@@ -28,7 +28,17 @@ public class ApiProvider {
         System.out.println(sql);
         return sql.toString();
     }
-
+    public String getApidetailByApiID( String api_id) throws IllegalAccessException {
+        StringBuffer sql = new StringBuffer();
+        sql.append("select a.*,s.sp_name,c.api_category_name ,d.price,d.content from api a,service_provider s,api_category c ,api_price d \n");
+//        List<String[]> condition = SqlUtil.getNotNullField(api);
+        sql.append("where ");
+       sql.append(" a.api_id='"+api_id +"' and ");
+        sql.append(" a.sp_id=s.sp_id and a.api_category_id=c.api_category_id and a.api_id=d.api_id and d.price_type=2 and ");
+        sql.append( " 1=1 ");
+        System.out.println(sql);
+        return sql.toString();
+    }
 
     public String getApiAndPriceListByApiExample(Api api) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
@@ -57,15 +67,18 @@ public class ApiProvider {
 
     public String countPageList(Api api,String key) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select count(1) from api\n");
-        sql.append("where ");
+        sql.append("select count(1) from api a,service_provider s,api_category c ,api_price d \n");
         List<String[]> condition = SqlUtil.getNotNullField(api);
+        sql.append("where ");
         if(condition.size() != 0){
             sql.append(getWhere(condition));
         }
+        sql.append(" a.sp_id=s.sp_id and a.api_category_id=c.api_category_id and a.api_id=d.api_id and d.price_type=2 and ");
         if (key!=null&&key!=""){
-            sql.append(" ( api_name like '%"+key+"%' or api_description like '%"+key+"%' ) and");
+            sql.append(" ( a.api_name like '%"+key+"%' or a.api_description like '%"+key+"%' ) and");
         }
+      //  sql.append( " 1=1 "+ " order by a.api_create_time desc limit " + ((pageNo -1) * pageSize)  + "," + pageSize);
+
         sql.append(" 1=1");
         return sql.toString();
     }

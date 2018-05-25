@@ -179,7 +179,7 @@ public class AdminController {
     /*想查询未审核的Api或者未适配的Api就传入对应的api模板
     * */
     @RequestMapping(value = "/admin/getapilist")
-    public Map<String, Object> getApiListByTimeDesc(@RequestBody Map map) {
+    public RestResult getApiListByTimeDesc(@RequestBody Map map) {
 
         Integer api_verify_state = (Integer) map.get("api_verify_state");
         Integer api_adapt_state = (Integer) map.get("api_adapt_state");
@@ -191,11 +191,38 @@ public class AdminController {
         if (api_adapt_state != null) {
             api.setApi_adapt_state(api_adapt_state);
         }
+        try {
+            return new RestResult(1,"OK",apiService.getApiPageList((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), api, key)) ;
+
+        }catch (Exception e){
+return new RestResult(0,"查询出错", e.toString()) ;
+        }
         //Api api=ClassUtil.mapToClass((Map) map.get("api"),Api.class);
-        return apiService.getApiPageList((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), api, key);
         //return null;
     }
+    @RequestMapping(value = "/admin/getapidetail")
+    public RestResult getApiDetailByApiID(@RequestBody Map map) {
 
+        String api_id = (String) map.get("api_id");
+        Api api = new Api();
+        if(api_id!=null){
+            api.setApi_id(api_id);
+        }
+        try{
+            Map<String,Object> result=new HashMap<>();
+            //Api api=ClassUtil.mapToClass((Map) map.get("api"),Api.class);
+
+            result.put("api",apiService.getApidetailByApiID(api_id));
+            result.put("headers","[]");
+            result.put("querys","[]");
+            result.put("body","{}");
+            //return null;
+            return new RestResult(1,"OK",result);
+
+        }catch (Exception e){
+            return new RestResult(0,"查询失败",e.toString());
+        }
+        }
     @RequestMapping(value = "/admin/user-auth")
     public RestResult modifyUserState(@RequestBody Map map) {
         Integer role = (Integer) map.get("role");//role为0表示consumer，为1表示服务提供商

@@ -33,7 +33,8 @@ public interface ApiMapper {
 
     @SelectProvider(type = ApiProvider.class, method = "getApiAndPriceListByApiExample")
     List<Map> getApiAndPriceListByApiExample(Api api);
-
+    @SelectProvider(type = ApiProvider.class,method = "getApidetailByApiID")
+    public Map getApidetailByApiID(String api_id);
     // 获取api数
     @SelectProvider(type = ApiProvider.class, method = "countPageList")
     Integer countPageList(Api api,String key);
