@@ -243,13 +243,15 @@ CREATE TABLE `consumer` (
   `consumer_type` int(1) NOT NULL COMMENT '0:内部用户\n1:外部用户',
   `consumer_state` int(11) DEFAULT '0' COMMENT '用户状态，0未审核，1：已经审核，账户正常，2：账户封禁中',
   `consumer_create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `consumer_intro` text,
+  `consumer_card_id` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`consumer_id`),
   UNIQUE KEY `consumer_consumer_email_uindex` (`consumer_email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `consumer` */
 
-insert  into `consumer`(`consumer_id`,`consumer_name`,`consumer_password`,`consumer_email`,`consumer_tel`,`consumer_type`,`consumer_state`,`consumer_create_time`) values ('87c340886b29406eb417deaeb53a53d5','YANGYANG','1111111','17862700885@163.COM','17862700885',0,1,'2018-05-24 17:02:44'),('87de254182574856af64d323869b686d','姬喜洋','woshiyangyang.','1044456468@qq.com','17862700885',0,1,'2018-05-24 17:02:44');
+insert  into `consumer`(`consumer_id`,`consumer_name`,`consumer_password`,`consumer_email`,`consumer_tel`,`consumer_type`,`consumer_state`,`consumer_create_time`,`consumer_intro`,`consumer_card_id`) values ('15273321066184evfHuS','yang','123456','11111@qq.com','13123922',0,0,'2018-05-26 18:55:07','自我介绍','1189810202090022'),('87c340886b29406eb417deaeb53a53d5','YANGYANG','1111111','17862700885@163.COM','17862700885',0,1,'2018-05-24 17:02:44',NULL,NULL),('87de254182574856af64d323869b686d','姬喜洋','woshiyangyang.','1044456468@qq.com','17862700885',0,1,'2018-05-24 17:02:44',NULL,NULL);
 
 /*Table structure for table `leaf` */
 
@@ -342,7 +344,7 @@ CREATE TABLE `service_provider` (
 
 /*Data for the table `service_provider` */
 
-insert  into `service_provider`(`sp_id`,`sp_org_id`,`sp_description`,`sp_tel`,`sp_representative`,`sp_email`,`sp_name`,`sp_password`,`sp_representative_id`,`sp_create_time`,`sp_state`) values ('c430c9776a934ff1a856360185920c5d','123456','修改后的描述','17862700885','ICES','hitices@hitwh.com','ICES','hitices','3612893242012132223','2018-05-24 17:04:27',0);
+insert  into `service_provider`(`sp_id`,`sp_org_id`,`sp_description`,`sp_tel`,`sp_representative`,`sp_email`,`sp_name`,`sp_password`,`sp_representative_id`,`sp_create_time`,`sp_state`) values ('c430c9776a934ff1a856360185920c5d','123456','修改后的描述','17862700885','ICES','hitices@hitwh.com','ICES','hitices','3612893242012132223','2018-05-24 17:04:27',0),('15273309231107w5SBfs','121','test','1688279892','yang','11111@qq.com','yang','123456','133131',NULL,0);
 
 /*Table structure for table `standard_inbound_param` */
 
