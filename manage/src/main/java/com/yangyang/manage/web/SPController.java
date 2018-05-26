@@ -11,13 +11,12 @@ import com.yangyang.utils.utils.RandomStrUtil;
 import com.yangyang.utils.utils.UUID;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.print.DocFlavor;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -100,11 +99,19 @@ public class SPController {
         apiPrice.setPrice_type(2);
 
         LOGGER.info("添加的api信息:" + api.toString());
-        RestResult restResult1 = XmlUtil.getHeadersAndQuerysFromXml(api.getApi_param_xml());
+        RestResult restResult1 = XmlUtil.getOriginHeadersAndQuerysFromXml(api.getApi_param_xml());
         if (restResult1.getStatus() == 0) {
             return restResult1;//xml校验失败，不能添加至数据库
         }
-        if (apiService.addApi(api,apiPrice)) {
+        List<ApiParam> list = (List<ApiParam>) restResult1.getData();
+        List<ApiParam> paramList= new ArrayList<>();
+        if (list.size() > 0) {
+            for (ApiParam param1 : list) {
+                param1.setApi_id(api.getApi_id());
+                param1.setApi_param_id(UUID.getUUID());
+            }
+        }
+        if (apiService.addApi(api,apiPrice,list)) {
             RestResult restResult = new RestResult(ResultStatusCode.OK.getStatuscode(), ResultStatusCode.OK.getMessage(), null);
             return restResult;
         }
@@ -118,7 +125,7 @@ public class SPController {
     @PostMapping(value = "/sp/test-param-xml")
     public RestResult isParamXml(@RequestBody Map map) {
         String param_xml = (String) map.get("param_xml");
-        return XmlUtil.getHeadersAndQuerysFromXml(param_xml);
+        return XmlUtil.getStandardHeadersAndQuerysFromXml(param_xml);
     }
 
     @PostMapping(value = "/sp/modify-api")

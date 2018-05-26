@@ -22,19 +22,24 @@ public class ApiService {
     ApiMapper apiMapper;
     @Autowired
     ApiParamMapper apiParamMapper;
-@Autowired
-LeafService leafService;
-@Autowired
+    @Autowired
+    LeafService leafService;
+    @Autowired
     ApiPriceMapper apiPriceMapper;
+    @Autowired
+    ApiParamService apiParamService;
+
     //插入API同时插入参数列表
     @Transactional
-    public boolean addApi(Api api, ApiPrice apiPrice) {
-        if (!apiMapper.addApi(api)||!apiPriceMapper.addApiPrice(apiPrice))
+    public boolean addApi(Api api, ApiPrice apiPrice, List<ApiParam> list) {
+        if (!apiMapper.addApi(api) || !apiPriceMapper.addApiPrice(apiPrice))
             return false;
-        String normal_response=api.getApi_normal_return_demo();
-        try{
-            leafService.addOriginLeafInfosByJsonExample(normal_response,api.getApi_id());
-        }catch (Exception e){
+        String normal_response = api.getApi_normal_return_demo();
+        try {
+            leafService.addOriginLeafInfosByJsonExample(normal_response, api.getApi_id());
+            apiParamService.updateParamByApiID(list, api.getApi_id());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             return false;
         }
         return true;
@@ -58,13 +63,15 @@ LeafService leafService;
         result.put("total", apiMapper.countPageList(api, key));
         return result;
     }
+
     public Map<String, Object> getApiList(Integer pageNo, Integer pageSize, Api api) {
         Map<String, Object> result = new HashMap<>();
         result.put("data", apiMapper.getApiListByApiExample(pageNo, pageSize, api));
-        result.put("total", apiMapper.countPageList(api,null));
+        result.put("total", apiMapper.countPageList(api, null));
         return result;
     }
-    public Map getApidetailByApiID(String api_id){
+
+    public Map getApidetailByApiID(String api_id) {
         return apiMapper.getApidetailByApiID(api_id);
     }
 

@@ -148,5 +148,6 @@ StringBuffer values=new StringBuffer();
         api.setApi_return_pattern("application/json");
         System.out.println(new ApiProvider().insertApi(api));
         System.out.println(new ApiProvider().getApiPageListByApiExample(1,100,new Api(),null));
+        System.out.println(new ApiProvider().getApidetailByApiID("1527311641393SJDkvvz"));
     }
 }

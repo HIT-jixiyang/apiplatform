@@ -2,7 +2,8 @@
 SQLyog Ultimate v12.09 (64 bit)
 MySQL - 5.7.20-log : Database - apiplatform
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -154,7 +155,7 @@ CREATE TABLE `api_param` (
 
 /*Data for the table `api_param` */
 
-insert  into `api_param`(`api_param_id`,`api_id`,`api_pre_param_key`,`api_param_value`,`api_after_param_key`,`api_pre_param_position`,`api_after_param_position`,`api_param_ismust`,`api_param_isconstant`) values ('1','24987fb58daa4f56b4c76669312d3e7b','\"\"','APPCODE 955c221306154d6f9528d2d9373a64','Authorization',0,0,1,1),('2','ef7deaca96d94cfeb21c1985c44525db','\"\"',' testtoken','token',0,0,1,1);
+insert  into `api_param`(`api_param_id`,`api_id`,api_param_key,`api_param_value`,`api_after_param_key`,api_param_position,`api_after_param_position`,`api_param_ismust`,api_param_desc) values ('1','24987fb58daa4f56b4c76669312d3e7b','\"\"','APPCODE 955c221306154d6f9528d2d9373a64','Authorization',0,0,1,1),('2','ef7deaca96d94cfeb21c1985c44525db','\"\"',' testtoken','token',0,0,1,1);
 
 /*Table structure for table `api_price` */
 

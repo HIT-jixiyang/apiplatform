@@ -1,6 +1,5 @@
 package com.yangyang.manage.web;
 
-import com.sun.javafx.collections.MappingChange;
 import com.yangyang.manage.component.FastDFSClient;
 import com.yangyang.pojo.entity.*;
 import com.yangyang.pojo.mapper.ConsumerMapper;
@@ -9,17 +8,12 @@ import com.yangyang.utils.XmlUtil;
 import com.yangyang.utils.utils.ApiCategoryID;
 import com.yangyang.utils.utils.ClassUtil;
 import com.yangyang.utils.utils.UUID;
-import com.yangyang.utils.utils.UploadFileUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.DocFlavor;
 import javax.servlet.http.HttpServletRequest;
-import java.io.StringReader;
-import java.rmi.MarshalledObject;
 import java.util.*;
 
 /**
@@ -49,12 +43,14 @@ public class AdminController {
     LeafService leafService;
     @Autowired
     LeafMapService leafMapService;
+    @Autowired
+    ApiParamService apiParamService;
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 
     @PostMapping(value = "/admin/test-param-xml")
     public RestResult isParamXml(@RequestBody Map map) {
         String param_xml = (String) map.get("param_xml");
-        return XmlUtil.getHeadersAndQuerysFromXml(param_xml);
+        return XmlUtil.getStandardHeadersAndQuerysFromXml(param_xml);
     }
 
     @PostMapping(value = "/admin/add-apicategory")
@@ -86,7 +82,7 @@ public class AdminController {
         param.setStandard_inbound_param_position(2);
         param.setStandard_inbound_param_key("body");
         try {
-            RestResult restResult = XmlUtil.getHeadersAndQuerysFromXml(param_xml);
+            RestResult restResult = XmlUtil.getStandardHeadersAndQuerysFromXml(param_xml);
             List<StandardInboundParam> list = (List<StandardInboundParam>) restResult.getData();
             List<StandardInboundParam> standardInboundParamList = new ArrayList<>();
             if (list.size() > 0) {
@@ -211,15 +207,47 @@ return new RestResult(0,"查询出错", e.toString()) ;
         try{
             Map<String,Object> result=new HashMap<>();
             //Api api=ClassUtil.mapToClass((Map) map.get("api"),Api.class);
-
+Map apidetail=apiService.getApidetailByApiID(api_id);
             result.put("api",apiService.getApidetailByApiID(api_id));
-            result.put("headers","[]");
+            List<ApiParam> paramList = apiParamService.getApiParamListById(api_id);
+            List<ApiParam> headerparams = new ArrayList<>();
+            List<ApiParam> queryparams = new ArrayList<>();
+            ApiParam bodyparam = new ApiParam();
+            for (ApiParam param : paramList) {
+                switch (param.getApi_param_position()) {
+                    case 0:
+                        headerparams.add(param);
+                        break;
+                    case 1:
+                        queryparams.add(param);
+                        break;
+                    case 2:
+                        bodyparam = param;
+                }
+            }
+            Map<String, Object> map1 = new HashMap<>();
+            if (headerparams != null) {
+                map1.put("header", headerparams);
+            } else {
+                map1.put("header", "[]");
+            }
+            if (queryparams != null) {
+                map1.put("query", queryparams);
+            } else {
+                map1.put("query", "[]");
+            }
+            if (apidetail.get("api_request_body") != null) {
+                map1.put("body", apidetail.get("api_request_body"));
+            } else map1.put("body", "{}");
+            result.put("params",map1);
+          /*  result.put("headers","[]");
             result.put("querys","[]");
             result.put("body","{}");
-            //return null;
+          */  //return null;
             return new RestResult(1,"OK",result);
 
         }catch (Exception e){
+            LOGGER.error(e.toString());
             return new RestResult(0,"查询失败",e.toString());
         }
         }

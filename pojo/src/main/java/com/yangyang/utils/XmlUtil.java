@@ -1,5 +1,6 @@
 package com.yangyang.utils;
 
+import com.yangyang.pojo.entity.ApiParam;
 import com.yangyang.pojo.entity.RestResult;
 import com.yangyang.pojo.entity.StandardInboundParam;
 import org.dom4j.*;
@@ -23,8 +24,8 @@ public class XmlUtil {
         return new RestResult(1, "校验成功", document);
     }
 
-    //获得头参数与query参数信息
-    public static RestResult getHeadersAndQuerysFromXml(String xml) {
+    //获得标准请求头参数与query参数信息
+    public static RestResult getStandardHeadersAndQuerysFromXml(String xml) {
         List<StandardInboundParam> standardInboundParamList = new ArrayList<>();
         RestResult restResut = isXml(xml);
         if (restResut.getStatus() == 0) {
@@ -113,7 +114,93 @@ public class XmlUtil {
     //    return null;
         return new RestResult(1,"转化成功",standardInboundParamList);
     }
+    //获得原始头参数与query参数信息
+    public static RestResult getOriginHeadersAndQuerysFromXml(String xml) {
+        List<ApiParam> apiParamList = new ArrayList<>();
+        RestResult restResut = isXml(xml);
+        if (restResut.getStatus() == 0) {
+            return restResut;
+        } else {
+            Document document = (Document) restResut.getData();
+            Element rootElement = document.getRootElement();
+            // 循环根节点，获取其子节点
+            for (Iterator iter = rootElement.elementIterator(); iter.hasNext(); ) {
+                Element element = (Element) iter.next(); // 获取标签对象
+                // 获取该标签对象的属性
 
+                if (element.getName().equals("headers")) {
+                    for (Iterator iterInner = element.elementIterator(); iterInner
+                            .hasNext(); ) {
+                        // 获取标签对象
+                        Element elementOption = (Element) iterInner.next();
+                        // 获取该标签对象的名称
+                        String tagName = elementOption.getName();
+                        Attribute keyattr = elementOption.attribute("key");
+                        Attribute typeattr = elementOption.attribute("type");
+                        Attribute descattr = elementOption.attribute("desc");
+                        Attribute formatattr = elementOption.attribute("format");
+                        Attribute ismustattr = elementOption.attribute("ismust");
+                        // 获取该标签对象的内容
+                        if(!typeattr.getValue().equals("String")&&!typeattr.getValue().equals("Integer")&&!typeattr.getValue().equals("Long")
+                                &&!typeattr.getValue().equals("Double")&&!typeattr.getValue().equals("Date")){
+                            return new RestResult(0,"参数类型不正确，请检查",null);
+                        }
+                        if (!ismustattr.getValue().equals("true")&&!ismustattr.getValue().equals("false")){
+                            return new RestResult(0,"ismust字段必须为true或者false，请检查",null);
+                        }
+                        String value = elementOption.getTextTrim();
+                        // 输出内容
+                        ApiParam apiParam = new ApiParam();
+                        apiParam.setApi_param_type(typeattr.getValue());
+                        apiParam.setApi_param_key(keyattr.getValue());
+                      apiParam.setApi_param_position(0);
+                        apiParam.setApi_param_desc(descattr.getValue()==null?"":descattr.getValue());
+                        apiParam.setApi_param_ismust(ismustattr.getValue().equals("true")?1:0);
+                        apiParam.setApi_param_value(value);
+                        apiParamList.add(apiParam);
+                        //System.out.print("key:" + keyattr.getValue() + "   value:" + tagContent + "  ");
+                    }
+                }
+                if (element.getName().equals("querys")) {
+                    for (Iterator iterInner = element.elementIterator(); iterInner
+                            .hasNext(); ) {
+                        // 获取标签对象
+                        Element elementOption = (Element) iterInner.next();
+                        // 获取该标签对象的名称
+                        String tagName = elementOption.getName();
+                        Attribute keyattr = elementOption.attribute("key");
+                        Attribute typeattr = elementOption.attribute("type");
+                        Attribute descattr = elementOption.attribute("desc");
+                        Attribute formatattr = elementOption.attribute("format");
+                        Attribute ismustattr = elementOption.attribute("ismust");
+                        // 获取该标签对象的内容
+                        if(!typeattr.getValue().equals("String")&&!typeattr.getValue().equals("Integer")&&!typeattr.getValue().equals("Long")
+                                &&!typeattr.getValue().equals("Double")&&!typeattr.getValue().equals("Date")){
+                            return new RestResult(0,"参数类型不正确，请检查",null);
+                        }
+                        if (!ismustattr.getValue().equals("true")&&!ismustattr.getValue().equals("false")){
+                            return new RestResult(0,"ismust字段必须为true或者false，请检查",null);
+                        }
+                        String value = elementOption.getTextTrim();
+                        // 输出内容
+                        ApiParam apiParam = new ApiParam();
+                        apiParam.setApi_param_type(typeattr.getValue());
+                        apiParam.setApi_param_key(keyattr.getValue());
+                        apiParam.setApi_param_position(1);
+                        apiParam.setApi_param_desc(descattr.getValue()==null?"":descattr.getValue());
+                        apiParam.setApi_param_ismust(ismustattr.getValue().equals("true")?1:0);
+                        apiParam.setApi_param_value(value);
+                        apiParamList.add(apiParam);
+                        //System.out.print("key:" + keyattr.getValue() + "   value:" + tagContent + "  ");
+                    }
+                }
+                // 循环第一层节点，获取其子节点
+            }
+
+        }
+        //    return null;
+        return new RestResult(1,"转化成功",apiParamList);
+    }
     public static void main(String[] args) {
         String xml = "<standardparam>\n" +
                 "    <headers>\n" +
@@ -139,7 +226,7 @@ public class XmlUtil {
                 "    </body>\n" +
                 "\n" +
                 "</standardparam>";
-       RestResult restResult= getHeadersAndQuerysFromXml(xml);
+       RestResult restResult= getStandardHeadersAndQuerysFromXml(xml);
        List<StandardInboundParam> list= (List<StandardInboundParam>) restResult.getData();
     }
 }

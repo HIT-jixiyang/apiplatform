@@ -19,7 +19,7 @@ public class ApiParamService {
     @Autowired
     ApiParamMapper apiParamMapper;
     @Transactional
-    public Object getApiParamListById(String apiID){
+    public List<ApiParam> getApiParamListById(String apiID){
         return apiParamMapper.getApiParamListById(apiID);
     }
     //根据Api_id去更新参数，先全部删除然后全部插入
@@ -32,16 +32,5 @@ public class ApiParamService {
         }
         return true;
     }
-    public  List<ApiParam> getConstantParamByApiID(String api_id){
-       // Api api=new Api();
-        LOGGER.info("constantlist:",api_id);
-        if(api_id==null){
-            return null;
-        }
-        List<ApiParam> apiParamList=apiParamMapper.getConstantParam(api_id);
-    LOGGER.info(apiParamList.toString());
-        return apiParamList;
-    }
-
 
 }

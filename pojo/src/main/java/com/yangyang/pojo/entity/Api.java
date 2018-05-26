@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.awt.geom.FlatteningPathIterator;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -37,4 +38,7 @@ private Integer api_env;
 private String api_param_xml;
 private Integer api_verify_state;
 private Integer api_adapt_state;
+private Timestamp api_create_time;
+private String api_request_body;
+private String api_request_contenttype;
 }
