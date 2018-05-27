@@ -8,14 +8,17 @@ import com.yangyang.pojo.service.ConsumerService;
 import com.yangyang.pojo.service.RegisterService;
 import com.yangyang.pojo.service.SpService;
 import com.yangyang.utils.utils.ClassUtil;
+import com.yangyang.utils.utils.GenerateUsertoken;
 import com.yangyang.utils.utils.RandomStrUtil;
 import com.yangyang.utils.utils.UUID;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.beans.PropertyVetoException;
+import java.util.HashMap;
 import java.util.Map;
 
 @CrossOrigin
@@ -27,6 +30,8 @@ public class RegisterAndLoginController {
     ConsumerService consumerService;
     @Autowired
     SpService spService;
+    @Autowired
+    RedisTemplate<String,String> redisTemplate;
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RegisterAndLoginController.class);
     public RegisterAndLoginController() throws PropertyVetoException {
     }
@@ -89,16 +94,22 @@ public Boolean checkConsumer(Consumer consumer){
         return true;
     }
 }
-@RequestMapping(value = "/splogin")
+@RequestMapping(value = "/login")
 public RestResult Login(@RequestBody Map map){
-    String emil= (String) map.get("email");
+    String email= (String) map.get("email");
     String password= (String) map.get("password");
-Integer role= (Integer) map.get("role");
+    Map<String,Object> resultmap=new HashMap<>();
+    Integer role= (Integer) map.get("role");
 if (role==1){
     try {
-        Sp sp= spService.spLogin(emil,password);
+        Sp sp= spService.spLogin(email,password);
+
         if (sp!=null){
-            return new RestResult(1,"登录成功",sp);
+            resultmap.put("sp",sp);
+            String token=GenerateUsertoken.createToken(sp.getSp_id(),1);
+            resultmap.put("token", token);
+            redisTemplate.opsForValue().set(sp.getSp_id(),token);
+            return new RestResult(1,"登录成功",resultmap);
         }else {
             return new RestResult(0,"登录失败",null);
         }
@@ -108,15 +119,30 @@ if (role==1){
     }
     }if(role==0){
         try {
-            Consumer consumer= consumerService.ConsumerLogin(emil,password);
+            Consumer consumer= consumerService.ConsumerLogin(email,password);
             if (consumer!=null){
-                return new RestResult(1,"登录成功",consumer);
+                resultmap.put("consumer",consumer);
+                String token=GenerateUsertoken.createToken(consumer.getConsumer_id(),0);
+                resultmap.put("token",token);
+               redisTemplate.opsForValue().set(consumer.getConsumer_id(),token);
+                return new RestResult(1,"登录成功",resultmap);
             }else {
                 return new RestResult(0,"登录失败",null);
             }
         }catch (Exception e){
             LOGGER.error(e.toString());
             return new RestResult(0,"登录失败",e.toString());
+        }
+    }
+    if(role==2){
+        if(email.equals("ices@hitwh.com")&&password.equals("ices")){
+
+            String token=GenerateUsertoken.createToken("admin",2);
+            resultmap.put("token",token);
+            redisTemplate.opsForValue().set("admin",token);
+            return new RestResult(1,"登录成功",resultmap);
+        }else {
+            return new RestResult(0,"登录失败",null);
         }
     }
    return new RestResult(0,"角色码不对",null);

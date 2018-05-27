@@ -1,53 +1,59 @@
 {
-  'data': {
-    'yesterday': {
-      'date': '23日星期三',
-      'high': '高温 24℃',
-      'low': '低温 15℃',
-      'fengxiang': '北风',
-      'fl': '<![CDATA[4-5级]]>',
-      'type': '晴'
+  "data": {
+    "yesterday": {
+      "date": "23日星期三",
+      "high": "高温 24℃",
+      "low": "低温 15℃",
+      "fengxiang": "北风",
+      "fengli": "<![CDATA[4-5级]]>",
+      "type": "晴"
     },
-    'city': '威海',
-    'forecast': [{
-      'date': '24日星期四',
-      'high': '高温 30℃',
-      'fengli': '<![CDATA[6-7级]]>',
-      'low': '低温 17℃',
-      'fengxiang': '西南风',
-      'type': '晴'
-    }, {
-      'date': '25日星期五',
-      'high': '高温 24℃',
-      'fengli': '<![CDATA[4-5级]]>',
-      'low': '低温 14℃',
-      'fengxiang': '西南风',
-      'type': '多云'
-    }, {
-      'date': '26日星期六',
-      'high': '高温 26℃',
-      'fengli': '<![CDATA[4-5级]]>',
-      'low': '低温 16℃',
-      'fengxiang': '南风',
-      'type': '多云'
-    }, {
-      'date': '27日星期天',
-      'high': '高温 25℃',
-      'fengli': '<![CDATA[4-5级]]>',
-      'low': '低温 15℃',
-      'fengxiang': '南风',
-      'type': '阴'
-    }, {
-      'date': '28日星期一',
-      'high': '高温 22℃',
-      'fengli': '<![CDATA[4-5级]]>',
-      'low': '低温 14℃',
-      'fengxiang': '东南风',
-      'type': '晴'
-    }],
-    'ganmao': '各项气象条件适宜，发生感冒机率较低。但请避免长期处于空调房间中，以防感冒。',
-    'wendu': '25'
+    "city": "威海",
+    "forecast": [
+      {
+        "date": "24日星期四",
+        "high": "高温 30℃",
+        "fengli": "<![CDATA[6-7级]]>",
+        "low": "低温 17℃",
+        "fengxiang": "西南风",
+        "type": "晴"
+      },
+      {
+        "date": "25日星期五",
+        "high": "高温 24℃",
+        "fengli": "<![CDATA[4-5级]]>",
+        "low": "低温 14℃",
+        "fengxiang": "西南风",
+        "type": "多云"
+      },
+      {
+        "date": "26日星期六",
+        "high": "高温 26℃",
+        "fengli": "<![CDATA[4-5级]]>",
+        "low": "低温 16℃",
+        "fengxiang": "南风",
+        "type": "多云"
+      },
+      {
+        "date": "27日星期天",
+        "high": "高温 25℃",
+        "fengli": "<![CDATA[4-5级]]>",
+        "low": "低温 15℃",
+        "fengxiang": "南风",
+        "type": "阴"
+      },
+      {
+        "date": "28日星期一",
+        "high": "高温 22℃",
+        "fengli": "<![CDATA[4-5级]]>",
+        "low": "低温 14℃",
+        "fengxiang": "东南风",
+        "type": "晴"
+      }
+    ],
+    "tip": "各项气象条件适宜，发生感冒机率较低。但请避免长期处于空调房间中，以防感冒。",
+    "temperature": "25"
   },
-  'status': 1000,
-  'desc': 'OK'
+  "status": 1000,
+  "message": "OK"
 }

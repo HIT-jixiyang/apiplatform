@@ -22,22 +22,8 @@
         <param key='time_stamp' type='Long' ismust='true' desc=' '>132973982</param>
     </headers>
     <querys>
-        <param key='app_id' type='String' ismust='true' desc=' '>19329829</param>
-        <param key='app_secret' type='String' ismust='true' desc=' '>ankalala</param>
-        <param key='time_stamp' type='Long' ismust='true' desc=' '>132973982</param>
+  <param key='cityname' type='String' ismust='true' desc='城市名称'>威海</param>
     </querys>
     <body>
-        <param key='city' type='String' format='' ismust='true'>北京</param>
-        <param key='date' type='String' format='YYMMDDHH' ismust='false'>2018-05-21</param>
-        <param key='forecast' type='List' >
-            <param key='high' type='String'>28℃</param>
-            <param key='low' type='String'>16℃</param>
-            <param key='type' type='String'>晴转多云</param>
-        </param>
-        <param key='yesterday' type='Object'>
-            <param key='high' type='String'>26℃</param>
-            <param key='low' type='String'>15℃</param>
-            <param key='type' type='String'>小雨</param>
-        </param>
     </body>
 </stand-request>
