@@ -28,6 +28,7 @@ public class LeafMapService {
             return true;
         } catch (Exception e) {
             LOGGER.error(e.toString());
+            LOGGER.error(e.getMessage());
             return false;
         }
     }

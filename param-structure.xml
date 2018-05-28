@@ -17,12 +17,9 @@
 -->
 <stand-request content-type='application/json'>
     <headers>
-        <param key='app_id' type='String' ismust='true' desc=' '>19329829</param>
-        <param key='app_secret' type='String' ismust='true' desc=' '>ankalala</param>
-        <param key='time_stamp' type='Long' ismust='true' desc=' '>132973982</param>
     </headers>
     <querys>
-  <param key='cityname' type='String' ismust='true' desc='城市名称'>威海</param>
+  <param key='city' type='String' ismust='true' desc='城市名称'>威海</param>
     </querys>
     <body>
     </body>

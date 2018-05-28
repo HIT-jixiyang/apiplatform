@@ -3,6 +3,7 @@ package com.yangyang.manage.web;
 import com.yangyang.pojo.entity.Consumer;
 import com.yangyang.pojo.entity.RestResult;
 import com.yangyang.pojo.entity.Sp;
+import com.yangyang.pojo.mapper.AdminMapper;
 import com.yangyang.pojo.service.ConsumerService;
 import com.yangyang.pojo.service.RegisterService;
 import com.yangyang.pojo.service.SpService;
@@ -29,6 +30,8 @@ public class RegisterAndLoginController {
     SpService spService;
     @Autowired
     RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    AdminMapper adminMapper;
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RegisterAndLoginController.class);
 
     public RegisterAndLoginController() throws PropertyVetoException {
@@ -70,7 +73,6 @@ public class RegisterAndLoginController {
             } else {
                 return new RestResult(0, "数据库错误", null);
             }
-
         } catch (Exception e) {
             LOGGER.error(e.toString());
             return new RestResult(0, "登记失败", e.toString());
@@ -138,8 +140,11 @@ public class RegisterAndLoginController {
             }
         }
         if (role == 2) {
-            if (email.equals("ices@hitwh.com") && password.equals("ices")) {
-
+            Map adiminmap=adminMapper.getAdminByAdmin_name(email);
+            if(adiminmap==null){
+                return new RestResult(0, "登录失败", null);
+            }
+            else if (password.equals(adiminmap.get("admin_password"))) {
                 String token = GenerateUsertoken.createToken("admin", 2);
                 resultmap.put("token", token);
                 redisTemplate.opsForValue().set("admin", token);

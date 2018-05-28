@@ -53,6 +53,7 @@ public class BillService {
         map.put("bill_item_id",billItem.getBill_item_id());
         map.put("request_time",billItem.getRequest_time());
         map.put("response_code",billItem.getResponse_code());
+        map.put("response_size",billItem.getResponse_size());
         ResponseEntity<Map> responseEntity= restTemplate.postForEntity("http://127.0.0.1:10002/bill/updatebill", (Object) map,Map.class);
         Map resultMap=responseEntity.getBody();
         Future<Object> future= new AsyncResult<>(resultMap);

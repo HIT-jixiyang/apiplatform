@@ -63,7 +63,7 @@ public class ZuulPostFilter extends ZuulFilter{
 
         RequestContext context = RequestContext.getCurrentContext();
 
-        billUpdate(context);
+
         InputStream stream = context.getResponseDataStream();
         Api api= (Api) context.get("api");
       /*  HttpServletResponse response=context.getResponse();
@@ -78,15 +78,23 @@ public class ZuulPostFilter extends ZuulFilter{
             for (LeafMap leafMap:leafMapList){
                 map.put(leafMap.getStandard_leaf_id(),leafMap.getOrigin_leaf_id());
             }
-            String standardBody=jsonMapService.getHandledString((String) context.get("standardResponse"),api.getApi_normal_return_demo(),map);
-         byte[] bytes=body.getBytes(Consts.UTF_8);
+            String standardBody=jsonMapService.getHandledString((String) context.get("standardResponse"),body,map);
+         byte[] bytes=standardBody.getBytes(Consts.UTF_8);
         context.setResponseDataStream(new ServletInputStreamWrapper(bytes));
+            try {
+                billUpdate(context,body);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
-private void billUpdate(RequestContext context){
+private void billUpdate(RequestContext context,String body) throws IOException {
+   // InputStream stream = context.getResponseDataStream();
+  //  String body = StreamUtils.copyToString(stream, Charset.forName("UTF-8"));
+   byte[] bytes=body.getBytes(Consts.UTF_8);
     HttpServletRequest request = context.getRequest();
     long startTime = (long) context.get("startTime");//请求的开始时间
     String api_id= (String) context.get("api_id");
@@ -100,6 +108,7 @@ private void billUpdate(RequestContext context){
     billItem.setApp_id(app_id);
     billItem.setApi_id(api_id);
     billItem.setResponse_code(response_code);
+   billItem.setResponse_size(bytes.length);
     long duration=System.currentTimeMillis() - startTime;//请求耗时
     LOGGER.info("请求路径"+request.getServletPath()+" --- "+"duration:"+" "+duration);
     Float request_time= new Float(duration/1000.0);

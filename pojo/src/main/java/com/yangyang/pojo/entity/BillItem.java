@@ -17,4 +17,5 @@ public class BillItem implements Serializable{
   private String app_id;
   private Float request_time;
   private String response_code;
+  private Integer response_size;
 }

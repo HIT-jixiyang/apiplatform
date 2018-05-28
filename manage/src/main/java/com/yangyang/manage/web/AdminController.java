@@ -357,30 +357,40 @@ Map apidetail=apiService.getApidetailByApiID(api_id);
     public RestResult adaptApiResponse(@RequestBody Map<String, Object> map) {
         String api_id = (String) map.get("api_id");
         String api_category_id = (String) map.get("api_category_id");
+        if(api_id==null||api_category_id==null) {
+            return new RestResult(0, "适配失败", "未指定api与api类");
+        }
+        Api api=new Api();
+        api.setApi_id(api_id);
+        api.setApi_category_id(api_category_id);
+        apiService.updateApi(api);
         Leaf leaf = new Leaf();
         leaf.setApi_id(api_id);
         List<Leaf> originLeafList = leafService.getLeafListByLeafExample(leaf);
         Leaf leaf1 = new Leaf();
         leaf1.setApi_category_id(api_category_id);
         List<Leaf> standardLeafList = leafService.getLeafListByLeafExample(leaf1);
-        Map<Integer, Integer> leafmaps = (Map<Integer, Integer>) map.get("leafmaps");
-        Set<Integer> set = leafmaps.keySet();
+        Map<String, Integer> leafmaps = (Map<String, Integer>) map.get("leafmaps");
+        Set<String> set = leafmaps.keySet();
         List<LeafMap> leafMapList = new ArrayList<>();
         try {
-            for (Integer key : set) {
+            for (String key1 : set) {
+            Integer key=Integer.valueOf(key1);
                 LeafMap leafMap = new LeafMap();
                 leafMap.setApi_id(api_id);
-                leafMap.setOrigin_leaf_id(key);
-                leafMap.setStandard_leaf_id(leafmaps.get(key));
-                leafMap.setOrigin_leaf_type(originLeafList.get(key).getLeaf_type());
-                leafMap.setOrigin_leaf_format(originLeafList.get(key).getLeaf_format());
-                leafMap.setStandard_leaf_format(standardLeafList.get(key).getLeaf_format());
+                leafMap.setOrigin_leaf_id(leafmaps.get(key1));
+                leafMap.setStandard_leaf_id(key);
+                leafMap.setOrigin_leaf_type(originLeafList.get(key-1).getLeaf_type());
+                leafMap.setOrigin_leaf_format(originLeafList.get(key-1).getLeaf_format());
+                leafMap.setStandard_leaf_format(standardLeafList.get(key-1).getLeaf_format());
                 leafMapList.add(leafMap);
             }
             leafMapService.addMapList(leafMapList);
             return new RestResult(1, "适配成功", null);
         } catch (Exception e) {
             LOGGER.error(e.toString());
+            LOGGER.error(e.getMessage());
+
             return new RestResult(0, "适配失败", e.toString());
         }
     }

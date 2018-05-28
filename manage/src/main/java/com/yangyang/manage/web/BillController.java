@@ -49,10 +49,13 @@ public class BillController {
         String bill_item_id= (String) map.get("bill_item_id");
         Float request_time= new Float((Double) map.get("request_time"));
         String response_code= (String) map.get("response_code");
+        Integer response_size= (Integer) map.get("response_size");
+
         BillItem billItem=new BillItem();
         billItem.setBill_item_id(bill_item_id);
         billItem.setResponse_code(response_code);
         billItem.setRequest_time(request_time);
+        billItem.setResponse_size(response_size);
         LOGGER.info(billItem.toString());
         Map<String,Object> map1=new HashMap<>();
         if( billItemService.updateBillItem(billItem)){
