@@ -344,7 +344,7 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
         URL[] urls = new URL[]{};
         MyClassLoader classLoader = new MyClassLoader(urls, ClassLoader.getSystemClassLoader());
         try {
-            classLoader.addJar(new File(api.getApi_jar_path()).toURI().toURL());
+            classLoader.addJar(new File("http://127.0.0.1:9999/"+api.getApi_jar_path()).toURI().toURL());
             Class<?> clazz = classLoader.loadClass("com.yangyang.utils.ParamMap");
             Method method = clazz.getDeclaredMethod("inboundParam2OutBoundParam", String.class);
             Object obj = clazz.newInstance();

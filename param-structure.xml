@@ -20,6 +20,7 @@
     </headers>
     <querys>
   <param key='city' type='String' ismust='true' desc='城市名称'>威海</param>
+    <param key="date" type="Date" ismust="false" desc="查询日期" format="YY-MM-DD">2018-05-21</param>
     </querys>
     <body>
     </body>

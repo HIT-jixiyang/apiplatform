@@ -1,6 +1,7 @@
 package com.yangyang.apigateway.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -19,6 +20,8 @@ import java.util.Set;
  **/
 @Service
 public class ResetMetricsService {
+    @Value("${server.port}")
+    private Integer port;
     @Autowired
     CounterService counterService;
     public static Map<String,Object> map;
@@ -29,7 +32,7 @@ public class ResetMetricsService {
         requestFactory.setConnectTimeout(3000);// 设置超时
         requestFactory.setReadTimeout(3000);
         RestTemplate restTemplate=new RestTemplate(requestFactory);
-        ResponseEntity<Map> metrics=restTemplate.getForEntity("http://localhost:10000/metrics", Map.class);
+        ResponseEntity<Map> metrics=restTemplate.getForEntity("http://localhost:"+port+"/metrics", Map.class);
         this. map=metrics.getBody();
         Set<String> ketset=map.keySet();
         for (String key : ketset){

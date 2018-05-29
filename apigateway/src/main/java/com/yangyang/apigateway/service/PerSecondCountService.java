@@ -1,5 +1,6 @@
 package com.yangyang.apigateway.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,9 @@ import java.util.Map;
  **/
 @Service
 public class PerSecondCountService {
+    @Value("${server.port}")
+    private Integer port;
+
     public Integer getRequestSpeedByCounterName(String countername){
         if (!countername.startsWith("speed.second")){
             return new Integer(0);
@@ -23,7 +27,7 @@ public class PerSecondCountService {
         requestFactory.setConnectTimeout(3000);// 设置超时
         requestFactory.setReadTimeout(3000);
         RestTemplate restTemplate=new RestTemplate(requestFactory);
-        ResponseEntity<Map> metrics=restTemplate.getForEntity("http://localhost:10000/metrics", Map.class);
+        ResponseEntity<Map> metrics=restTemplate.getForEntity("http://localhost:"+port+"/metrics", Map.class);
         Map<String,Object> map=metrics.getBody();
         Integer count = (Integer) map.get("counter."+countername);
         if(count==null){

@@ -24,8 +24,8 @@ PerSecondCountService perSecondCountService;
     PerMinuteCountService perMinuteCountService;
 //访问每秒钟的请求次数使用speed.second开头的计数器
 @GetMapping(value = "/monitor/getPerSecondRequestTimes")
-    public String getApiRequestPerSecondTimesPerSecond(@RequestParam(value = "counter_name") String counter_name){
-       Integer count= (Integer) ResetMetricsService.map.get(counter_name);
+    public String getApiRequestPerSecondTimesPerSecond(@RequestParam(value = "api_id") String api_id){
+       Integer count= (Integer) ResetMetricsService.map.get("counter.speed.second."+api_id);
        if (count==null){
            return "0";
        }

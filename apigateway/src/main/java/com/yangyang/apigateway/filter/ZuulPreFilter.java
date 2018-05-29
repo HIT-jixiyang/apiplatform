@@ -83,7 +83,7 @@ public class ZuulPreFilter extends ZuulFilter {
             ctx.setResponseStatusCode(401);// 返回错误码
             ctx.setResponseBody("unable");// 返回错误内容
             ctx.set("isSuccess", false);
-            return true;
+            return false;
         }else{
             String api_category_path=request.getServletPath();
            ApiCategory apiCategory= apiCategoryService.getApiCategoryByPath(api_category_path+"/**");
@@ -97,6 +97,8 @@ public class ZuulPreFilter extends ZuulFilter {
               //  counterService.increment("speed.minute."+api_id);
                 ctx.set("app_id",app_id);
                    // billService.bill(bill_item_id,api_id,APPID);
+                    String user_id=request.getHeader("user_id");
+                    ctx.set("user_id",user_id);
                     return true;
                 }else {
                     ctx.setSendZuulResponse(false);
