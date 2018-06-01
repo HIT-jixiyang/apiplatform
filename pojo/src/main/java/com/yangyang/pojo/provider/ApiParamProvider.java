@@ -14,7 +14,7 @@ public class ApiParamProvider {
 
     public String getApiParamListByApiParamExample(Integer pageNo,Integer pageSize,ApiParam apiParam) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from api_param \n");
+        sql.append("select * from h2_api_param \n");
         List<String[]> condition = SqlUtil.getNotNullField(apiParam);
         //找到对第三方结账时的价格
         sql.append("where ");
@@ -27,7 +27,7 @@ public class ApiParamProvider {
 
     public String countPageList(ApiParam apiParam) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select count(1) from api_param\n");
+        sql.append("select count(1) from h2_api_param\n");
         sql.append("where ");
         List<String[]> condition = SqlUtil.getNotNullField(apiParam);
         if(condition.size() != 0){
@@ -48,7 +48,7 @@ public class ApiParamProvider {
 
         List<String[]> condition = SqlUtil.getNotNullField(apiParam);
         StringBuffer sql = new StringBuffer();
-        sql.append("update api_param set \n");
+        sql.append("update h2_api_param set \n");
         sql.append(getSet(condition));
         sql.append(" where api_param_id ="+"\""+apiParam.getApi_param_id()+"\"");
         return sql.toString();
@@ -65,7 +65,7 @@ public class ApiParamProvider {
     public   String insertApiParam(ApiParam apiParam) throws IllegalAccessException {
         List<String[]> condition = SqlUtil.getNotNullField(apiParam);
         StringBuffer sql = new StringBuffer();
-        sql.append("insert into api_param(");
+        sql.append("insert into h2_api_param(");
         sql.append(getApiParamColumn(condition));
         sql.append(") values (");
         sql.append(getApiParamValues(condition)+")");

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -28,7 +29,7 @@ public class RefreshHeartBeatServiceTest {
 
     }
     @Test
-    public  void testhttp(){
+    public  void testhttp() throws IOException {
         System.out.println(HTTPUtils.doget("http://www.hitwh.edu"));
     }
 

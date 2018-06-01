@@ -12,7 +12,7 @@ import java.util.List;
 public class ConsumerProvider {
     public String getConsumerPageListByConsumerExample(Integer pageNo, Integer pageSize, Consumer consumer,String key) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from consumer \n");
+        sql.append("select * from h2_consumer \n");
         List<String[]> condition = SqlUtil.getNotNullField(consumer);
         sql.append("where ");
         if(condition.size() != 0){
@@ -28,7 +28,7 @@ public class ConsumerProvider {
 
     public String countPageList(Consumer consumer,String key) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select count(*) from consumer \n");
+        sql.append("select count(*) from h2_consumer \n");
         List<String[]> condition = SqlUtil.getNotNullField(consumer);
         sql.append("where ");
         if(condition.size() != 0){
@@ -51,7 +51,7 @@ public class ConsumerProvider {
 
         List<String[]> condition = SqlUtil.getNotNullField(consumer);
         StringBuffer sql = new StringBuffer();
-        sql.append("update consumer set \n");
+        sql.append("update h2_consumer set \n");
         sql.append(getSet(condition));
         sql.append(" where consumer_id ="+"\""+consumer.getConsumer_id()+"\"");
         return sql.toString();
@@ -68,7 +68,7 @@ public class ConsumerProvider {
     public   String insertConsumer(Consumer Consumer) throws IllegalAccessException {
         List<String[]> condition = SqlUtil.getNotNullField(Consumer);
         StringBuffer sql = new StringBuffer();
-        sql.append("insert into consumer(");
+        sql.append("insert into h2_consumer(");
         sql.append(getConsumerColumn(condition));
         sql.append(") values (");
         sql.append(getConsumerValues(condition)+")");

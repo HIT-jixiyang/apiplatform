@@ -17,7 +17,7 @@ import java.util.Map;
  **/
 @Mapper
 public interface ApiCategoryMapper {
-    @Select("select  api_category_id from api_category")
+    @Select("select  api_category_id from h2_api_category")
     public List<String> getAllCategoryID();
 
     @InsertProvider(type = ApiCategoryProvider.class, method = "insertApiCategory")

@@ -11,10 +11,10 @@ import java.util.List;
 @Component
 @Mapper
 public interface ConsumerMapper {
-    @Select("select * from consumer where consumer_email=#{email}")
+    @Select("select * from h2_consumer where consumer_email=#{email}")
     public Consumer getConsumerByEmail(String email);
 
-    @Select("select * from consumer where consumer_id=#{id}")
+    @Select("select * from h2_consumer where consumer_id=#{id}")
     public Consumer getConsumerById(String id);
 
     @InsertProvider(type = ConsumerProvider.class, method = "insertConsumer")
@@ -23,7 +23,7 @@ public interface ConsumerMapper {
     @UpdateProvider(type = ConsumerProvider.class, method = "updateConsumerByConsumerExample")
     public int updateConsumerByConsumerExample(Consumer consumer);
 
-    @Delete("delete from consumer where consumer_id=#{consumer_id}")
+    @Delete("delete from h2_consumer where consumer_id=#{consumer_id}")
     public int deleteConsumerByConsumerID(String consumer_id);
 
     @SelectProvider(type = ConsumerProvider.class, method = "getConsumerPageListByConsumerExample")

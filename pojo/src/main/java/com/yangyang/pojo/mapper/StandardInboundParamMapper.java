@@ -14,11 +14,11 @@ import java.util.List;
  **/
 @Mapper
 public interface StandardInboundParamMapper {
-    @Select("SELECT * FROM standard_inbound_param WHERE api_category_id=#{api_category_id}")
+    @Select("SELECT * FROM h2_standard_inbound_param WHERE api_category_id=#{api_category_id}")
 public List<StandardInboundParam> getStandardInboundParamListByApiCategoryID(String api_category_id);
 @InsertProvider(type = StandardParamProvider.class,method = "insertStandardInboundParam")
     public Integer insertStandardInboundParam(StandardInboundParam standardInboundParam);
-@Delete("delete  FROM standard_inbound_param WHERE api_category_id=#{api_category_id}")
+@Delete("delete  FROM h2_standard_inbound_param WHERE api_category_id=#{api_category_id}")
 public Integer deleteStandardParamByApiCategoryID(@Param("api_category_id") String api_category_id);
 
 }

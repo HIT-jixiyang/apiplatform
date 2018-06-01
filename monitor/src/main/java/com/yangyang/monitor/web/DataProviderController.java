@@ -1,3 +1,4 @@
+/*
 package com.yangyang.monitor.web;
 
 import com.yangyang.monitor.service.PerSecondCountService;
@@ -7,12 +8,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+*/
 /**
  * @program: apiplatform
  * @description:
  * @author: JiXiYang
  * @create: 2018-05-08 20:52
- **/
+ **//*
+
 @CrossOrigin
 @RestController
 public class DataProviderController {
@@ -29,3 +32,4 @@ PerSecondCountService perSecondCountService;
         return  perSecondCountService.getRequestSpeedByCounterName(counter_name);
 }
 }
+*/

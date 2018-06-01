@@ -51,7 +51,7 @@ create table api_app
 	enabled tinyint(1) default '0' not null,
 	primary key (api_id, app_id),
 	constraint auth_api
-		foreign key (api_id) references api (api_id)
+		foreign key (api_id) references h2_api (api_id)
 )
 ;
 
@@ -92,7 +92,7 @@ create table api_price
 	content float not null comment '单价配额',
 	price float not null comment '单价',
 	constraint price_api
-		foreign key (api_id) references api (api_id)
+		foreign key (api_id) references h2_api (api_id)
 )
 ;
 
@@ -111,9 +111,9 @@ create table app
 )
 ;
 
-alter table api_app
+alter table h2_api_app
 	add constraint auth_app
-		foreign key (app_id) references app (app_id)
+		foreign key (app_id) references h2_app (app_id)
 ;
 
 create table bill_item
@@ -126,9 +126,9 @@ create table bill_item
 	request_time float default '999999' null,
 	response_code varchar(5) default '404' null,
 	constraint bill_api
-		foreign key (api_id) references api (api_id),
+		foreign key (api_id) references h2_api (api_id),
 	constraint bill_app
-		foreign key (app_id) references app (app_id)
+		foreign key (app_id) references h2_app (app_id)
 )
 ;
 
@@ -210,9 +210,9 @@ create table `order`
 	1:响应时间优先
 	2:稳定性优先',
 	constraint order_consumer
-		foreign key (consumer_id) references consumer (consumer_id),
+		foreign key (consumer_id) references h2_consumer (consumer_id),
 	constraint order_api
-		foreign key (api_id) references api (api_id)
+		foreign key (api_id) references h2_api (api_id)
 )
 ;
 
@@ -243,9 +243,9 @@ create index sp_id
 	on service_provider (sp_id)
 ;
 
-alter table api
+alter table h2_api
 	add constraint api_sp
-		foreign key (sp_id) references service_provider (sp_id)
+		foreign key (sp_id) references h2_service_provider (sp_id)
 ;
 
 create table sys_combo

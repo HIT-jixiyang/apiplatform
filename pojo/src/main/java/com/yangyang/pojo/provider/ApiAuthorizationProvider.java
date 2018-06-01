@@ -15,18 +15,18 @@ import java.util.List;
 public class ApiAuthorizationProvider {
     public String getApiCategoryListPageByAppID(Integer pageNo,Integer pageSize,String app_id){
       StringBuffer sql=new StringBuffer();
-      sql.append("SELECT * FROM  api_category WHERE api_category.api_category_id IN (SELECT api_category_id FROM api_app WHERE app_id="+app_id+")");
+      sql.append("SELECT * FROM  h2_api_category WHERE api_category.api_category_id IN (SELECT api_category_id FROM api_app WHERE app_id="+app_id+")");
       sql.append(" limit " + ((pageNo -1) * pageSize)  + "," + pageSize);
         return sql.toString();
     }
     public String getApiCategoryCountByAppID(String app_id){
         StringBuffer sql=new StringBuffer();
-        sql.append("SELECT count(*) FROM  api_category WHERE api_category.api_category_id IN (SELECT api_category_id FROM api_app WHERE app_id="+app_id+")");
+        sql.append("SELECT count(*) FROM  h2_api_category WHERE api_category.api_category_id IN (SELECT api_category_id FROM api_app WHERE app_id="+app_id+")");
         return sql.toString();
     }
     public String getApiAuthorizationListByApiAuthorizationExample(ApiAuthorization ApiAuthorization) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from api_app \n");
+        sql.append("select * from h2_api_app \n");
         List<String[]> condition = SqlUtil.getNotNullField(ApiAuthorization);
         //获得授权信息
         sql.append("where ");
@@ -39,7 +39,7 @@ public class ApiAuthorizationProvider {
     //获取api授权表的某一页内容
     public String getApiAuthorizationPageListByApiAuthorizationExample(Integer pageNo, Integer pageSize, ApiAuthorization ApiAuthorization) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from api_app \n");
+        sql.append("select * from h2_api_app \n");
         List<String[]> condition = SqlUtil.getNotNullField(ApiAuthorization);
         sql.append("where ");
         if(condition.size() != 0){
@@ -51,7 +51,7 @@ public class ApiAuthorizationProvider {
 //获取api类的页数
     public String countPageList(ApiAuthorization ApiAuthorization) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select count(1) from api_app\n");
+        sql.append("select count(1) from h2_api_app\n");
         sql.append("where ");
         List<String[]> condition = SqlUtil.getNotNullField(ApiAuthorization);
         if(condition.size() != 0){
@@ -71,7 +71,7 @@ public class ApiAuthorizationProvider {
 
         List<String[]> condition = SqlUtil.getNotNullField(ApiAuthorization);
         StringBuffer sql = new StringBuffer();
-        sql.append("update api_app set \n");
+        sql.append("update h2_api_app set \n");
         sql.append(getSet(condition));
         sql.append(" where api_category_id ="+"\""+ApiAuthorization.getApi_category_id()+"\""+" and app_id="+"\""+ApiAuthorization.getApp_id()+"\"");
         return sql.toString();
@@ -88,7 +88,7 @@ public class ApiAuthorizationProvider {
     public   String insertApiAuthorization(ApiAuthorization ApiAuthorization) throws IllegalAccessException {
         List<String[]> condition = SqlUtil.getNotNullField(ApiAuthorization);
         StringBuffer sql = new StringBuffer();
-        sql.append("insert into ApiAuthorization(");
+        sql.append("insert into h2_api_app(");
         sql.append(getApiAuthorizationColumn(condition));
         sql.append(") values (");
         sql.append(getApiAuthorizationValues(condition)+")");

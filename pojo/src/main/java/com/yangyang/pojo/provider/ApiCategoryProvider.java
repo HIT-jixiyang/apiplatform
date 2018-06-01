@@ -16,7 +16,7 @@ public class ApiCategoryProvider {
     //获取所有api类
     public String getApiCategoryListByApiCategoryExample(ApiCategory apiCategory) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from api_category \n");
+        sql.append("select * from h2_api_category \n");
         List<String[]> condition = SqlUtil.getNotNullField(apiCategory);
         //找到对第三方结账时的价格
         sql.append("where ");
@@ -29,7 +29,7 @@ public class ApiCategoryProvider {
     //获取api类的某一页内容
     public String getApiCategoryPageListByApiCategoryExample(Integer pageNo, Integer pageSize, ApiCategory apiCategory,String name) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from api_category \n");
+        sql.append("select * from h2_api_category \n");
         List<String[]> condition = SqlUtil.getNotNullField(apiCategory);
         sql.append("where ");
         if(condition.size() != 0){
@@ -48,7 +48,7 @@ public class ApiCategoryProvider {
 //获取api类的页数
     public String countPageList(ApiCategory apiCategory,String name) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select count(1) from api_category\n");
+        sql.append("select count(1) from h2_api_category\n");
         sql.append("where ");
         List<String[]> condition = SqlUtil.getNotNullField(apiCategory);
         if(condition.size() != 0){
@@ -71,7 +71,7 @@ public class ApiCategoryProvider {
 
         List<String[]> condition = SqlUtil.getNotNullField(apiCategory);
         StringBuffer sql = new StringBuffer();
-        sql.append("update api_category set \n");
+        sql.append("update h2_api_category set \n");
         sql.append(getSet(condition));
         sql.append(" where api_category_id ="+"\""+apiCategory.getApi_category_id()+"\"");
         return sql.toString();
@@ -88,7 +88,7 @@ public class ApiCategoryProvider {
     public   String insertApiCategory(ApiCategory apiCategory) throws IllegalAccessException {
         List<String[]> condition = SqlUtil.getNotNullField(apiCategory);
         StringBuffer sql = new StringBuffer();
-        sql.append("insert into api_category(");
+        sql.append("insert into h2_api_category(");
         sql.append(getApiCategoryColumn(condition));
         sql.append(") values (");
         sql.append(getApiCategoryValues(condition)+")");

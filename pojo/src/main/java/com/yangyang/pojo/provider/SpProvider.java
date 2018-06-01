@@ -12,7 +12,7 @@ import java.util.List;
 public class SpProvider {
     public String getSpPageListBySpExample(Integer pageNo, Integer pageSize, Sp sp,String key) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from service_provider \n");
+        sql.append("select * from h2_service_provider \n");
         List<String[]> condition = SqlUtil.getNotNullField(sp);
         sql.append("where ");
         if(condition.size() != 0){
@@ -28,7 +28,7 @@ public class SpProvider {
 
     public String countPageList(Sp sp,String key) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select count(*) from service_provider \n");
+        sql.append("select count(*) from h2_service_provider \n");
         List<String[]> condition = SqlUtil.getNotNullField(sp);
         sql.append("where ");
         if(condition.size() != 0){
@@ -51,7 +51,7 @@ public class SpProvider {
 
         List<String[]> condition = SqlUtil.getNotNullField(sp);
         StringBuffer sql = new StringBuffer();
-        sql.append("update service_provider set \n");
+        sql.append("update h2_service_provider set \n");
         sql.append(getSet(condition));
         sql.append(" where sp_id ="+"\""+sp.getSp_id()+"\"");
         return sql.toString();
@@ -68,7 +68,7 @@ public class SpProvider {
     public   String insertSp(Sp sp) throws IllegalAccessException {
         List<String[]> condition = SqlUtil.getNotNullField(sp);
         StringBuffer sql = new StringBuffer();
-        sql.append("insert into service_provider(");
+        sql.append("insert into h2_service_provider(");
         sql.append(getSpColumn(condition));
         sql.append(") values (");
         sql.append(getSpValues(condition)+")");

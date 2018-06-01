@@ -94,8 +94,8 @@ public class SPController {
         ApiPrice apiPrice=new ApiPrice();
         apiPrice.setApi_id(api.getApi_id());
         apiPrice.setPrice_id(UUID.getUUID());
-        apiPrice.setContent((Integer) price_map.get("content"));
-        apiPrice.setPrice(new Float((Double) price_map.get("price")));
+        apiPrice.setContent(Integer.valueOf((String)price_map.get("content")));
+        apiPrice.setPrice(Float.valueOf((String) price_map.get("price")));
         apiPrice.setPrice_type(2);
 
         LOGGER.info("添加的api信息:" + api.toString());

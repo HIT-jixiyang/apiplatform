@@ -30,7 +30,7 @@ public class AppProvider {
 
     public String countPageList(App app,String name) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select count(1) from app\n");
+        sql.append("select count(1) from h2_app\n");
         sql.append("where ");
         List<String[]> condition = SqlUtil.getNotNullField(app);
         if(condition.size() != 0){
@@ -44,7 +44,7 @@ public class AppProvider {
     }
     public String getAppPageList(Integer pageNo, Integer pageSize, App app, String name) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from app \n");
+        sql.append("select * from h2_app \n");
         List<String[]> condition = SqlUtil.getNotNullField(app);
         sql.append("where ");
         if(condition.size() != 0){

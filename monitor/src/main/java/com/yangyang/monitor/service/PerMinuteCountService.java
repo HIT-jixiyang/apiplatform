@@ -1,3 +1,4 @@
+/*
 package com.yangyang.monitor.service;
 
 import org.springframework.http.ResponseEntity;
@@ -7,12 +8,14 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
+*/
 /**
  * @program: apiplatform
  * @description:
  * @author: JiXiYang
  * @create: 2018-05-08 20:57
- **/
+ **//*
+
 @Service
 public class PerMinuteCountService {
     public Integer getRequestSpeedByCounterName(String countername){
@@ -34,3 +37,4 @@ public class PerMinuteCountService {
     }
 
 }
+*/

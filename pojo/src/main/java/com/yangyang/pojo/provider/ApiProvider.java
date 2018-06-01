@@ -14,7 +14,7 @@ import java.util.List;
 public class ApiProvider {
     public String getApiPageListByApiExample(Integer pageNo, Integer pageSize, Api api,String key) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select a.*,s.sp_name,c.api_category_name ,d.price,d.content from api a,service_provider s,api_category c ,api_price d \n");
+        sql.append("select a.*,s.sp_name,c.api_category_name ,d.price,d.content from h2_api a,h2_service_provider s,h2_api_category c ,h2_api_price d \n");
         List<String[]> condition = SqlUtil.getNotNullField(api);
         sql.append("where ");
         if(condition.size() != 0){
@@ -30,7 +30,7 @@ public class ApiProvider {
     }
     public String getApidetailByApiID( String api_id) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select a.*,s.sp_name,c.api_category_name ,d.price,d.content from api a,service_provider s,api_category c ,api_price d \n");
+        sql.append("select a.*,s.sp_name,c.api_category_name ,d.price,d.content from h2_api a,h2_service_provider s,h2_api_category c ,h2_api_price d \n");
 //        List<String[]> condition = SqlUtil.getNotNullField(api);
         sql.append("where ");
        sql.append(" a.api_id='"+api_id +"' and ");
@@ -42,7 +42,7 @@ public class ApiProvider {
 
     public String getApiAndPriceListByApiExample(Api api) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select a.*,b.price,b.content from api a,api_price b \n");
+        sql.append("select a.*,b.price,b.content from h2_api a,h2_api_price b \n");
         List<String[]> condition = SqlUtil.getNotNullField(api);
         //找到对第三方结账时的价格
         sql.append("where a.api_id=b.api_id and b.price_type=2 and ");
@@ -54,7 +54,7 @@ public class ApiProvider {
     }
     public String getApiListByApiExample(Integer pageNo,Integer pageSize,Api api) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from api \n");
+        sql.append("select * from h2_api \n");
         List<String[]> condition = SqlUtil.getNotNullField(api);
         //找到对第三方结账时的价格
         sql.append("where ");
@@ -67,7 +67,7 @@ public class ApiProvider {
 
     public String countPageList(Api api,String key) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select count(1) from api a,service_provider s,api_category c ,api_price d \n");
+        sql.append("select count(1) from h2_api a,h2_service_provider s,h2_api_category c ,h2_api_price d \n");
         List<String[]> condition = SqlUtil.getNotNullField(api);
         sql.append("where ");
         if(condition.size() != 0){
@@ -86,7 +86,15 @@ public class ApiProvider {
     private String getWhere(List<String[]> condition){
         StringBuffer where = new StringBuffer();
         for(int i = 0, len = condition.size(); i < len; i++){
-            where.append(condition.get(i)[0] + "=" + condition.get(i)[1] + " and");
+            if (!condition.get(i)[0].equals("`sp_id`")){
+                where.append(condition.get(i)[0] + "=" + condition.get(i)[1] + " and");
+            }
+           else {
+                if(!condition.get(i)[1].equals("\"null\"")){
+                    where.append("a.`sp_id`" + "=" + condition.get(i)[1] + " and");
+                }
+
+            }
         }
         return where.toString();
     }
@@ -94,9 +102,10 @@ public class ApiProvider {
 
         List<String[]> condition = SqlUtil.getNotNullField(api);
         StringBuffer sql = new StringBuffer();
-        sql.append("update api set \n");
+        sql.append("update h2_api set \n");
         sql.append(getSet(condition));
         sql.append(" where api_id ="+"\""+api.getApi_id()+"\"");
+        System.out.println(sql.toString());
         return sql.toString();
     }
     private String getSet(List<String[]> condition){
@@ -111,7 +120,7 @@ public class ApiProvider {
 public   String insertApi(Api api) throws IllegalAccessException {
     List<String[]> condition = SqlUtil.getNotNullField(api);
     StringBuffer sql = new StringBuffer();
-    sql.append("insert into api(");
+    sql.append("insert into h2_api(");
     sql.append(getApiColumn(condition));
     sql.append(") values (");
     sql.append(getApiValues(condition)+")");

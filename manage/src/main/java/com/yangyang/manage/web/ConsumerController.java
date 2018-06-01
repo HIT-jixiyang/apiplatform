@@ -30,8 +30,6 @@ public class ConsumerController {
     @Autowired
     ApiAuthorizationService apiAuthorizationService;
     @Autowired
-    OrderService orderService;
-    @Autowired
     ApiCategoryService apiCategoryService;
     @Autowired
     StandardInboundParamService standardInboundParamService;

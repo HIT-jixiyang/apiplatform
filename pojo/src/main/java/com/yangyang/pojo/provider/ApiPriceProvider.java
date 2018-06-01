@@ -14,7 +14,7 @@ public class ApiPriceProvider {
 
     public String getApiPriceListByApiPriceExample(Integer pageNo,Integer pageSize,ApiPrice apiPrice) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from api_price \n");
+        sql.append("select * from h2_api_price \n");
         List<String[]> condition = SqlUtil.getNotNullField(apiPrice);
         //找到对第三方结账时的价格
         sql.append("where ");
@@ -27,7 +27,7 @@ public class ApiPriceProvider {
 
     public String countPageList(ApiPrice apiPrice) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select count(1) from api_price\n");
+        sql.append("select count(1) from h2_api_price\n");
         sql.append("where ");
         List<String[]> condition = SqlUtil.getNotNullField(apiPrice);
         if(condition.size() != 0){
@@ -48,7 +48,7 @@ public class ApiPriceProvider {
 
         List<String[]> condition = SqlUtil.getNotNullField(apiPrice);
         StringBuffer sql = new StringBuffer();
-        sql.append("update api_price set \n");
+        sql.append("update h2_api_price set \n");
         sql.append(getSet(condition));
         sql.append(" where api_price_id ="+"\""+apiPrice.getPrice_id()+"\"");
         return sql.toString();
@@ -65,7 +65,7 @@ public class ApiPriceProvider {
 public   String insertApiPrice(ApiPrice apiPrice) throws IllegalAccessException {
     List<String[]> condition = SqlUtil.getNotNullField(apiPrice);
     StringBuffer sql = new StringBuffer();
-    sql.append("insert into api_price(");
+    sql.append("insert into h2_api_price(");
     sql.append(getApiPriceColumn(condition));
     sql.append(") values (");
     sql.append(getApiPriceValues(condition)+")");

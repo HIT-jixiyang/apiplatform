@@ -40,8 +40,10 @@ public class ComputWeightService {
           //  Float time1 = billItemMapper.getAverageResponseTimeByApiCategory(1000, api.getApi_category_id());
 
            if(time!=null){
-               api.setApi_average_response_time(time);
-               apiMapper.updateApiByApiExample(api);
+             Api api1=new Api();
+             api1.setApi_id(api.getApi_id());
+             api1.setApi_average_response_time(time);
+               apiMapper.updateApiByApiExample(api1);
            }
         }
     }

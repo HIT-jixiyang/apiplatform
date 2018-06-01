@@ -40,8 +40,6 @@ public class ZuulPostFilter extends ZuulFilter{
     @Autowired
     BillService billService;
     @Autowired
-    JsonMapService jsonMapService;
-    @Autowired
     LeafMapService leafMapService;
     @Override
     public String filterType() {
@@ -78,7 +76,7 @@ public class ZuulPostFilter extends ZuulFilter{
             for (LeafMap leafMap:leafMapList){
                 map.put(leafMap.getStandard_leaf_id(),leafMap.getOrigin_leaf_id());
             }
-            String standardBody=jsonMapService.getHandledString((String) context.get("standardResponse"),body,map);
+            String standardBody=new JsonMapService().getHandledString((String) context.get("standardResponse"),body,map);
          byte[] bytes=standardBody.getBytes(Consts.UTF_8);
         context.setResponseDataStream(new ServletInputStreamWrapper(bytes));
             try {

@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Mapper
 public interface AdminMapper {
-    @Select("select * from admin where admin_name=#{admin_name}")
+    @Select("select * from h2_admin where admin_name=#{admin_name}")
     public Map getAdminByAdmin_name(String admin_name);
 
 }

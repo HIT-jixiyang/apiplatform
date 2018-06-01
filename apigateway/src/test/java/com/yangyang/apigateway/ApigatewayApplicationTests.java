@@ -21,7 +21,7 @@ public class ApigatewayApplicationTests {
 				e.printStackTrace();
 			}
 			RestTemplate restTemplate=new RestTemplate();
-			String count=restTemplate.getForObject("http://localhost:11001/monitor/getPerSecondRequestTimes?api_id=1527387292336aLih66q",String.class);
+			String count=restTemplate.getForObject("http://localhost:11001/monitor/getPerSecondRequestTimes?api_id=1527598249582WZVf1dq",String.class);
 			System.out.println(count);
 			//System.out.println(perSecondCountService.getRequestSpeedByCounterName("speed.second.ef7deaca96d94cfeb21c1985c44525db"));
 		}

@@ -174,12 +174,15 @@ public class AdminController {
 
     /*想查询未审核的Api或者未适配的Api就传入对应的api模板
     * */
-    @RequestMapping(value = "/admin/getapilist")
+    @RequestMapping(value = "/getapilist")
     public RestResult getApiListByTimeDesc(@RequestBody Map map) {
 
         Integer api_verify_state = (Integer) map.get("api_verify_state");
         Integer api_adapt_state = (Integer) map.get("api_adapt_state");
         String key = (String) map.get("key");
+        String id= (String) map.get("id");
+        Integer role= Integer.valueOf((String) map.get("role"));
+
         Api api = new Api();
         if (api_verify_state != null) {
             api.setApi_verify_state(api_verify_state);
@@ -187,11 +190,15 @@ public class AdminController {
         if (api_adapt_state != null) {
             api.setApi_adapt_state(api_adapt_state);
         }
+        if(role==1){
+            api.setSp_id(id);
+        }
         try {
             return new RestResult(1,"OK",apiService.getApiPageList((Integer) map.get("pageNo"), (Integer) map.get("pageSize"), api, key)) ;
 
         }catch (Exception e){
-return new RestResult(0,"查询出错", e.toString()) ;
+            LOGGER.error(e.getMessage());
+            return new RestResult(0,"查询出错", e.toString()) ;
         }
         //Api api=ClassUtil.mapToClass((Map) map.get("api"),Api.class);
         //return null;
@@ -367,6 +374,10 @@ Map apidetail=apiService.getApidetailByApiID(api_id);
         Leaf leaf = new Leaf();
         leaf.setApi_id(api_id);
         List<Leaf> originLeafList = leafService.getLeafListByLeafExample(leaf);
+       Map<Integer,Object> originlistmap=new HashMap<>();
+       for (Leaf l:originLeafList){
+           originlistmap.put(l.getLeaf_id(),l);
+       }
         Leaf leaf1 = new Leaf();
         leaf1.setApi_category_id(api_category_id);
         List<Leaf> standardLeafList = leafService.getLeafListByLeafExample(leaf1);
@@ -376,14 +387,17 @@ Map apidetail=apiService.getApidetailByApiID(api_id);
         try {
             for (String key1 : set) {
             Integer key=Integer.valueOf(key1);
+            if(leafmaps.get(key1)!=null){
                 LeafMap leafMap = new LeafMap();
                 leafMap.setApi_id(api_id);
                 leafMap.setOrigin_leaf_id(leafmaps.get(key1));
                 leafMap.setStandard_leaf_id(key);
-                leafMap.setOrigin_leaf_type(originLeafList.get(key-1).getLeaf_type());
-                leafMap.setOrigin_leaf_format(originLeafList.get(key-1).getLeaf_format());
+                leafMap.setOrigin_leaf_type(((Leaf)originlistmap.get(leafmaps.get(key1))).getLeaf_type());
+                leafMap.setOrigin_leaf_format(((Leaf)originlistmap.get(leafmaps.get(key1))).getLeaf_format());
                 leafMap.setStandard_leaf_format(standardLeafList.get(key-1).getLeaf_format());
                 leafMapList.add(leafMap);
+            }
+
             }
             leafMapService.addMapList(leafMapList);
             return new RestResult(1, "适配成功", null);
@@ -395,7 +409,7 @@ Map apidetail=apiService.getApidetailByApiID(api_id);
         }
     }
 
-    @PostMapping(value = "get-leaf-infos")
+    @PostMapping(value = "/admin/get-leaf-infos")
     public RestResult getLeafInfos(@RequestBody Map map) {
         String api_id = (String) map.get("api_id");
         String api_category_id = (String) map.get("api_category_id");

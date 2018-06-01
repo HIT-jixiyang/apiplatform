@@ -77,10 +77,13 @@ public class BillController {
         String beginTime= (String) map.get("begintime");
         String endTime= (String) map.get("endtime");
         String api_name= (String) map.get("api_name");
+      //  String consumer_id= (String) map.get("id");
+
       try{
           Map<String,Object> mapList=billItemService.getBillItemByAppIDAndApiIDAndTime(pageNo,pageSize,billItem,api_name,beginTime,endTime);
       }
        catch (Exception e){
+          LOGGER.info(e.getMessage());
            return  new RestResult(ResultStatusCode.SYSTEM_ERROR.getStatuscode(),ResultStatusCode.SYSTEM_ERROR.getMessage(),e);
 
        }

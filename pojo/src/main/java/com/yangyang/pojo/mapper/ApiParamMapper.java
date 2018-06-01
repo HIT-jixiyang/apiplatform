@@ -15,7 +15,7 @@ import java.util.List;
 @Mapper
 public interface ApiParamMapper {
     // 根据Id获取api参数列表
-    @Select("select * from api_param where api_id = #{apiId}")
+    @Select("select * from h2_api_param where api_id = #{apiId}")
     List<ApiParam> getApiParamListById(String apiId);
     //插入一条参数
    /* @Insert("insert into api_param values(#{api_param_id},#{api_id}," +
@@ -26,6 +26,6 @@ public interface ApiParamMapper {
             ")")*/
    @InsertProvider(type = ApiParamProvider.class,method = "insertApiParam")
     public boolean addApiParam(ApiParam apiRequestParam);
-    @Delete("delete from api_param where api_id=#{api_id}")
+    @Delete("delete from h2_api_param where api_id=#{api_id}")
     public int deleteApiParamByApiID(String api_id);
 }

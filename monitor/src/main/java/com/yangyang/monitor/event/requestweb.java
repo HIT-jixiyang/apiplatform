@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component
 public class requestweb {
 
@@ -17,7 +19,7 @@ public class requestweb {
     HTTPUtils httpUtils;
 
 @Async("myTaskAsyncPool")
-public void requestweb(Api api){
+public void requestweb(Api api) throws IOException {
   //  System.out.println(api.getApi_url()+"请求开始当前时间"+(System.currentTimeMillis()/1000));
 
     String api_url = api.getApi_url();

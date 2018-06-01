@@ -39,7 +39,7 @@ public class ComputScoreByModelServiceImpl implements ComputScoreByModelService 
         Float average_response_time;
         Float api_price;
         Float api_success_response_ratio;
-        Float content;
+        Integer content;
         String api_id;
         for (String api_category_id : apiCategoryIDs) {
             apiCategoryAverageCost = apiService.getAverageCostByCategoryID(api_category_id);
@@ -49,7 +49,7 @@ public class ComputScoreByModelServiceImpl implements ComputScoreByModelService 
             if (mapList.size() != 0) {
                 for (Map map : mapList) {
                     api_id = (String) map.get("api_id");
-                    content = (Float) map.get("content");//api单价对应的配额
+                    content = (Integer) map.get("content");//api单价对应的配额
                     api_price = (Float) map.get("price");//api单价
                     average_response_time = (Float) map.get("api_average_response_time");//api平均响应时间
                     api_success_response_ratio = (Float) map.get("api_success_response_ratio");//api响应成功率

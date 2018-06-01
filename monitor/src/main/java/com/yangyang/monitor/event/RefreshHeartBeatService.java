@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -15,7 +16,7 @@ public class RefreshHeartBeatService {
     @Autowired
     requestweb requestweb;
     @Async("myTaskAsyncPool")
-    public void RefreshHeartBearService() {
+    public void RefreshHeartBearService() throws IOException {
         int N;
         int MAX;
         List<Api> ApiList = hearBeatService.GetApiHeartList();
@@ -23,7 +24,6 @@ public class RefreshHeartBeatService {
         System.out.println("一共"+MAX+"条API数据");
         for (N = 0; N <MAX; N++)
         {
-            System.out.println(N);
             Api api = ApiList.get(N);
             requestweb.requestweb(api);
 

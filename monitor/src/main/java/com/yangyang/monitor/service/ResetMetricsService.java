@@ -1,3 +1,4 @@
+/*
 package com.yangyang.monitor.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,14 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 import java.util.Set;
 
+*/
 /**
  * @program: apiplatform
  * @description:
  * @author: JiXiYang
  * @create: 2018-05-08 20:53
- **/
+ **//*
+
 @Service
 public class ResetMetricsService {
     @Autowired
@@ -53,3 +56,4 @@ public class ResetMetricsService {
         }
     }
 }
+*/

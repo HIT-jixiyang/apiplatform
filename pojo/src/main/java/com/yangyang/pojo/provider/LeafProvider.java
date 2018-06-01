@@ -12,7 +12,7 @@ import java.util.List;
 public class LeafProvider {
     public String getLeafListByLeafExample( Leaf leaf) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from leaf \n");
+        sql.append("select * from h2_leaf \n");
         List<String[]> condition = SqlUtil.getNotNullField(leaf);
         sql.append("where ");
         if(condition.size() != 0){
@@ -35,7 +35,7 @@ public class LeafProvider {
 
         List<String[]> condition = SqlUtil.getNotNullField(leaf);
         StringBuffer sql = new StringBuffer();
-        sql.append("update leaf set \n");
+        sql.append("update h2_leaf set \n");
         sql.append(getSet(condition));
         sql.append(" where leaf_id ="+"\""+leaf.getLeaf_id()+"\"");
         return sql.toString();
@@ -52,7 +52,7 @@ public class LeafProvider {
 public   String insertLeaf(Leaf leaf) throws IllegalAccessException {
     List<String[]> condition = SqlUtil.getNotNullField(leaf);
     StringBuffer sql = new StringBuffer();
-    sql.append("insert into leaf(");
+    sql.append("insert into h2_leaf(");
     sql.append(getLeafColumn(condition));
     sql.append(") values (");
     sql.append(getLeafValues(condition)+")");

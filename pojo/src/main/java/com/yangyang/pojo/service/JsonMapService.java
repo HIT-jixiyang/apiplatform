@@ -9,7 +9,6 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-
 import java.util.*;
 
 //处理json的映射
@@ -19,10 +18,10 @@ import java.util.*;
 public class JsonMapService {
     private String OriginJsonStr;
     private String StandardJsonStr;
-    private static int ID = 0;//ID用于编码
+    private int ID = 0;//ID用于编码
     private String api_id;
     private String api_category_id;
-    private static Object myobject;//用于返回处理后的报文
+    private Object myobject;//用于返回处理后的报文
     private MultiValueMap<Integer, Leaf> LeafInfos = new LinkedMultiValueMap<>();
     private Map<Integer, Integer> leafmap;//叶子结点映射关系
 //解析标准json报文
@@ -235,6 +234,7 @@ public class JsonMapService {
                     Integer preID = leafmap.get(ID);
                     if (preID != null) {
                         //修改标准报文的叶子，改成和原始报文对应的叶子信息
+                        System.out.println("当前key"+key+"  当前原始叶子信息  ----"+LeafInfos.get(leafmap.get(ID)).get(index).getLeaf_value());
                         jsonObject.put(key, LeafInfos.get(leafmap.get(ID)).get(index).getLeaf_value());
                         object = LeafInfos.get(leafmap.get(ID)).get(index);
                         System.out.println(ID + "------" + "[" + key + "]:" + LeafInfos.get(leafmap.get(ID)).get(index).getLeaf_value() + " TYPE :" + LeafInfos.get(leafmap.get(ID)).get(index).getLeaf_value().getClass());
@@ -248,6 +248,7 @@ public class JsonMapService {
 
     //给定标准的json报文，原始的报文，两者叶子映射关系，即可得到处理后的报文
     public String getHandledString(String standardJson, String originJsonStr, Map<Integer, Integer> leafmap) {
+     //  this.setLeafInfos(null);
         this.LeafInfos = getOriginLeafInfos("", originJsonStr);
         this.leafmap = leafmap;
         ID = 0;
@@ -326,73 +327,16 @@ public class JsonMapService {
                 "  'status': 1000," +
                 "  'desc': 'OK'" +
                 "}";
-        String originJson = "{" +
-                "'data': {" +
-                "'yesterday': {" +
-                "'date': '23日星期三'," +
-                "'high': '高温 24℃'," +
-                "'fx': '北风'," +
-                "'low': '低温 15℃'," +
-                "'fl': '<![CDATA[4-5级]]>'," +
-                "'type': '晴'" +
-                "}," +
-                "'city': '威海'," +
-                "'forecast': [{" +
-                "'date': '24日星期四'," +
-                "'high': '高温 30℃'," +
-                "'fengli': '<![CDATA[6-7级]]>'," +
-                "'low': '低温 17℃'," +
-                "'fengxiang': '西南风'," +
-                "'type': '晴'" +
-                "}," +
-                "{" +
-                "'date': '25日星期五'," +
-                "'high': '高温 24℃'," +
-                "'fengli': '<![CDATA[4-5级]]>'," +
-                "'low': '低温 14℃'," +
-                "'fengxiang': '西南风'," +
-                "'type': '多云'" +
-                "}," +
-                "{" +
-                "'date': '26日星期六'," +
-                "'high': '高温 26℃'," +
-                "'fengli': '<![CDATA[4-5级]]>'," +
-                "'low': '低温 16℃'," +
-                "'fengxiang': '南风'," +
-                "'type': '多云'" +
-                "}," +
-                "{" +
-                "'date': '27日星期天'," +
-                "'high': '高温 25℃'," +
-                "'fengli': '<![CDATA[4-5级]]>'," +
-                "'low': '低温 15℃'," +
-                "'fengxiang': '南风'," +
-                "'type': '阴'" +
-                "}," +
-                "{" +
-                "'date': '28日星期一'," +
-                "'high': '高温 22℃'," +
-                "'fengli': '<![CDATA[4-5级]]>'," +
-                "'low': '低温 14℃'," +
-                "'fengxiang': '东南风'," +
-                "'type': '晴'" +
-                "}" +
-                "]," +
-                "'ganmao': '各项气象条件适宜，发生感冒机率较低。但请避免长期处于空调房间中，以防感冒。'," +
-                "'wendu': '25'" +
-                "}," +
-                "'status': 1000," +
-                "'desc': 'OK'" +
-                "}";
+        String originJson1 = "{\"city\":\"威海\",\"weather\":{\"data\":{\"yesterday\":{\"date\":\"16日\",\"high\":\"高温 28℃\",\"fx\":\"南风\",\"low\":\"低温 19℃\",\"fl\":\"<![CDATA[5-6级]]>\",\"type\":\"小雨\"},\"forecast\":[{\"date\":\"17日\",\"high\":\"高温 25℃\",\"fx\":\"南风\",\"low\":\"低温 15℃\",\"fl\":\"<![CDATA[4-5级]]>\",\"type\":\"小雨\"},{\"date\":\"18日\",\"high\":\"高温 22℃\",\"fx\":\"北风\",\"low\":\"低温 14℃\",\"fl\":\"<![CDATA[4-5级]]>\",\"type\":\"晴\"},{\"date\":\"19日\",\"high\":\"高温 20℃\",\"fx\":\"东风\",\"low\":\"低温 14℃\",\"fl\":\"<![CDATA[4-5级]]>\",\"type\":\"晴\"},{\"date\":\"20日\",\"high\":\"高温 22℃\",\"fx\":\"东南风\",\"low\":\"低温 14℃\",\"fl\":\"<![CDATA[4-5级]]>\",\"type\":\"多云\"},{\"date\":\"21日\",\"high\":\"高温 22℃\",\"fx\":\"东南风\",\"low\":\"低温 14℃\",\"fl\":\"<![CDATA[4-5级]]>\",\"type\":\"阴\"}],\"ganmao\":\"虽然温度适宜但风力较大，仍较易发生感冒，体质较弱的朋友请注意适当防护。\",\"wendu\":\"19\"}},\"status\":\"200\"}\n";
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 1; i <= 17; i++) {
             map.put(i, i);
         }
         map.put(4, 3);//标准json的4号叶子将对应到原始json的3号叶子
         map.put(3, 4);//标准json的3号叶子将对应到原始json的4号叶子
-        String json = new JsonMapService().getHandledString(standardJson, originJson, map);
+        String json = new JsonMapService().getHandledString(standardJson, originJson1, map);
         System.out.println(json);
-        MultiValueMap<Integer, Leaf> map1 = new JsonMapService().getOriginLeafInfos("", originJson);
+        MultiValueMap<Integer, Leaf> map1 = new JsonMapService().getOriginLeafInfos("", originJson1);
         MultiValueMap<Integer, Leaf> map2 = new JsonMapService().getStandardLeafInfos("", standardJson);
         //  System.out.println(new JsonMapService().getStandardLeafInfos("",standardJson));
     }

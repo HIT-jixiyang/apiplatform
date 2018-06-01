@@ -12,7 +12,7 @@ import java.util.List;
 public class LeafMapProvider {
     public String getLeafMapListByLeafMapExample(LeafMap leafMap) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from leafmap \n");
+        sql.append("select * from h2_leafmap \n");
         List<String[]> condition = SqlUtil.getNotNullField(leafMap);
         sql.append("where ");
         if(condition.size() != 0){
@@ -43,7 +43,7 @@ public class LeafMapProvider {
 public   String insertLeafMap(LeafMap leafMap) throws IllegalAccessException {
     List<String[]> condition = SqlUtil.getNotNullField(leafMap);
     StringBuffer sql = new StringBuffer();
-    sql.append("insert into leafmap(");
+    sql.append("insert into h2_leafmap(");
     sql.append(getLeafMapColumn(condition));
     sql.append(") values (");
     sql.append(getLeafMapValues(condition)+")");

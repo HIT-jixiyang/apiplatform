@@ -15,7 +15,7 @@ public class StandardParamProvider {
     //获取所有api类
     public String getStandardInboundParamListByStandardInboundParamExample(StandardInboundParam standardInboundParam) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from standard_inbound_param \n");
+        sql.append("select * from h2_standard_inbound_param \n");
         List<String[]> condition = SqlUtil.getNotNullField(standardInboundParam);
         //找到对第三方结账时的价格
         sql.append("where ");
@@ -36,7 +36,7 @@ public class StandardParamProvider {
     public   String insertStandardInboundParam(StandardInboundParam standardInboundParam) throws IllegalAccessException {
         List<String[]> condition = SqlUtil.getNotNullField(standardInboundParam);
         StringBuffer sql = new StringBuffer();
-        sql.append("insert into standard_inbound_param(");
+        sql.append("insert into h2_standard_inbound_param(");
         sql.append(getStandardInboundParamColumn(condition));
         sql.append(") values (");
         sql.append(getStandardInboundParamValues(condition)+")");

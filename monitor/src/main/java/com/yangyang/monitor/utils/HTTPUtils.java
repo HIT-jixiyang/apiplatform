@@ -21,7 +21,7 @@ import java.util.Map;
 @Component
 public class HTTPUtils {
 
-    public static HttpResponse doget(String url){
+    public static HttpResponse doget(String url) throws IOException {
         CloseableHttpClient httpCilent = HttpClients.custom().build();
         RequestConfig requestConfig=RequestConfig.custom().setConnectTimeout(1000)
                 .setConnectionRequestTimeout(1000).setSocketTimeout(1000).setRedirectsEnabled(true).build();
@@ -39,13 +39,14 @@ public class HTTPUtils {
              httpResponse=httpCilent.execute(httpGet);
          //   System.out.println("httpclient"+url+"请求结束"+System.currentTimeMillis()/1000);
         StatusCode=httpResponse.getStatusLine().getStatusCode();
+        httpCilent.close();
            return httpResponse;
         } catch (IOException e) {
-
+            httpCilent.close();
         }
       return httpResponse;
     }
-    public static HttpResponse dopost(String url){
+    public static HttpResponse dopost(String url) throws IOException {
         CloseableHttpClient httpCilent = HttpClients.custom().build();
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(1000).setConnectionRequestTimeout(1000)
                 .setSocketTimeout(1000).setRedirectsEnabled(true).build();
@@ -69,16 +70,16 @@ public class HTTPUtils {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (ClientProtocolException e) {
-
+            httpCilent.close();
         } catch (IOException e) {
-
+            httpCilent.close();
         }
         // 设置post求情参数
 
         return httpResponse;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println(doget("http://ali-weather.showapi.com/area-to-weather"));
         System.out.println("");
     }

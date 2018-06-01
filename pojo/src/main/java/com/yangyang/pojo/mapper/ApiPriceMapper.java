@@ -11,17 +11,17 @@ import java.util.Map;
 public interface ApiPriceMapper {
     @InsertProvider(type = ApiPriceProvider.class, method = "insertApiPrice")
     public boolean addApiPrice(ApiPrice apiprice);
-    @Select("select * from api_price where api_id=#{api_id}")
+    @Select("select * from h2_api_price where api_id=#{api_id}")
     public List<ApiPrice> getApiPriceListByApiId(String api_id);
     @UpdateProvider(type = ApiPriceProvider.class, method = "updateApiPriceByApiPriceExample")
     public int updateApiPriceByApiPriceExample(ApiPrice apiprice);
-    @Select("select * from api_price ")
+    @Select("select * from h2_api_price ")
     public List<ApiPrice> getAllApiPriceList();
-    @Delete("delete from api_price where price_id=#{price_id}")
+    @Delete("delete from h2_api_price where price_id=#{price_id}")
     public int deleteApiPriceByApiPriceID(String price_id);
-    @Delete("delete from api_price where api_id=#{api_id}")
+    @Delete("delete from h2_api_price where api_id=#{api_id}")
     public int deleteApiPriceByApiID(String api_id);
-    @Select("select * from api_price where price_id=#{price_id}")
+    @Select("select * from h2_api_price where price_id=#{price_id}")
     public ApiPrice getApiPriceByApiPriceID(String price_id);
     @SelectProvider(type = ApiPriceProvider.class,method = "getApiPriceListByApiPriceExample")
     public List<ApiPrice> getApiPriceListByApiPriceExample(Integer pageNo, Integer pageSize, ApiPrice apiprice);

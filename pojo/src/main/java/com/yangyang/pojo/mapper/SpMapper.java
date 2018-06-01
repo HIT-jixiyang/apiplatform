@@ -13,13 +13,13 @@ import java.util.List;
 @Component
 @Mapper
 public interface SpMapper {
-    @Select("select * from service_provider")
+    @Select("select * from h2_service_provider")
     List<Sp> getAllSpList();
 
     /*
     根据id获取服务提供商
      */
-    @Select("select * from service_provider where sp_email=#{email}")
+    @Select("select * from h2_service_provider where sp_email=#{email}")
     Sp getSpByEmail(@Param("email") String email);
 
     /*

@@ -17,7 +17,7 @@ public class BillItemProvider {
 
     public String getBillItemPageListByBillItemExample(Integer pageNo, Integer pageSize, BillItem billItem) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select * from bill_item\n");
+        sql.append("select * from h2_bill_item\n");
         List<String[]> condition = SqlUtil.getNotNullField(billItem);
         sql.append("where ");
         if(condition.size() != 0){
@@ -28,7 +28,7 @@ public class BillItemProvider {
     }
     public String getBillItemPageListByBillItemExampleAndTime(Integer pageNo, Integer pageSize, BillItem billItem,String api_name,String beginTime,String endTime) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select a.*,b.api_name from bill_item a,api b\n");
+        sql.append("select a.*,b.api_name from h2_bill_item a,h2_api b\n");
         List<String[]> condition = SqlUtil.getNotNullField(billItem);
         sql.append("where ");
         if(beginTime!=null&&endTime!=null)
@@ -46,7 +46,7 @@ public class BillItemProvider {
     }
     public String getBillItemCountByAppIDAndApiName(BillItem billItem, String api_name,String beginTime, String endTime) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select count(*) from bill_item a,api b\n");
+        sql.append("select count(*) from h2_bill_item a,h2_api b\n");
         List<String[]> condition = SqlUtil.getNotNullField(billItem);
         sql.append("where ");
         if(beginTime!=null&&endTime!=null)
@@ -65,7 +65,7 @@ public class BillItemProvider {
 
     public String countPageList(BillItem billItem) throws IllegalAccessException {
         StringBuffer sql = new StringBuffer();
-        sql.append("select count(1) from bill_item\n");
+        sql.append("select count(1) from h2_bill_item\n");
         sql.append("where ");
         List<String[]> condition = SqlUtil.getNotNullField(billItem);
         if(condition.size() != 0){
@@ -77,7 +77,7 @@ public class BillItemProvider {
     public String updateBillItemByBillExample(BillItem billItem) throws IllegalAccessException {
         List<String[]> condition = SqlUtil.getNotNullField(billItem);
         StringBuffer sql = new StringBuffer();
-        sql.append("update bill_item set \n");
+        sql.append("update h2_bill_item set \n");
         sql.append(getSet(condition));
         sql.append(" where bill_item_id ="+"\""+billItem.getBill_item_id()+"\"");
         return sql.toString();
@@ -104,19 +104,20 @@ public class BillItemProvider {
     }
     public String getAverageResponseTimeByApiID(int offset,String api_id){
         StringBuffer buffer=new StringBuffer();
-        buffer.append("select AVG(request_time) from bill_item ");
+        buffer.append("select AVG(request_time) from h2_bill_item ");
         buffer.append("where api_id= ");
         buffer.append("\""+api_id+"\"");
         buffer.append("and response_code='200' ");
         buffer.append("ORDER BY create_time DESC LIMIT ");
         buffer.append("0,"+offset);
+        System.out.println(buffer.toString());
         return buffer.toString();
 }
 //SELECT count(*) FROM (SELECT * from bill_item a WHERE api_id="ef7deaca96d94cfeb21c1985c44525db" ORDER BY create_time DESC LIMIT 0,20) b WHERE b.response_code="200";
 public String getResponseTimesByApiIDAndStatusCode(int offset,String api_id,String response_code){
         StringBuffer buffer=new StringBuffer();
         buffer.append("select count(*) from ");
-        buffer.append("( select * from bill_item a ");
+        buffer.append("( select * from h2_bill_item a ");
         buffer.append("where api_id= ");
         buffer.append("\""+api_id+"\""+" ORDER BY create_time DESC ");
         buffer.append("limit 0,"+offset+") b");
@@ -127,10 +128,10 @@ public String getResponseTimesByApiIDAndStatusCode(int offset,String api_id,Stri
 
     public String getAverageResponseTimeByApiCategory(int offset,String api_category_id){
         StringBuffer buffer=new StringBuffer();
-        buffer.append("select AVG(request_time) from bill_item ");
+        buffer.append("select AVG(request_time) from h2_bill_item ");
         buffer.append("where api_id in ");
-        buffer.append(" ( select api_id from api where api_category_id=");
-        buffer.append(api_category_id+") ");
+        buffer.append(" ( select api_id from h2_api where api_category_id=");
+        buffer.append("\""+api_category_id+"\""+") ");
         buffer.append(" and response_code='200' ");
         buffer.append("ORDER BY create_time DESC LIMIT ");
         buffer.append("0,"+offset);
