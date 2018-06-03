@@ -1,384 +1,60 @@
 {
-  "status": 1,
-  "message": "OK",
   "data": {
-    "apicategoryleaflist": [
+    "yesterday": {
+      "date": "1日星期五",
+      "high": "高温 36℃",
+      "fx": "西南风",
+      "low": "低温 20℃",
+      "fl": "<![CDATA[3-4级]]>",
+      "type": "晴"
+    },
+    "city": "北京",
+    "aqi": "129",
+    "forecast": [
       {
-        "leaf_id": 1,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Object",
-        "leaf_key": "date",
-        "leaf_format": "",
-        "leaf_value": "23日星期三",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.yesterday"
+        "date": "2日星期六",
+        "high": "高温 35℃",
+        "fengli": "<![CDATA[3-4级]]>",
+        "low": "低温 21℃",
+        "fengxiang": "南风",
+        "type": "多云"
       },
       {
-        "leaf_id": 2,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Object",
-        "leaf_key": "high",
-        "leaf_format": "",
-        "leaf_value": "高温 24℃",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.yesterday"
+        "date": "3日星期天",
+        "high": "高温 32℃",
+        "fengli": "<![CDATA[<3级]]>",
+        "low": "低温 19℃",
+        "fengxiang": "西北风",
+        "type": "多云"
       },
       {
-        "leaf_id": 3,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Object",
-        "leaf_key": "fengli",
-        "leaf_format": "",
-        "leaf_value": "<![CDATA[4-5级]]>",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.yesterday"
+        "date": "4日星期一",
+        "high": "高温 34℃",
+        "fengli": "<![CDATA[3-4级]]>",
+        "low": "低温 20℃",
+        "fengxiang": "西南风",
+        "type": "多云"
       },
       {
-        "leaf_id": 4,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Object",
-        "leaf_key": "low",
-        "leaf_format": "",
-        "leaf_value": "低温 15℃",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.yesterday"
+        "date": "5日星期二",
+        "high": "高温 36℃",
+        "fengli": "<![CDATA[3-4级]]>",
+        "low": "低温 22℃",
+        "fengxiang": "西南风",
+        "type": "多云"
       },
       {
-        "leaf_id": 5,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Object",
-        "leaf_key": "fengxiang",
-        "leaf_format": "",
-        "leaf_value": "北风",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.yesterday"
-      },
-      {
-        "leaf_id": 6,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Object",
-        "leaf_key": "type",
-        "leaf_format": "",
-        "leaf_value": "晴",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.yesterday"
-      },
-      {
-        "leaf_id": 7,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Object",
-        "leaf_key": "city",
-        "leaf_format": "",
-        "leaf_value": "威海",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data"
-      },
-      {
-        "leaf_id": 8,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Object",
-        "leaf_key": "temperature",
-        "leaf_format": "",
-        "leaf_value": "25",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data"
-      },
-      {
-        "leaf_id": 9,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Array",
-        "leaf_key": "date",
-        "leaf_format": "",
-        "leaf_value": "24日星期四",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.forecast"
-      },
-      {
-        "leaf_id": 10,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Array",
-        "leaf_key": "high",
-        "leaf_format": "",
-        "leaf_value": "高温 30℃",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.forecast"
-      },
-      {
-        "leaf_id": 11,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Array",
-        "leaf_key": "fengli",
-        "leaf_format": "",
-        "leaf_value": "<![CDATA[6-7级]]>",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.forecast"
-      },
-      {
-        "leaf_id": 12,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Array",
-        "leaf_key": "low",
-        "leaf_format": "",
-        "leaf_value": "低温 17℃",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.forecast"
-      },
-      {
-        "leaf_id": 13,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Array",
-        "leaf_key": "fengxiang",
-        "leaf_format": "",
-        "leaf_value": "西南风",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.forecast"
-      },
-      {
-        "leaf_id": 14,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Array",
-        "leaf_key": "type",
-        "leaf_format": "",
-        "leaf_value": "晴",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.forecast"
-      },
-      {
-        "leaf_id": 15,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Object",
-        "leaf_key": "tip",
-        "leaf_format": "",
-        "leaf_value": "各项气象条件适宜，发生感冒机率较低。但请避免长期处于空调房间中，以防感冒。",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data"
-      },
-      {
-        "leaf_id": 16,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Object",
-        "leaf_key": "message",
-        "leaf_format": "",
-        "leaf_value": "OK",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root"
-      },
-      {
-        "leaf_id": 17,
-        "api_id": null,
-        "api_category_id": "1527383697891I1ZV",
-        "parent_type": "Object",
-        "leaf_key": "status",
-        "leaf_format": "",
-        "leaf_value": "1000",
-        "leaf_type": "class java.lang.Integer",
-        "leaf_path": "root"
+        "date": "6日星期三",
+        "high": "高温 36℃",
+        "fengli": "<![CDATA[<3级]]>",
+        "low": "低温 23℃",
+        "fengxiang": "南风",
+        "type": "多云"
       }
     ],
-    "apileaflist": [
-      {
-        "leaf_id": 1,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Object",
-        "leaf_key": "date",
-        "leaf_format": "",
-        "leaf_value": "26日星期六",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.yesterday"
-      },
-      {
-        "leaf_id": 2,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Object",
-        "leaf_key": "high",
-        "leaf_format": "",
-        "leaf_value": "高温 26℃",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.yesterday"
-      },
-      {
-        "leaf_id": 3,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Object",
-        "leaf_key": "fx",
-        "leaf_format": "",
-        "leaf_value": "南风",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.yesterday"
-      },
-      {
-        "leaf_id": 4,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Object",
-        "leaf_key": "low",
-        "leaf_format": "",
-        "leaf_value": "低温 16℃",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.yesterday"
-      },
-      {
-        "leaf_id": 5,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Object",
-        "leaf_key": "fl",
-        "leaf_format": "",
-        "leaf_value": "<![CDATA[4-5级]]>",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.yesterday"
-      },
-      {
-        "leaf_id": 6,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Object",
-        "leaf_key": "type",
-        "leaf_format": "",
-        "leaf_value": "多云",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.yesterday"
-      },
-      {
-        "leaf_id": 7,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Object",
-        "leaf_key": "city",
-        "leaf_format": "",
-        "leaf_value": "威海",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data"
-      },
-      {
-        "leaf_id": 8,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Array",
-        "leaf_key": "date",
-        "leaf_format": "",
-        "leaf_value": "27日星期天",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.forecast"
-      },
-      {
-        "leaf_id": 9,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Array",
-        "leaf_key": "high",
-        "leaf_format": "",
-        "leaf_value": "高温 25℃",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.forecast"
-      },
-      {
-        "leaf_id": 10,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Array",
-        "leaf_key": "fengli",
-        "leaf_format": "",
-        "leaf_value": "<![CDATA[4-5级]]>",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.forecast"
-      },
-      {
-        "leaf_id": 11,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Array",
-        "leaf_key": "low",
-        "leaf_format": "",
-        "leaf_value": "低温 18℃",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.forecast"
-      },
-      {
-        "leaf_id": 12,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Array",
-        "leaf_key": "fengxiang",
-        "leaf_format": "",
-        "leaf_value": "南风",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.forecast"
-      },
-      {
-        "leaf_id": 13,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Array",
-        "leaf_key": "type",
-        "leaf_format": "",
-        "leaf_value": "多云",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data.forecast"
-      },
-      {
-        "leaf_id": 14,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Object",
-        "leaf_key": "ganmao",
-        "leaf_format": "",
-        "leaf_value": "风较大，阴冷潮湿，较易发生感冒，体质较弱的朋友请注意适当防护。",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data"
-      },
-      {
-        "leaf_id": 15,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Object",
-        "leaf_key": "wendu",
-        "leaf_format": "",
-        "leaf_value": "24",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root.data"
-      },
-      {
-        "leaf_id": 16,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Object",
-        "leaf_key": "status",
-        "leaf_format": "",
-        "leaf_value": "1000",
-        "leaf_type": "class java.lang.Integer",
-        "leaf_path": "root"
-      },
-      {
-        "leaf_id": 17,
-        "api_id": "1527387292336aLih66q",
-        "api_category_id": null,
-        "parent_type": "Object",
-        "leaf_key": "desc",
-        "leaf_format": "",
-        "leaf_value": "OK",
-        "leaf_type": "class java.lang.String",
-        "leaf_path": "root"
-      }
-    ]
-  }
+    "ganmao": "各项气象条件适宜，发生感冒机率较低。但请避免长期处于空调房间中，以防感冒。",
+    "wendu": "34"
+  },
+  "status": 1000,
+  "desc": "OK"
 }

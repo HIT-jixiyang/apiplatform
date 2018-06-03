@@ -340,16 +340,20 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
 
     public  static RequestBody getChangedRequestBodyByApiID(RequestBody request, Api api) throws Exception {
         String requestBody= SerializeUtil.serializeObject(request);
-        String relativelyPath = System.getProperty("user.dir");
+       // String relativelyPath = System.getProperty("user.dir");
         URL[] urls = new URL[]{};
-        MyClassLoader classLoader = new MyClassLoader(urls, ClassLoader.getSystemClassLoader());
+       // MyClassLoader classLoader = new MyClassLoader(urls, ClassLoader.getSystemClassLoader());
+        //URL url=new URL("http://127.0.0.1:9999/"+api.getApi_jar_path());
+        URL url=new File("E:\\gitres\\apiplatform\\apigateway\\src\\main\\resources\\jar\\param-map-1.0-SNAPSHOT.jar").toURI().toURL();
+        @SuppressWarnings("resource")
+        URLClassLoader myClassLoader=new URLClassLoader(new URL[]{url},ClassLoader.getSystemClassLoader());
         try {
-            classLoader.addJar(new File("http://127.0.0.1:9999/"+api.getApi_jar_path()).toURI().toURL());
-            Class<?> clazz = classLoader.loadClass("com.yangyang.utils.ParamMap");
+           // classLoader.addJar(new File("http://127.0.0.1:9999/"+api.getApi_jar_path()).toURI().toURL());
+            Class<?> clazz = myClassLoader.loadClass("com.yangyang.utils.ParamMap");
             Method method = clazz.getDeclaredMethod("inboundParam2OutBoundParam", String.class);
             Object obj = clazz.newInstance();
             String request2 = (String) method.invoke(obj, requestBody);
-            classLoader.close();
+            myClassLoader.close();
             return (RequestBody) SerializeUtil.stringSerializeObject(request2);
         } catch (Exception e) {
             e.printStackTrace();
@@ -376,7 +380,6 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
     private void setCounter(String api_id){
         counterService.increment("speed.second."+api_id);
         counterService.increment("speed.second.requesttotal");
-
     }
 
 }

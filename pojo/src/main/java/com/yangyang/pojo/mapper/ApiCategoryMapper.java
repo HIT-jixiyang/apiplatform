@@ -37,12 +37,12 @@ public interface ApiCategoryMapper {
     @SelectProvider(type = ApiCategoryProvider.class, method = "countPageList")
     Integer countPageList(ApiCategory apiCategory, String name);
 
-    @Delete("delete from api_category where api_category_id=#{api_category_id}")
+    @Delete("delete from h2_api_category where api_category_id=#{api_category_id}")
     Integer deleteApiCategory(@Param(value = "api_category_id") String api_category_id);
 
-    @Select("select * from api_category")
+    @Select("select * from h2_api_category")
     public List<ApiCategory> getAllApiCategory();
 
-    @Select("SELECT * FROM api_category WHERE api_category_path=#{api_category_path}")
+    @Select("SELECT * FROM h2_api_category WHERE api_category_path=#{api_category_path}")
     public ApiCategory getApiCategoryByPath(@Param("api_category_path") String api_category_path);
 }
