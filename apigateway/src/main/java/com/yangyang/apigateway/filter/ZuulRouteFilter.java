@@ -1,6 +1,5 @@
 package com.yangyang.apigateway.filter;
 
-import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.context.RequestContext;
 import com.yangyang.apigateway.service.BillService;
 import com.yangyang.entity.RequestBody;
@@ -41,7 +40,6 @@ import org.springframework.util.StringUtils;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -53,8 +51,8 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-class UrlRouteFilter extends SimpleHostRoutingFilter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UrlRouteFilter.class);
+class ZuulRouteFilter extends SimpleHostRoutingFilter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ZuulRouteFilter.class);
     ProxyRequestHelper helper;
     ZuulProperties properties;
     @Autowired
@@ -86,7 +84,7 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
     CloseableHttpClient httpClient;
     private boolean sslHostnameValidationEnabled;
 
-    public UrlRouteFilter( ProxyRequestHelper helper, ZuulProperties properties) {
+    public ZuulRouteFilter(ProxyRequestHelper helper, ZuulProperties properties) {
         super(helper, properties);
         System.out.println("进入自定义路由");
         this.helper = helper;
@@ -189,7 +187,6 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
 
         LOGGER.info(api.toString());
 
-        LOGGER.info(app_id+"验证通过");
         LOGGER.info("app_id:"+app_id+"  api_id:"+api.getApi_id()+"发起记账请求");
         //记账请求
         String bill_item_id= BillItemID.getBillItemID();
@@ -203,15 +200,15 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
             try {
                 String body = InputStreamUtil.InputStream2String(requestEntity);
                 LOGGER.info(body);
-                JSONObject jsonObject = JSONObject.parseObject(body);
+              //  JSONObject jsonObject = JSONObject.parseObject(body);
                 RequestBody requestBody = new RequestBody();
                 requestBody.setHeader(headers);
                 requestBody.setQuery(querys);
-                requestBody.setBody(jsonObject);
+                requestBody.setBody(body);
                 RequestBody customRequestBody = (RequestBody) getChangedRequestBodyByApiID(requestBody, api);
                 headers = customRequestBody.getHeader();
                 querys = customRequestBody.getQuery();
-                body = JSONObject.toJSONString(customRequestBody.getBody());
+                body = customRequestBody.getBody();
                 requestEntity = new ByteArrayInputStream(body.getBytes("UTF-8"));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -247,7 +244,7 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
             context.set("error.status_code", Integer.valueOf(500));
             context.set("error.exception", var9);
         }
-        System.out.println("请求结束" + System.currentTimeMillis());
+       LOGGER.info("请求结束" + System.currentTimeMillis());
         return null;
     }
 
@@ -344,9 +341,9 @@ class UrlRouteFilter extends SimpleHostRoutingFilter {
         URL[] urls = new URL[]{};
        // MyClassLoader classLoader = new MyClassLoader(urls, ClassLoader.getSystemClassLoader());
         //URL url=new URL("http://127.0.0.1:9999/"+api.getApi_jar_path());
-        URL url=new File("E:\\gitres\\apiplatform\\apigateway\\src\\main\\resources\\jar\\param-map-1.0-SNAPSHOT.jar").toURI().toURL();
+        URL url=new URL("file:"+api.getApi_jar_path());
         @SuppressWarnings("resource")
-        URLClassLoader myClassLoader=new URLClassLoader(new URL[]{url},ClassLoader.getSystemClassLoader());
+        URLClassLoader myClassLoader=new URLClassLoader(new URL[]{url},Thread.currentThread().getContextClassLoader());
         try {
            // classLoader.addJar(new File("http://127.0.0.1:9999/"+api.getApi_jar_path()).toURI().toURL());
             Class<?> clazz = myClassLoader.loadClass("com.yangyang.utils.ParamMap");

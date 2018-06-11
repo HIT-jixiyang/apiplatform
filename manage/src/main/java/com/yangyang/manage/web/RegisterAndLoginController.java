@@ -112,7 +112,7 @@ public class RegisterAndLoginController {
                     resultmap.put("sp", sp);
                     String token = GenerateUsertoken.createToken(sp.getSp_id(), 1);
                     resultmap.put("token", token);
-                    redisTemplate.opsForValue().set(sp.getSp_id(), token);
+                  //  redisTemplate.opsForValue().set(sp.getSp_id(), token);
                     return new RestResult(1, "登录成功", resultmap);
                 } else {
                     return new RestResult(0, "登录失败", null);
@@ -129,7 +129,7 @@ public class RegisterAndLoginController {
                     resultmap.put("consumer", consumer);
                     String token = GenerateUsertoken.createToken(consumer.getConsumer_id(), 0);
                     resultmap.put("token", token);
-                    redisTemplate.opsForValue().set(consumer.getConsumer_id(), token);
+                //    redisTemplate.opsForValue().set(consumer.getConsumer_id(), token);
                     return new RestResult(1, "登录成功", resultmap);
                 } else {
                     return new RestResult(0, "登录失败", null);
@@ -147,7 +147,7 @@ public class RegisterAndLoginController {
             else if (password.equals(adiminmap.get("admin_password"))) {
                 String token = GenerateUsertoken.createToken("admin", 2);
                 resultmap.put("token", token);
-                redisTemplate.opsForValue().set("admin", token);
+             //   redisTemplate.opsForValue().set("admin", token);
                 return new RestResult(1, "登录成功", resultmap);
             } else {
                 return new RestResult(0, "登录失败", null);

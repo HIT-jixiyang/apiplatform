@@ -26,5 +26,5 @@ public class RequestBody implements Serializable {
                         text/xml*/
     MultiValueMap<String, String> header;//请求头中的参数
     MultiValueMap<String, String> query;//请求路径中的参数
-    Object body;//请求体中的参数
+    String body;//请求体中的参数
 }

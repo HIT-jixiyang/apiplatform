@@ -111,6 +111,7 @@ private void billUpdate(RequestContext context,String body) throws IOException {
     LOGGER.info("请求路径"+request.getServletPath()+" --- "+"duration:"+" "+duration);
     Float request_time= new Float(duration/1000.0);
     billItem.setRequest_time(request_time);
+    LOGGER.info("更新记账:"+billItem);
     billService.updateBill(billItem);
 }
 

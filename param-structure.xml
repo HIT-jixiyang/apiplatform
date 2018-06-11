@@ -19,9 +19,9 @@
     <headers>
     </headers>
     <querys>
-  <param key='citykey' type='String' ismust='true' desc='城市名称'>威海</param>
-    <param key='date' type='Date' ismust='false' desc='查询日期' format='YY-MM-DD'>2018-05-21</param>
     </querys>
     <body>
+        <param key='first' type='Integer' ismust='true' desc='第一个加数'>1</param>
+        <param key='second' type='Integer' ismust='true' desc='第二个加数' >2</param>
     </body>
 </stand-request>

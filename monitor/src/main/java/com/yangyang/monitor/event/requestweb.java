@@ -31,13 +31,13 @@ public void requestweb(Api api) throws IOException {
         HttpResponse response=httpUtils.doget(api_url);
      //   System.out.println(api.getApi_url()+"请求结束当前时间"+(System.currentTimeMillis()/1000));
         if (response == null) {
-            System.out.println(api_url+"死掉了");
+            System.out.println(api_url+" 不可用");
             if (api_enabled == 1)
                 api_enabled = 0;
             hearBeatService.UpdateStatement(api_id, api_enabled);
         } else {
 
-            System.out.println(api_url+"活着");
+            System.out.println(api_url+" 可用");
             if (api_enabled == 0)
                 api_enabled = 1;
             hearBeatService.UpdateStatement(api_id, api_enabled);
@@ -48,12 +48,12 @@ public void requestweb(Api api) throws IOException {
         HttpResponse response=httpUtils.dopost(api_url);
      //   System.out.println(api.getApi_url()+"请求结束当前时间"+(System.currentTimeMillis()/1000));
         if (response == null) {
-            System.out.println(api_url+"死掉了");
+            System.out.println(api_url+" 不可用");
             if (api_enabled == 1)
                 api_enabled = 0;
             hearBeatService.UpdateStatement(api_id, api_enabled);
         } else {
-            System.out.println(api_url+"活着");
+            System.out.println(api_url+" 可用");
             if (api_enabled == 0)
                 api_enabled = 1;
             hearBeatService.UpdateStatement(api_id, api_enabled);

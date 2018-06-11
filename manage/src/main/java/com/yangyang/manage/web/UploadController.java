@@ -44,7 +44,7 @@ public class UploadController {
             return new RestResult(ResultStatusCode.SYSTEM_ERROR.getStatuscode(),ResultStatusCode.SYSTEM_ERROR.getMessage(),map);
         }
         String filePath = request.getSession().getServletContext().getRealPath("jars/");
-
+filePath=filePath.replace("\\","/");
         try {
             UploadFileUtil.uploadFile(file.getBytes(), filePath, fileName);
           } catch (Exception e) {
